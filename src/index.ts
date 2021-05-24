@@ -7,6 +7,7 @@ import {
   WebGLRenderer,
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { LchColor } from './lib/color'
 
 let mesh
 let renderer
@@ -29,6 +30,7 @@ function init() {
   camera.position.z = 1
 
   scene = new Scene()
+  scene.background = LchColor(50, 0, 0)
 
   const geometry = new BoxGeometry(0.2, 0.2, 0.2)
   const material = new MeshNormalMaterial()
