@@ -1,0 +1,17 @@
+{
+  "name": "cielab-curved-palette",
+  "version": "0.1.0",
+  "description": "A tool which generates accessible sRGB color palettes by drawing bézier curves through CIELAB color space.",
+  "main": "index.html",
+  "repository": "git@github.com:thure/cielab-curved-palette.git",
+  "author": "Will Shown <v-wishow@microsoft.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  }
+}
