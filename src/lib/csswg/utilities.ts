@@ -62,6 +62,16 @@ export function sRGB_to_LCH(RGB) {
   return Lab_to_LCH(XYZ_to_Lab(D65_to_D50(lin_sRGB_to_XYZ(lin_sRGB(RGB)))))
 }
 
+export function sRGB_to_LAB(RGB) {
+  // convert an array of gamma-corrected sRGB values
+  // in the 0.0 to 1.0 range
+  // to linear-light sRGB, then to CIE XYZ,
+  // then adapt from D65 to D50,
+  // then convert XYZ to CIE Lab
+
+  return XYZ_to_Lab(D65_to_D50(lin_sRGB_to_XYZ(lin_sRGB(RGB))))
+}
+
 export function P3_to_LCH(RGB) {
   // convert an array of gamma-corrected display-p3 values
   // in the 0.0 to 1.0 range
