@@ -7,11 +7,10 @@ import {
   MeshPhongMaterial,
   Vector3,
 } from 'three'
+import { ck, lk } from '../lib/3d'
 
 const center = new Vector3(0, 50, 0)
 const depth = 256
-
-const ABComponentScale = 3 / 8 // Why does this seem right? What's the real limit of the LAB space?
 
 enum axisPhase {
   zero,
@@ -71,11 +70,7 @@ export default function populate({ scene }) {
         Array.prototype.push.apply(colors, color)
 
         const [L, A, B] = sRGB_to_LAB(color)
-        const position = new Vector3(
-          A * ABComponentScale,
-          L,
-          B * ABComponentScale
-        )
+        const position = new Vector3(A * ck, L * lk, B * ck)
         vertices.push(position.x, position.y, position.z)
 
         const normal = position.sub(center).normalize()
@@ -111,7 +106,10 @@ export default function populate({ scene }) {
     planeGeometry.setAttribute('normal', new Float32BufferAttribute(normals, 3))
     planeGeometry.setAttribute('color', new Float32BufferAttribute(colors, 3))
 
-    gamut.add(new Mesh(planeGeometry, planeMaterial))
+    const planeMesh = new Mesh(planeGeometry, planeMaterial)
+    planeMesh.renderOrder = 9e9
+
+    gamut.add(planeMesh)
   })
 
   scene.add(gamut)

@@ -9,6 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { LchColor } from '../lib/color'
 import populateAxes from './axes'
 import populateGamut from './gamut'
+import populateCurve from './curve'
 
 export function init() {
   window.addEventListener('resize', onWindowResize, false)
@@ -21,7 +22,7 @@ export function init() {
   )
   camera.position.x = 600
   camera.position.z = 600
-  camera.position.y = 400
+  camera.position.y = 300
 
   const scene = new Scene()
   scene.background = LchColor(50, 0, 0)
@@ -39,6 +40,7 @@ export function init() {
 
   populateAxes({ scene })
   populateGamut({ scene })
+  populateCurve({ scene })
 
   function onWindowResize() {
     const density = window.devicePixelRatio

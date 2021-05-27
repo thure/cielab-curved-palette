@@ -19,3 +19,6 @@ export function rotateAboutPoint(
 
   obj.rotateOnAxis(axis, theta) // rotate the OBJECT
 }
+
+export const ck = 3 / 8
+export const lk = 1
