@@ -1,8 +1,8 @@
 import { sRGB_to_LAB } from '../lib/csswg/utilities'
 import {
   BufferGeometry,
-  DoubleSide,
   Float32BufferAttribute,
+  Group,
   Mesh,
   MeshPhongMaterial,
   Vector3,
@@ -51,7 +51,15 @@ function getColor([rPhase, gPhase, bPhase]: axisPhase[], i, o) {
 }
 
 export default function populate({ scene }) {
-  phases.forEach((phase) => {
+  const gamut = new Group()
+
+  const planeMaterial = new MeshPhongMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.1,
+  })
+
+  phases.forEach((phase, p) => {
     const vertices = []
     const indices = []
     const normals = []
@@ -82,27 +90,29 @@ export default function populate({ scene }) {
         const v3 = (i + 1) * depth + o
         const v4 = (i + 1) * depth + (o + 1)
 
-        indices.push(v1, v2, v4) // face one
-        indices.push(v2, v3, v4) // face two
+        if (p % 2 == 0) {
+          // counter-clockwise winding
+          indices.push(v1, v2, v4)
+          indices.push(v2, v3, v4)
+        } else {
+          // clockwise winding
+          indices.push(v4, v2, v1)
+          indices.push(v4, v3, v2)
+        }
       }
     }
 
-    const geometry = new BufferGeometry()
-    geometry.setIndex(indices)
-    geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3))
-    geometry.setAttribute('normal', new Float32BufferAttribute(normals, 3))
-    geometry.setAttribute('color', new Float32BufferAttribute(colors, 3))
-
-    scene.add(
-      new Mesh(
-        geometry,
-        new MeshPhongMaterial({
-          side: DoubleSide,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.1,
-        })
-      )
+    const planeGeometry = new BufferGeometry()
+    planeGeometry.setIndex(indices)
+    planeGeometry.setAttribute(
+      'position',
+      new Float32BufferAttribute(vertices, 3)
     )
+    planeGeometry.setAttribute('normal', new Float32BufferAttribute(normals, 3))
+    planeGeometry.setAttribute('color', new Float32BufferAttribute(colors, 3))
+
+    gamut.add(new Mesh(planeGeometry, planeMaterial))
   })
+
+  scene.add(gamut)
 }
