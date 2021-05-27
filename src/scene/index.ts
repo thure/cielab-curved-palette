@@ -1,11 +1,17 @@
 import {
+  CustomBlending,
   PerspectiveCamera,
   Scene,
-  WebGLRenderer,
-  Vector3,
   HemisphereLight,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+
 import { LchColor } from '../lib/color'
 import populateAxes from './axes'
 import populateGamut from './gamut'
@@ -14,12 +20,7 @@ import populateCurve from './curve'
 export function init() {
   window.addEventListener('resize', onWindowResize, false)
 
-  const camera = new PerspectiveCamera(
-    12,
-    window.innerWidth / window.innerHeight,
-    0.01,
-    4e3
-  )
+  const camera = new PerspectiveCamera(12, 1, 0.01, 4e3)
   camera.position.x = 600
   camera.position.z = 600
   camera.position.y = 300
@@ -38,19 +39,36 @@ export function init() {
 
   document.body.appendChild(renderer.domElement)
 
-  populateAxes({ scene })
-  populateGamut({ scene })
-  populateCurve({ scene })
+  const axes = populateAxes({ scene })
+  const gamut = populateGamut({ scene })
+  const curve = populateCurve({ scene })
+
+  const composer = new EffectComposer(renderer)
+
+  composer.addPass(new RenderPass(scene, camera))
+
+  const outlinePass = new OutlinePass(new Vector2(), scene, camera, [gamut])
+
+  outlinePass.edgeGlow = 0
+  outlinePass.visibleEdgeColor = LchColor(20, 0, 0)
+  outlinePass.overlayMaterial.blending = CustomBlending
+
+  composer.addPass(outlinePass)
 
   function onWindowResize() {
     const density = window.devicePixelRatio
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
     renderer.setSize(window.innerWidth * density, window.innerHeight * density)
+    outlinePass.setSize(
+      window.innerWidth * density,
+      window.innerHeight * density
+    )
+    composer.setSize(window.innerWidth * density, window.innerHeight * density)
   }
 
   function render() {
-    renderer.render(scene, camera)
+    composer.render()
     requestAnimationFrame(render)
   }
 

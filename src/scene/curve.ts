@@ -10,10 +10,19 @@ import {
 } from 'three'
 import { ck, lk } from '../lib/3d'
 import { LAB_to_sRGB } from '../lib/csswg/utilities'
+import { force_into_gamut } from '../lib/lch'
+import { Lab_to_LCH } from '../lib/csswg/conversions'
 
 const depth = 1
 const rs = 3
 const thickness = 0.5
+
+function get_point_within_gamut(t): Vector3 {
+  const point = CurvePath.prototype.getPoint.call(this, t)
+  const [l, a, b] = force_into_gamut(point.y / lk, point.x / ck, point.z / ck)
+  point.set(a * ck, l * lk, b * ck)
+  return point
+}
 
 export default function populate({ scene }) {
   const black = new Vector3(0, 0, 0)
@@ -25,7 +34,7 @@ export default function populate({ scene }) {
   curve.add(
     new QuadraticBezierCurve3(
       black,
-      new Vector3(keyColor.x, keyColor.y / 2, keyColor.z),
+      new Vector3(keyColor.x, keyColor.y / 6, keyColor.z),
       keyColor
     )
   )
@@ -33,10 +42,12 @@ export default function populate({ scene }) {
   curve.add(
     new QuadraticBezierCurve3(
       keyColor,
-      new Vector3(keyColor.x, keyColor.y + (100 - keyColor.y) / 2, keyColor.z),
+      new Vector3(keyColor.x, keyColor.y + (100 - keyColor.y) / 4, keyColor.z),
       white
     )
   )
+
+  curve.getPoint = get_point_within_gamut
 
   const tube = new TubeGeometry(
     curve as unknown as Curve<Vector3>,

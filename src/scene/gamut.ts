@@ -10,7 +10,7 @@ import {
 import { ck, lk } from '../lib/3d'
 
 const center = new Vector3(0, 50, 0)
-const depth = 256
+const depth = 32
 
 enum axisPhase {
   zero,
@@ -55,7 +55,7 @@ export default function populate({ scene }) {
   const planeMaterial = new MeshPhongMaterial({
     vertexColors: true,
     transparent: true,
-    opacity: 0.1,
+    opacity: 0,
   })
 
   phases.forEach((phase, p) => {
@@ -113,4 +113,6 @@ export default function populate({ scene }) {
   })
 
   scene.add(gamut)
+
+  return gamut
 }

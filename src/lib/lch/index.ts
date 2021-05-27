@@ -3,34 +3,18 @@
 // from https://raw.githubusercontent.com/LeaVerou/css.land/master/lch/lch.js
 
 import { LCH_to_sRGB } from '../csswg/utilities'
+import { Lab_to_LCH, LCH_to_Lab } from '../csswg/conversions'
 
-export function alpha_to_string(a = 100) {
-  return a < 100 ? ` / ${a}%` : ''
-}
-
-export function LCH_to_sRGB_string(l, c, h, forceInGamut = false) {
-  if (forceInGamut) {
-    ;[l, c, h] = force_into_gamut(l, c, h)
-  }
-
-  return (
-    'rgb(' +
-    LCH_to_sRGB([+l, +c, +h])
-      .map((x) => {
-        return Math.round(x * 10000) / 100 + '%'
-      })
-      .join(' ') +
-    ')'
-  )
-}
-
-export function force_into_gamut(l, c, h) {
+export function force_into_gamut(_l, a, b) {
   // Moves an lch color into the sRGB gamut
   // by holding the l and h steady,
   // and adjusting the c via binary-search
   // until the color is on the sRGB boundary.
+
+  let [l, c, h] = Lab_to_LCH([_l, a, b])
+
   if (isLCH_within_sRGB(l, c, h)) {
-    return [l, c, h]
+    return [_l, a, b]
   }
 
   let hiC = c
@@ -48,7 +32,7 @@ export function force_into_gamut(l, c, h) {
     c = (hiC + loC) / 2
   }
 
-  return [l, c, h]
+  return LCH_to_Lab([l, c, h])
 }
 
 export function isLCH_within_sRGB(l, c, h) {
