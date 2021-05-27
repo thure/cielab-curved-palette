@@ -18,6 +18,12 @@ import populateGamut from './gamut'
 import populateCurve from './curve'
 
 export function mount() {
+  const initialState = {
+    keyColorLCH: [44.51, 39.05, 288.84],
+    darkControl: 5 / 6,
+    lightControl: 1 / 4,
+  }
+
   window.addEventListener('resize', onWindowResize, false)
 
   const camera = new PerspectiveCamera(12, 1, 0.01, 4e3)
@@ -41,7 +47,7 @@ export function mount() {
 
   const axes = populateAxes({ scene })
   const gamut = populateGamut({ scene })
-  const curve = populateCurve({ scene })
+  const { updateCurve } = populateCurve({ scene, initialState })
 
   const composer = new EffectComposer(renderer)
 
@@ -77,6 +83,7 @@ export function mount() {
   render()
 
   return {
-    scene,
+    initialState,
+    updateCurve,
   }
 }

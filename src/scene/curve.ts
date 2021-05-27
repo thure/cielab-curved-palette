@@ -11,11 +11,14 @@ import {
 import { ck, lk } from '../lib/3d'
 import { LAB_to_sRGB } from '../lib/csswg/utilities'
 import { force_into_gamut } from '../lib/lch'
-import { Lab_to_LCH } from '../lib/csswg/conversions'
+import { Lab_to_LCH, LCH_to_Lab } from '../lib/csswg/conversions'
+import throttle from 'lodash/throttle'
 
 const depth = 1
 const rs = 3
 const thickness = 0.5
+
+let tubeMesh = null
 
 function get_point_within_gamut(t): Vector3 {
   const point = CurvePath.prototype.getPoint.call(this, t)
@@ -24,17 +27,20 @@ function get_point_within_gamut(t): Vector3 {
   return point
 }
 
-export default function populate({ scene }) {
+function update({ scene, keyColorLCH, darkControl, lightControl }) {
+  if (tubeMesh) scene.remove(tubeMesh)
+
   const black = new Vector3(0, 0, 0)
   const white = new Vector3(0, 100, 0)
-  const keyColor = new Vector3(12.61 * ck, 44.51 * lk, -36.96 * ck)
+  const [l, a, b] = LCH_to_Lab(keyColorLCH)
+  const keyColor = new Vector3(a * ck, l * lk, b * ck)
 
   const curve = new CurvePath()
 
   curve.add(
     new QuadraticBezierCurve3(
       black,
-      new Vector3(keyColor.x, keyColor.y / 6, keyColor.z),
+      new Vector3(keyColor.x, keyColor.y * (1 - darkControl), keyColor.z),
       keyColor
     )
   )
@@ -42,7 +48,11 @@ export default function populate({ scene }) {
   curve.add(
     new QuadraticBezierCurve3(
       keyColor,
-      new Vector3(keyColor.x, keyColor.y + (100 - keyColor.y) / 4, keyColor.z),
+      new Vector3(
+        keyColor.x,
+        keyColor.y + (100 - keyColor.y) * lightControl,
+        keyColor.z
+      ),
       white
     )
   )
@@ -69,5 +79,20 @@ export default function populate({ scene }) {
 
   tube.setAttribute('color', new Float32BufferAttribute(colors, 3))
 
-  scene.add(new Mesh(tube, new MeshBasicMaterial({ vertexColors: true })))
+  tubeMesh = new Mesh(tube, new MeshBasicMaterial({ vertexColors: true }))
+
+  scene.add(tubeMesh)
+}
+
+export default function populate({
+  scene,
+  initialState: { keyColorLCH, darkControl, lightControl },
+}) {
+  update({ scene, keyColorLCH, darkControl, lightControl })
+
+  return {
+    updateCurve: throttle(function (l, c, h, darkControl, lightControl) {
+      update({ scene, keyColorLCH: [l, c, h], darkControl, lightControl })
+    }, 0.2e3),
+  }
 }
