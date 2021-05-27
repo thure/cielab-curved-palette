@@ -5,13 +5,24 @@
       rel="stylesheet"
     />
     <style>
+      body {
+        overflow: hidden;
+      }
       body > canvas {
         height: 100% !important;
-        width: 100% !important;
+        width: calc(100% + 336px) !important;
+      }
+      #controls {
+        position: fixed;
+        top: 1rem;
+        bottom: 1rem;
+        left: 1rem;
+        width: 320px;
       }
     </style>
   </head>
   <body>
+    <div id="controls"></div>
     <script src="index.ts"></script>
   </body>
 </html>

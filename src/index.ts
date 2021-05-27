@@ -1,3 +1,5 @@
-import { init } from './scene'
+import { mount as mountScene } from './scene'
+import { mount as mountControls } from './controls'
 
-init()
+const sceneControls = mountScene()
+const controls = mountControls(sceneControls)
