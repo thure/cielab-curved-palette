@@ -17,7 +17,13 @@ import populateAxes from './axes'
 import populateGamut from './gamut'
 import populateCurve from './curve'
 
-export function init() {
+export function mount() {
+  const initialState = {
+    keyColorLCH: [44.51, 39.05, 288.84],
+    darkControl: 5 / 6,
+    lightControl: 1 / 4,
+  }
+
   window.addEventListener('resize', onWindowResize, false)
 
   const camera = new PerspectiveCamera(12, 1, 0.01, 4e3)
@@ -41,7 +47,7 @@ export function init() {
 
   const axes = populateAxes({ scene })
   const gamut = populateGamut({ scene })
-  const curve = populateCurve({ scene })
+  const { updateCurve } = populateCurve({ scene, initialState })
 
   const composer = new EffectComposer(renderer)
 
@@ -56,15 +62,16 @@ export function init() {
   composer.addPass(outlinePass)
 
   function onWindowResize() {
+    const w = window.innerWidth + 336
+    const h = window.innerHeight
     const density = window.devicePixelRatio
-    camera.aspect = window.innerWidth / window.innerHeight
+    const dw = w * density
+    const dh = h * density
+    camera.aspect = w / h
     camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth * density, window.innerHeight * density)
-    outlinePass.setSize(
-      window.innerWidth * density,
-      window.innerHeight * density
-    )
-    composer.setSize(window.innerWidth * density, window.innerHeight * density)
+    renderer.setSize(dw, dh)
+    outlinePass.setSize(dw, dh)
+    composer.setSize(dw, dh)
   }
 
   function render() {
@@ -74,4 +81,9 @@ export function init() {
 
   onWindowResize()
   render()
+
+  return {
+    initialState,
+    updateCurve,
+  }
 }
