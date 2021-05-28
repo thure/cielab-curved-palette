@@ -1,5 +1,4 @@
 import {
-  Curve,
   CurvePath,
   Float32BufferAttribute,
   Mesh,
