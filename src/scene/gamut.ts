@@ -4,7 +4,7 @@ import {
   Float32BufferAttribute,
   Group,
   Mesh,
-  MeshPhongMaterial,
+  MeshBasicMaterial,
   Vector3,
 } from 'three'
 import { ck, lk } from '../lib/3d'
@@ -52,10 +52,11 @@ function getColor([rPhase, gPhase, bPhase]: axisPhase[], i, o) {
 export default function populate({ scene }) {
   const gamut = new Group()
 
-  const planeMaterial = new MeshPhongMaterial({
+  const planeMaterial = new MeshBasicMaterial({
     vertexColors: true,
     transparent: true,
     opacity: 0,
+    alphaTest: 0,
   })
 
   phases.forEach((phase, p) => {
@@ -107,6 +108,7 @@ export default function populate({ scene }) {
     planeGeometry.setAttribute('color', new Float32BufferAttribute(colors, 3))
 
     const planeMesh = new Mesh(planeGeometry, planeMaterial)
+    planeMesh.renderOrder = 9e9
 
     gamut.add(planeMesh)
   })

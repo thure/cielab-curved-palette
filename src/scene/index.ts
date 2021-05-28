@@ -43,9 +43,6 @@ export function mount() {
   controls.target = new Vector3(0, 50, 0)
   controls.update()
 
-  const light = new HemisphereLight()
-  scene.add(light)
-
   document.body.appendChild(renderer.domElement)
 
   const axes = populateAxes({ scene })
