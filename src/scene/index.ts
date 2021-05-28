@@ -15,6 +15,7 @@ import { LchColor } from '../lib/color'
 import populateAxes from './axes'
 import populateGamut from './gamut'
 import populateCurve from './curve'
+import populateShades from './shades'
 
 export function mount({ curveUpdateHandler }) {
   const initialState = {
@@ -51,6 +52,7 @@ export function mount({ curveUpdateHandler }) {
     initialState,
     onUpdate: curveUpdateHandler,
   })
+  const { updateShades } = populateShades({ scene })
 
   const composer = new EffectComposer(renderer)
 
@@ -93,5 +95,6 @@ export function mount({ curveUpdateHandler }) {
     updateCurve,
     updateGamut,
     updateGamutOutline,
+    updateShades,
   }
 }

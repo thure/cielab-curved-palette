@@ -149,6 +149,10 @@ export const Controls = ({
           }}
         />
         <Header as="h2" styles={{ fontWeight: 300 }}>
+          Palette parameters
+        </Header>
+
+        <Header as="h2" styles={{ fontWeight: 300 }}>
           Display
         </Header>
         <FormSlider

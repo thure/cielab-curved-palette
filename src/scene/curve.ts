@@ -8,15 +8,15 @@ import {
   Vector3,
 } from 'three'
 import { ck, lk, rotatePoint } from '../lib/3d'
-import { LAB_to_sRGB, sRGB_to_LAB } from '../lib/csswg/utilities'
+import { LAB_to_sRGB } from '../lib/csswg/utilities'
 import { force_into_gamut } from '../lib/lch'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import throttle from 'lodash/throttle'
 
 const depth = 0.8
 const rs = 3
-const thickness = 0.6
-const resultDepth = 11
+const thickness = 0.4
+const resultDepth = 64
 
 let tubeMesh = null
 
@@ -96,10 +96,10 @@ function update({ scene, keyColorLCH, darkControl, lightControl, hueTorsion }) {
   const darkPointsSize = Math.floor((resultDepth * l) / 100)
   const darkPoints = curve.curves[0]
     .getPoints(darkPointsSize)
-    .map((point) => [point.y, point.x, point.z])
+    .map((point) => [point.y / lk, point.x / ck, point.z / ck])
   const lightPoints = curve.curves[1]
     .getPoints(resultDepth - darkPointsSize)
-    .map((point) => [point.y, point.x, point.z])
+    .map((point) => [point.y / lk, point.x / ck, point.z / ck])
   lightPoints.splice(0, 1)
 
   return [...darkPoints, ...lightPoints]

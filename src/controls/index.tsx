@@ -8,7 +8,11 @@ import {
 } from '@fluentui/react-northstar'
 
 import { Controls } from './controls'
-import { Palette } from './palette'
+import {
+  Palette,
+  shadeDistributions,
+  defaultShadeDistribution,
+} from './palette'
 
 let onCurveUpdate
 
@@ -22,6 +26,10 @@ const ControlsGrid = ({ sceneControls }) => {
   const [curvePoints, setCurvePoints] = useState([])
   onCurveUpdate = setCurvePoints
 
+  const [shadeDistribution, setShadeDistribution] = useState(
+    defaultShadeDistribution
+  )
+
   return (
     <Grid
       columns="320px 1fr"
@@ -34,8 +42,10 @@ const ControlsGrid = ({ sceneControls }) => {
         rowGap: '1rem',
       }}
     >
-      <Controls {...{ sceneControls }} />
-      <Palette {...{ curvePoints }} />
+      <Controls
+        {...{ sceneControls, shadeDistributions, setShadeDistribution }}
+      />
+      <Palette {...{ sceneControls, curvePoints, shadeDistribution }} />
     </Grid>
   )
 }
