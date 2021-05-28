@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  Box,
   Form,
   FormSlider,
   Provider,
@@ -16,14 +15,17 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
 
   const [darkControl, setDarkControl] = useState(initialState.darkControl)
   const [lightControl, setLightControl] = useState(initialState.lightControl)
+  const [hueTorsion, setHueTorsion] = useState(initialState.hueTorsion)
 
   return (
     <>
       <Form styles={{ display: 'block', padding: '1rem', margin: 0 }}>
-        <Header as="h1" styles={{ fontWeight: 300, marginTop: 0 }}>
+        <Header as="h1" styles={{ fontWeight: 200, marginTop: 0 }}>
           LCH curved palette
         </Header>
-        <Header as="h2">Key color</Header>
+        <Header as="h2" styles={{ fontWeight: 300 }}>
+          Midpoint key color
+        </Header>
         <FormSlider
           fluid
           label="Hue"
@@ -40,7 +42,8 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
                 keyColorC,
                 numericValue,
                 darkControl,
-                lightControl
+                lightControl,
+                hueTorsion
               )
             }
           }}
@@ -61,7 +64,8 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
                 numericValue,
                 keyColorH,
                 darkControl,
-                lightControl
+                lightControl,
+                hueTorsion
               )
             }
           }}
@@ -82,15 +86,40 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
                 keyColorC,
                 keyColorH,
                 darkControl,
-                lightControl
+                lightControl,
+                hueTorsion
               )
             }
           }}
         />
-        <Header as="h2">Curve parameters</Header>
+        <Header as="h2" styles={{ fontWeight: 300 }}>
+          Curve parameters
+        </Header>
         <FormSlider
           fluid
-          label="Chroma retention towards black"
+          label="Hue torsion"
+          min={Math.PI / -4}
+          max={Math.PI / 4}
+          step={0.001}
+          value={hueTorsion}
+          onChange={(_e, { value }) => {
+            const numericValue = parseFloat(value)
+            if (Number.isFinite(numericValue)) {
+              setHueTorsion(numericValue)
+              updateCurve(
+                keyColorL,
+                keyColorC,
+                keyColorH,
+                darkControl,
+                lightControl,
+                hueTorsion
+              )
+            }
+          }}
+        />
+        <FormSlider
+          fluid
+          label="Chroma curvature towards black"
           min={0}
           max={1}
           step={0.01}
@@ -104,14 +133,15 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
                 keyColorC,
                 keyColorH,
                 numericValue,
-                lightControl
+                lightControl,
+                hueTorsion
               )
             }
           }}
         />
         <FormSlider
           fluid
-          label="Chroma retention towards white"
+          label="Chroma curvature towards white"
           min={0}
           max={1}
           step={0.01}
@@ -125,7 +155,8 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
                 keyColorC,
                 keyColorH,
                 darkControl,
-                numericValue
+                numericValue,
+                hueTorsion
               )
             }
           }}

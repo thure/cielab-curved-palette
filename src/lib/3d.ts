@@ -9,15 +9,19 @@ export function rotateAboutPoint(
     obj.parent.localToWorld(obj.position) // compensate for world coordinate
   }
 
-  obj.position.sub(point) // remove the offset
-  obj.position.applyAxisAngle(axis, theta) // rotate the POSITION
-  obj.position.add(point) // re-add the offset
+  rotatePoint(obj.position, point, axis, theta)
 
   if (pointIsWorld) {
     obj.parent.worldToLocal(obj.position) // undo world coordinates compensation
   }
 
   obj.rotateOnAxis(axis, theta) // rotate the OBJECT
+}
+
+export function rotatePoint(vector, point, axis, theta) {
+  vector.sub(point) // remove the offset
+  vector.applyAxisAngle(axis, theta) // rotate the POSITION
+  vector.add(point) // re-add the offset
 }
 
 export const ck = 3 / 8

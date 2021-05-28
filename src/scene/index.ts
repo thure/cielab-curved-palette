@@ -20,8 +20,9 @@ import populateCurve from './curve'
 export function mount() {
   const initialState = {
     keyColorLCH: [44.51, 39.05, 288.84],
-    darkControl: 5 / 6,
-    lightControl: 1 / 4,
+    darkControl: 2 / 3,
+    lightControl: 1 / 3,
+    hueTorsion: 0,
   }
 
   window.addEventListener('resize', onWindowResize, false)
