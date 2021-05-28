@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
+  Checkbox,
   Form,
   FormSlider,
   Provider,
@@ -8,7 +9,11 @@ import {
   teamsDarkTheme,
 } from '@fluentui/react-northstar'
 
-const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
+const Controls = ({
+  sceneControls: { initialState, updateCurve, updateGamut, updateGamutOutline },
+}) => {
+  // Color controls
+
   const [keyColorL, setKeyColorL] = useState(initialState.keyColorLCH[0])
   const [keyColorC, setKeyColorC] = useState(initialState.keyColorLCH[1])
   const [keyColorH, setKeyColorH] = useState(initialState.keyColorLCH[2])
@@ -16,6 +21,13 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
   const [darkControl, setDarkControl] = useState(initialState.darkControl)
   const [lightControl, setLightControl] = useState(initialState.lightControl)
   const [hueTorsion, setHueTorsion] = useState(initialState.hueTorsion)
+
+  // Other controls
+
+  const [gamutOpacity, setGamutOpacity] = useState(initialState.gamutOpacity)
+  const [gamutOutlineEnabled, setGamutOutlineEnabled] = useState(
+    initialState.gamutOutlineEnabled
+  )
 
   return (
     <>
@@ -37,14 +49,7 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setKeyColorH(numericValue)
-              updateCurve(
-                keyColorL,
-                keyColorC,
-                numericValue,
-                darkControl,
-                lightControl,
-                hueTorsion
-              )
+              updateCurve({ h: numericValue })
             }
           }}
         />
@@ -59,14 +64,7 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setKeyColorC(numericValue)
-              updateCurve(
-                keyColorL,
-                numericValue,
-                keyColorH,
-                darkControl,
-                lightControl,
-                hueTorsion
-              )
+              updateCurve({ c: numericValue })
             }
           }}
         />
@@ -81,14 +79,7 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setKeyColorL(numericValue)
-              updateCurve(
-                numericValue,
-                keyColorC,
-                keyColorH,
-                darkControl,
-                lightControl,
-                hueTorsion
-              )
+              updateCurve({ l: numericValue })
             }
           }}
         />
@@ -106,14 +97,7 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setHueTorsion(numericValue)
-              updateCurve(
-                keyColorL,
-                keyColorC,
-                keyColorH,
-                darkControl,
-                lightControl,
-                hueTorsion
-              )
+              updateCurve({ hueTorsion: numericValue })
             }
           }}
         />
@@ -128,14 +112,7 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setDarkControl(numericValue)
-              updateCurve(
-                keyColorL,
-                keyColorC,
-                keyColorH,
-                numericValue,
-                lightControl,
-                hueTorsion
-              )
+              updateCurve({ darkControl: numericValue })
             }
           }}
         />
@@ -150,16 +127,39 @@ const Controls = ({ sceneControls: { initialState, updateCurve } }) => {
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setLightControl(numericValue)
-              updateCurve(
-                keyColorL,
-                keyColorC,
-                keyColorH,
-                darkControl,
-                numericValue,
-                hueTorsion
-              )
+              updateCurve({ lightControl: numericValue })
             }
           }}
+        />
+        <Header as="h2" styles={{ fontWeight: 300 }}>
+          Display
+        </Header>
+        <FormSlider
+          fluid
+          label="sRGB gamut opacity"
+          min={0}
+          max={1}
+          step={0.01}
+          value={gamutOpacity}
+          onChange={(_e, { value }) => {
+            const numericValue = parseFloat(value)
+            if (Number.isFinite(numericValue)) {
+              setGamutOpacity(numericValue)
+              updateGamut({ opacity: numericValue })
+            }
+          }}
+        />
+        <Checkbox
+          fluid
+          toggle
+          label="sRGB gamut outline"
+          labelPosition="start"
+          checked={gamutOutlineEnabled}
+          onChange={(_e, { checked }) => {
+            setGamutOutlineEnabled(checked)
+            updateGamutOutline({ enabled: checked })
+          }}
+          styles={{ display: 'block' }}
         />
       </Form>
     </>

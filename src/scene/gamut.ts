@@ -107,12 +107,16 @@ export default function populate({ scene }) {
     planeGeometry.setAttribute('color', new Float32BufferAttribute(colors, 3))
 
     const planeMesh = new Mesh(planeGeometry, planeMaterial)
-    planeMesh.renderOrder = 9e9
 
     gamut.add(planeMesh)
   })
 
   scene.add(gamut)
 
-  return gamut
+  return {
+    gamut,
+    updateGamut: function ({ opacity = 0 }) {
+      planeMaterial.opacity = opacity
+    },
+  }
 }

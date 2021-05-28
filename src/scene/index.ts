@@ -23,6 +23,8 @@ export function mount() {
     darkControl: 2 / 3,
     lightControl: 1 / 3,
     hueTorsion: 0,
+    gamutOpacity: 0,
+    gamutOutlineEnabled: true,
   }
 
   window.addEventListener('resize', onWindowResize, false)
@@ -47,7 +49,7 @@ export function mount() {
   document.body.appendChild(renderer.domElement)
 
   const axes = populateAxes({ scene })
-  const gamut = populateGamut({ scene })
+  const { gamut, updateGamut } = populateGamut({ scene })
   const { updateCurve } = populateCurve({ scene, initialState })
 
   const composer = new EffectComposer(renderer)
@@ -61,6 +63,9 @@ export function mount() {
   outlinePass.overlayMaterial.blending = CustomBlending
 
   composer.addPass(outlinePass)
+  function updateGamutOutline({ enabled }) {
+    outlinePass.enabled = enabled
+  }
 
   function onWindowResize() {
     const w = window.innerWidth + 336
@@ -86,5 +91,7 @@ export function mount() {
   return {
     initialState,
     updateCurve,
+    updateGamut,
+    updateGamutOutline,
   }
 }

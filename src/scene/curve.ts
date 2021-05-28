@@ -14,9 +14,9 @@ import { force_into_gamut } from '../lib/lch'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import throttle from 'lodash/throttle'
 
-const depth = 1
+const depth = 0.8
 const rs = 3
-const thickness = 0.5
+const thickness = 0.6
 
 let tubeMesh = null
 
@@ -98,25 +98,22 @@ export default function populate({
   scene,
   initialState: { keyColorLCH, darkControl, lightControl, hueTorsion },
 }) {
-  update({ scene, keyColorLCH, darkControl, lightControl, hueTorsion })
+  let state = { keyColorLCH, darkControl, lightControl, hueTorsion }
+
+  update({ scene, ...state })
 
   return {
-    updateCurve: throttle(function (
-      l,
-      c,
-      h,
-      darkControl,
-      lightControl,
-      hueTorsion
-    ) {
-      update({
-        scene,
-        keyColorLCH: [l, c, h],
-        darkControl,
-        lightControl,
-        hueTorsion,
-      })
+    updateCurve: throttle(function ({
+      l = state.keyColorLCH[0],
+      c = state.keyColorLCH[1],
+      h = state.keyColorLCH[2],
+      darkControl = state.darkControl,
+      lightControl = state.lightControl,
+      hueTorsion = state.hueTorsion,
+    }) {
+      state = { keyColorLCH: [l, c, h], darkControl, lightControl, hueTorsion }
+      update({ scene, ...state })
     },
-    0.2e3),
+    200),
   }
 }
