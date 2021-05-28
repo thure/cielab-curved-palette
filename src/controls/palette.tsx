@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import { Box, Flex } from '@fluentui/react-northstar'
 import { LAB_to_sRGB } from '../lib/csswg/utilities'
+import { force_into_gamut } from '../lib/lch'
 
 export enum shadeDistributions {
   cubeRoot = 'cubeRoot',
+  middleGround = 'middleGround',
   linear = 'linear',
 }
 
-export const defaultShadeDistribution = shadeDistributions.cubeRoot
+export const defaultShadeDistribution = shadeDistributions.middleGround
 
 const nShades = 12
 
@@ -15,6 +17,12 @@ function getTargetLightness(shadeDistribution: shadeDistributions, t) {
   switch (shadeDistribution) {
     case shadeDistributions.cubeRoot:
       return 6.3 * Math.cbrt(t * 1000 - 500) + 50
+    case shadeDistributions.middleGround:
+      return (
+        (getTargetLightness(shadeDistributions.cubeRoot, t) +
+          getTargetLightness(shadeDistributions.linear, t)) /
+        2
+      )
     case shadeDistributions.linear:
       return t * 100
   }
@@ -49,7 +57,9 @@ function getPaletteShades({ curvePoints, shadeDistribution, nShades }) {
     ]
   }
 
-  return paletteShades
+  paletteShades[nShades] = curvePoints[curvePoints.length - 1]
+
+  return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }
 
 export const Palette = ({

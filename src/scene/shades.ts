@@ -7,7 +7,6 @@ import {
 } from 'three'
 import { LAB_to_sRGB } from '../lib/csswg/utilities'
 import { ck, lk } from '../lib/3d'
-import { force_into_gamut } from '../lib/lch'
 
 let shades
 
@@ -18,25 +17,23 @@ function updateShades({ scene, shadePoints }) {
   if (shades) scene.remove(shades)
   shades = new Group()
   console.log('updateShades', shadePoints)
-  shadePoints
-    .map(([l, a, b]) => force_into_gamut(l, a, b))
-    .forEach(([l, a, _b]) => {
-      const color = LAB_to_sRGB([l, a, _b])
-      const shadeGeo = new OctahedronBufferGeometry(shadeRadius)
-      const colors = []
+  shadePoints.forEach(([l, a, _b]) => {
+    const color = LAB_to_sRGB([l, a, _b])
+    const shadeGeo = new OctahedronBufferGeometry(shadeRadius)
+    const colors = []
 
-      for (let i = 0; i < shadeGeo.attributes.position.count; i++) {
-        Array.prototype.push.apply(colors, color)
-      }
+    for (let i = 0; i < shadeGeo.attributes.position.count; i++) {
+      Array.prototype.push.apply(colors, color)
+    }
 
-      shadeGeo.setAttribute('color', new Float32BufferAttribute(colors, 3))
+    shadeGeo.setAttribute('color', new Float32BufferAttribute(colors, 3))
 
-      const shadeMesh = new Mesh(shadeGeo, shadeMaterial)
+    const shadeMesh = new Mesh(shadeGeo, shadeMaterial)
 
-      shadeMesh.position.set(a * ck, l * lk, _b * ck)
+    shadeMesh.position.set(a * ck, l * lk, _b * ck)
 
-      shades.add(shadeMesh)
-    })
+    shades.add(shadeMesh)
+  })
   scene.add(shades)
 }
 
