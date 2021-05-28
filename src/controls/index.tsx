@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import {
   Checkbox,
@@ -8,6 +8,12 @@ import {
   Header,
   teamsDarkTheme,
 } from '@fluentui/react-northstar'
+
+let onCurveUpdate
+
+export function curveUpdateHandler(points) {
+  if (onCurveUpdate) onCurveUpdate(points)
+}
 
 const Controls = ({
   sceneControls: { initialState, updateCurve, updateGamut, updateGamutOutline },
@@ -27,6 +33,21 @@ const Controls = ({
   const [gamutOpacity, setGamutOpacity] = useState(initialState.gamutOpacity)
   const [gamutOutlineEnabled, setGamutOutlineEnabled] = useState(
     initialState.gamutOutlineEnabled
+  )
+
+  onCurveUpdate = (points) => console.log('on curve update', points)
+
+  useEffect(
+    () =>
+      updateCurve({
+        l: keyColorL,
+        c: keyColorC,
+        h: keyColorH,
+        darkControl,
+        lightControl,
+        hueTorsion,
+      }),
+    [keyColorL, keyColorC, keyColorH, darkControl, lightControl, hueTorsion]
   )
 
   return (
@@ -49,7 +70,6 @@ const Controls = ({
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setKeyColorH(numericValue)
-              updateCurve({ h: numericValue })
             }
           }}
         />
@@ -64,7 +84,6 @@ const Controls = ({
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setKeyColorC(numericValue)
-              updateCurve({ c: numericValue })
             }
           }}
         />
@@ -79,7 +98,6 @@ const Controls = ({
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setKeyColorL(numericValue)
-              updateCurve({ l: numericValue })
             }
           }}
         />
@@ -97,7 +115,6 @@ const Controls = ({
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setHueTorsion(numericValue)
-              updateCurve({ hueTorsion: numericValue })
             }
           }}
         />
@@ -112,7 +129,6 @@ const Controls = ({
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setDarkControl(numericValue)
-              updateCurve({ darkControl: numericValue })
             }
           }}
         />
@@ -127,7 +143,6 @@ const Controls = ({
             const numericValue = parseFloat(value)
             if (Number.isFinite(numericValue)) {
               setLightControl(numericValue)
-              updateCurve({ lightControl: numericValue })
             }
           }}
         />
@@ -150,7 +165,6 @@ const Controls = ({
           }}
         />
         <Checkbox
-          fluid
           toggle
           label="sRGB gamut outline"
           labelPosition="start"

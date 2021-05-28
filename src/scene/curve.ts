@@ -9,7 +9,7 @@ import {
   Vector3,
 } from 'three'
 import { ck, lk, rotatePoint } from '../lib/3d'
-import { LAB_to_sRGB } from '../lib/csswg/utilities'
+import { LAB_to_sRGB, sRGB_to_LAB } from '../lib/csswg/utilities'
 import { force_into_gamut } from '../lib/lch'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import throttle from 'lodash/throttle'
@@ -17,6 +17,7 @@ import throttle from 'lodash/throttle'
 const depth = 0.8
 const rs = 3
 const thickness = 0.6
+const resultDepth = 11
 
 let tubeMesh = null
 
@@ -35,7 +36,7 @@ function update({ scene, keyColorLCH, darkControl, lightControl, hueTorsion }) {
   const [l, a, b] = LCH_to_Lab(keyColorLCH)
   const keyColor = new Vector3(a * ck, l * lk, b * ck)
 
-  const curve = new CurvePath()
+  const curve = new CurvePath<Vector3>()
 
   const darkControlPoint = new Vector3(
     keyColor.x,
@@ -70,7 +71,7 @@ function update({ scene, keyColorLCH, darkControl, lightControl, hueTorsion }) {
   curve.getPoint = get_point_within_gamut
 
   const tube = new TubeGeometry(
-    curve as unknown as Curve<Vector3>,
+    curve,
     Math.ceil(curve.getLength() * depth),
     thickness,
     rs
@@ -92,15 +93,28 @@ function update({ scene, keyColorLCH, darkControl, lightControl, hueTorsion }) {
   tubeMesh = new Mesh(tube, new MeshBasicMaterial({ vertexColors: true }))
 
   scene.add(tubeMesh)
+
+  const darkPointsSize = Math.floor((resultDepth * l) / 100)
+  const darkPoints = curve.curves[0]
+    .getPoints(darkPointsSize)
+    .map((point) => [point.y, point.x, point.z])
+  const lightPoints = curve.curves[1]
+    .getPoints(resultDepth - darkPointsSize)
+    .map((point) => [point.y, point.x, point.z])
+  lightPoints.splice(0, 1)
+
+  return [...darkPoints, ...lightPoints]
 }
 
 export default function populate({
   scene,
   initialState: { keyColorLCH, darkControl, lightControl, hueTorsion },
+  onUpdate,
 }) {
   let state = { keyColorLCH, darkControl, lightControl, hueTorsion }
 
-  update({ scene, ...state })
+  const updateResult = update({ scene, ...state })
+  if (onUpdate) onUpdate(updateResult)
 
   return {
     updateCurve: throttle(function ({
@@ -112,7 +126,8 @@ export default function populate({
       hueTorsion = state.hueTorsion,
     }) {
       state = { keyColorLCH: [l, c, h], darkControl, lightControl, hueTorsion }
-      update({ scene, ...state })
+      const updateResult = update({ scene, ...state })
+      if (onUpdate) onUpdate(updateResult)
     },
     200),
   }

@@ -2,7 +2,6 @@ import {
   CustomBlending,
   PerspectiveCamera,
   Scene,
-  HemisphereLight,
   Vector2,
   Vector3,
   WebGLRenderer,
@@ -17,7 +16,7 @@ import populateAxes from './axes'
 import populateGamut from './gamut'
 import populateCurve from './curve'
 
-export function mount() {
+export function mount({ curveUpdateHandler }) {
   const initialState = {
     keyColorLCH: [44.51, 39.05, 288.84],
     darkControl: 2 / 3,
@@ -47,7 +46,11 @@ export function mount() {
 
   const axes = populateAxes({ scene })
   const { gamut, updateGamut } = populateGamut({ scene })
-  const { updateCurve } = populateCurve({ scene, initialState })
+  const { updateCurve } = populateCurve({
+    scene,
+    initialState,
+    onUpdate: curveUpdateHandler,
+  })
 
   const composer = new EffectComposer(renderer)
 
