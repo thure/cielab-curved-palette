@@ -1,4 +1,4 @@
-# CIELAB curved palette
+# [Launch LCH curved palette tool](https://thure.github.io/cielab-curved-palette/)
 
 A tool which generates accessible sRGB color palettes by drawing bézier curves through CIELAB color space. You supply a key color, and the tool will draw a configurable curve between `#ffffff` and `#000000` that intersects the key color.
 
