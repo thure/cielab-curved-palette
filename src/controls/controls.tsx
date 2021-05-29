@@ -5,10 +5,16 @@ import {
   Form,
   FormSlider,
   Header,
+  Input,
+  Button,
 } from '@fluentui/react-northstar'
 
 export const Controls = ({
   sceneControls: { initialState, updateCurve, updateGamut, updateGamutOutline },
+  paletteDistributionLinearity,
+  setPaletteDistributionLinearity,
+  paletteNShades,
+  setPaletteNShades,
 }) => {
   // Color controls
 
@@ -52,12 +58,14 @@ export const Controls = ({
         pointerEvents: 'initial',
         gridRowStart: 1,
         gridRowEnd: 3,
+        padding: '1rem',
       }}
     >
-      <Form styles={{ display: 'block', padding: '1rem', margin: 0 }}>
+      <Form styles={{ margin: '0 0 2rem 0', height: 'auto' }}>
         <Header as="h1" styles={{ fontWeight: 200, marginTop: 0 }}>
           LCH curved palette
         </Header>
+
         <Header as="h2" styles={{ fontWeight: 300 }}>
           Midpoint key color
         </Header>
@@ -103,6 +111,7 @@ export const Controls = ({
             }
           }}
         />
+
         <Header as="h2" styles={{ fontWeight: 300 }}>
           Curve parameters
         </Header>
@@ -148,9 +157,36 @@ export const Controls = ({
             }
           }}
         />
+
         <Header as="h2" styles={{ fontWeight: 300 }}>
           Palette parameters
         </Header>
+        <FormSlider
+          fluid
+          label="Distribution linearity"
+          min={-0.2}
+          max={1}
+          step={0.01}
+          value={paletteDistributionLinearity}
+          onChange={(_e, { value }) => {
+            const numericValue = parseFloat(value)
+            if (Number.isFinite(numericValue)) {
+              setPaletteDistributionLinearity(numericValue)
+            }
+          }}
+        />
+        <Input
+          fluid
+          label="Number of shades"
+          type="number"
+          value={paletteNShades}
+          onChange={(_e, { value }) => {
+            const numericValue = parseInt(value)
+            if (Number.isFinite(numericValue)) {
+              setPaletteNShades(numericValue)
+            }
+          }}
+        />
 
         <Header as="h2" styles={{ fontWeight: 300 }}>
           Display
@@ -179,9 +215,12 @@ export const Controls = ({
             setGamutOutlineEnabled(checked)
             updateGamutOutline({ enabled: checked })
           }}
-          styles={{ display: 'block' }}
+          styles={{ width: '100%' }}
         />
       </Form>
+      <Button as="a" href="https://github.com/thure/cielab-curved-palette">
+        Github
+      </Button>
     </Box>
   )
 }

@@ -16,7 +16,6 @@ const shadeRadius = 1.5
 function updateShades({ scene, shadePoints }) {
   if (shades) scene.remove(shades)
   shades = new Group()
-  console.log('updateShades', shadePoints)
   shadePoints.forEach(([l, a, _b]) => {
     const color = LAB_to_sRGB([l, a, _b])
     const shadeGeo = new OctahedronBufferGeometry(shadeRadius)

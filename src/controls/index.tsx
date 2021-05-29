@@ -8,11 +8,7 @@ import {
 } from '@fluentui/react-northstar'
 
 import { Controls } from './controls'
-import {
-  Palette,
-  shadeDistributions,
-  defaultShadeDistribution,
-} from './palette'
+import { Palette } from './palette'
 
 let onCurveUpdate
 
@@ -26,8 +22,10 @@ const ControlsGrid = ({ sceneControls }) => {
   const [curvePoints, setCurvePoints] = useState([])
   onCurveUpdate = setCurvePoints
 
-  const [shadeDistribution, setShadeDistribution] = useState(
-    defaultShadeDistribution
+  const [paletteDistributionLinearity, setPaletteDistributionLinearity] =
+    useState(sceneControls.initialState.paletteDistributionLinearity)
+  const [paletteNShades, setPaletteNShades] = useState(
+    sceneControls.initialState.paletteNShades
   )
 
   return (
@@ -43,11 +41,34 @@ const ControlsGrid = ({ sceneControls }) => {
       }}
     >
       <Controls
-        {...{ sceneControls, shadeDistributions, setShadeDistribution }}
+        {...{
+          sceneControls,
+          paletteDistributionLinearity,
+          setPaletteDistributionLinearity,
+          paletteNShades,
+          setPaletteNShades,
+        }}
       />
-      <Palette {...{ sceneControls, curvePoints, shadeDistribution }} />
+      <Palette
+        {...{
+          sceneControls,
+          curvePoints,
+          paletteDistributionLinearity,
+          paletteNShades,
+        }}
+      />
     </Grid>
   )
+}
+
+const ugh = {
+  root: ({ variables }) => ({
+    color: variables.color,
+    backgroundColor: variables.backgroundColor,
+    borderColor: variables.borderColor,
+    borderWidth: variables.borderWidth,
+    boxShadow: variables.elevation,
+  }),
 }
 
 export function mount(sceneControls) {
@@ -55,15 +76,8 @@ export function mount(sceneControls) {
     <Provider
       theme={mergeThemes(teamsDarkTheme, {
         componentStyles: {
-          Box: {
-            root: ({ variables }) => ({
-              color: variables.color,
-              backgroundColor: variables.backgroundColor,
-              borderColor: variables.borderColor,
-              borderWidth: variables.borderWidth,
-              boxShadow: variables.elevation,
-            }),
-          },
+          Box: ugh,
+          Text: ugh,
         },
       })}
       styles={{

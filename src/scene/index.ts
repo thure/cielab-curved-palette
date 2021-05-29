@@ -25,6 +25,8 @@ export function mount({ curveUpdateHandler }) {
     hueTorsion: 0,
     gamutOpacity: 0,
     gamutOutlineEnabled: true,
+    paletteNShades: 9,
+    paletteDistributionLinearity: 0.4,
   }
 
   window.addEventListener('resize', onWindowResize, false)
@@ -71,7 +73,7 @@ export function mount({ curveUpdateHandler }) {
 
   function onWindowResize() {
     const w = window.innerWidth + 336
-    const h = window.innerHeight
+    const h = window.innerHeight + 96
     const density = window.devicePixelRatio
     const dw = w * density
     const dh = h * density

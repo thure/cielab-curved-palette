@@ -3,43 +3,21 @@ import { Box, Flex } from '@fluentui/react-northstar'
 import { LAB_to_sRGB } from '../lib/csswg/utilities'
 import { force_into_gamut } from '../lib/lch'
 
-export enum shadeDistributions {
-  cubeRoot = 'cubeRoot',
-  middleGround = 'middleGround',
-  linear = 'linear',
+function getTargetLightness(linearity, t) {
+  const cbrt = 6.3 * Math.cbrt(t * 1000 - 500) + 50
+  const line = t * 100
+  return Math.max(0, Math.min(100, cbrt + (line - cbrt) * linearity))
 }
 
-export const defaultShadeDistribution = shadeDistributions.middleGround
-
-const nShades = 12
-
-function getTargetLightness(shadeDistribution: shadeDistributions, t) {
-  switch (shadeDistribution) {
-    case shadeDistributions.cubeRoot:
-      return 6.3 * Math.cbrt(t * 1000 - 500) + 50
-    case shadeDistributions.middleGround:
-      return (
-        (getTargetLightness(shadeDistributions.cubeRoot, t) +
-          getTargetLightness(shadeDistributions.linear, t)) /
-        2
-      )
-    case shadeDistributions.linear:
-      return t * 100
-  }
-}
-
-function getPaletteShades({ curvePoints, shadeDistribution, nShades }) {
+function getPaletteShades({ curvePoints, linearity, nShades }) {
   if (curvePoints.length <= 2) return []
 
   const paletteShades = []
 
   let c = 0
 
-  for (let i = 0; i < nShades; i++) {
-    const l = Math.max(
-      0,
-      Math.min(100, getTargetLightness(shadeDistribution, i / nShades))
-    )
+  for (let i = 0; i < nShades - 1; i++) {
+    const l = getTargetLightness(linearity, i / (nShades - 1))
 
     while (l > curvePoints[c + 1][0]) {
       c++
@@ -65,17 +43,18 @@ function getPaletteShades({ curvePoints, shadeDistribution, nShades }) {
 export const Palette = ({
   sceneControls: { updateShades },
   curvePoints,
-  shadeDistribution,
+  paletteDistributionLinearity,
+  paletteNShades,
 }) => {
   const paletteShades = getPaletteShades({
     curvePoints,
-    shadeDistribution,
-    nShades,
+    nShades: paletteNShades,
+    linearity: paletteDistributionLinearity,
   })
 
   useEffect(() => {
     paletteShades.length > 0 && updateShades(paletteShades)
-  }, [curvePoints])
+  }, [curvePoints, paletteDistributionLinearity, paletteNShades])
 
   return (
     <Flex
