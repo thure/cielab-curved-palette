@@ -35,7 +35,7 @@ function getPaletteShades({ curvePoints, linearity, nShades }) {
     ]
   }
 
-  paletteShades[nShades] = curvePoints[curvePoints.length - 1]
+  paletteShades[nShades - 1] = curvePoints[curvePoints.length - 1]
 
   return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }
@@ -45,6 +45,7 @@ export const Palette = ({
   curvePoints,
   paletteDistributionLinearity,
   paletteNShades,
+  setPaletteJSON,
 }) => {
   const paletteShades = getPaletteShades({
     curvePoints,
@@ -52,8 +53,23 @@ export const Palette = ({
     linearity: paletteDistributionLinearity,
   })
 
+  const paletteShadesHex = paletteShades.map((lab) => {
+    return (
+      '#' +
+      LAB_to_sRGB(lab)
+        .map((x) => {
+          const channel = x < 0 ? 0 : Math.floor(x >= 1.0 ? 255 : x * 256)
+          return channel.toString(16).padStart(2, '0')
+        })
+        .join('')
+    )
+  })
+
   useEffect(() => {
-    paletteShades.length > 0 && updateShades(paletteShades)
+    if (paletteShades.length > 0) {
+      updateShades(paletteShades)
+      setPaletteJSON(JSON.stringify(paletteShadesHex, null, 2))
+    }
   }, [curvePoints, paletteDistributionLinearity, paletteNShades])
 
   return (
@@ -64,14 +80,13 @@ export const Palette = ({
         overflow: 'hidden',
       }}
     >
-      {paletteShades.map((lab, l) => {
-        const [r, g, b] = LAB_to_sRGB(lab)
+      {paletteShadesHex.map((hex, i) => {
         return (
           <Box
-            key={`shade_${l}`}
+            key={`shade_${i}`}
             styles={{
               flex: '1 0 0',
-              background: `rgb(${r * 100}% ${g * 100}% ${b * 100}%)`,
+              background: hex,
             }}
           />
         )

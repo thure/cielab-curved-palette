@@ -27,6 +27,7 @@ const ControlsGrid = ({ sceneControls }) => {
   const [paletteNShades, setPaletteNShades] = useState(
     sceneControls.initialState.paletteNShades
   )
+  const [paletteJSON, setPaletteJSON] = useState('')
 
   return (
     <Grid
@@ -47,6 +48,7 @@ const ControlsGrid = ({ sceneControls }) => {
           setPaletteDistributionLinearity,
           paletteNShades,
           setPaletteNShades,
+          paletteJSON,
         }}
       />
       <Palette
@@ -55,6 +57,7 @@ const ControlsGrid = ({ sceneControls }) => {
           curvePoints,
           paletteDistributionLinearity,
           paletteNShades,
+          setPaletteJSON,
         }}
       />
     </Grid>

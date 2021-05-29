@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import {
   Box,
+  Button,
   Checkbox,
   Form,
   FormSlider,
   Header,
   Input,
-  Button,
+  TextArea,
 } from '@fluentui/react-northstar'
 
 export const Controls = ({
@@ -15,6 +16,7 @@ export const Controls = ({
   setPaletteDistributionLinearity,
   paletteNShades,
   setPaletteNShades,
+  paletteJSON,
 }) => {
   // Color controls
 
@@ -217,10 +219,21 @@ export const Controls = ({
           }}
           styles={{ width: '100%' }}
         />
+        <Header as="h2" styles={{ fontWeight: 300 }}>
+          Result
+        </Header>
+        <TextArea
+          fluid
+          spellCheck={false}
+          resize="vertical"
+          value={paletteJSON}
+          styles={{ height: '12rem' }}
+        />
+
+        <Button as="a" href="https://github.com/thure/cielab-curved-palette">
+          Github
+        </Button>
       </Form>
-      <Button as="a" href="https://github.com/thure/cielab-curved-palette">
-        Github
-      </Button>
     </Box>
   )
 }
