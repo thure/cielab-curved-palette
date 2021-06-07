@@ -143,6 +143,11 @@ export function mount(sceneControls) {
         componentStyles: {
           Box: ugh,
           Text: ugh,
+          Slider: {
+            track: () => ({
+              display: 'none',
+            }),
+          },
         },
       })}
       styles={{
