@@ -1,14 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
-import {Provider} from "@fluentui/react-northstar";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {Provider as ThemeProvider, mergeThemes, teamsDarkTheme, teamsTheme} from "@fluentui/react-northstar";
+import {Provider as StoreProvider} from 'react-redux'
 
+import { store } from './state/store'
 import {Palette, System, Theme} from './pages'
-import {mergeThemes, teamsDarkTheme} from "@fluentui/react-northstar";
+import {useAppSelector} from "./state/hooks";
 
 const ugh = {
   root: ({ variables }) => ({
@@ -20,20 +18,26 @@ const ugh = {
   }),
 }
 
+const appTheme = {
+  componentStyles: {
+    Box: ugh,
+    Text: ugh,
+    Slider: {
+      track: () => ({
+        display: 'none',
+      }),
+    },
+  },
+}
+
+const appLightTheme = mergeThemes(teamsTheme, appTheme)
+const appDarkTheme = mergeThemes(teamsDarkTheme, appTheme)
+
 const App = () => {
-  return <Provider
-    theme={mergeThemes(teamsDarkTheme, {
-      componentStyles: {
-        Box: ugh,
-        Text: ugh,
-        Slider: {
-          track: () => ({
-            display: 'none',
-          }),
-        },
-      },
-    })}
-    styles={{background: 'transparent'}}
+  const ui = useAppSelector(state => state.system.ui)
+  return <ThemeProvider
+    theme={ui === 'light' ? appLightTheme : appDarkTheme}
+    styles={{flexGrow: 1}}
   >
     <Router>
       <Switch>
@@ -48,12 +52,14 @@ const App = () => {
         </Route>
       </Switch>
     </Router>
-  </Provider>
+  </ThemeProvider>
 }
 
 function mount() {
   return ReactDOM.render(
-    <App/>,
+    <StoreProvider store={store}>
+      <App/>
+    </StoreProvider>,
     document.getElementById('root')
   );
 }
