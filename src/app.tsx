@@ -39,7 +39,7 @@ const appLightTheme = mergeThemes(teamsTheme, appTheme)
 const appDarkTheme = mergeThemes(teamsDarkTheme, appTheme)
 
 const App = () => {
-  const ui = useAppSelector((state) => state.system.ui)
+  const ui = useAppSelector((state) => state.app.ui)
   return (
     <ThemeProvider
       theme={ui === 'light' ? appLightTheme : appDarkTheme}

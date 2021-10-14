@@ -1,5 +1,6 @@
 import React from 'react'
+import { MainContent } from '../components'
 
 export const Theme = () => {
-  return <main>Theme</main>
+  return <MainContent>Theme</MainContent>
 }

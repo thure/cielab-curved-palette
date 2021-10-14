@@ -1,5 +1,6 @@
 import React from 'react'
+import { MainContent } from '../components'
 
 export const Palette = () => {
-  return <main>Palette</main>
+  return <MainContent>Palette</MainContent>
 }

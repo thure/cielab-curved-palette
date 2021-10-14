@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import system from './system'
+import app from './app'
 
 export const store = configureStore({
   reducer: {
-    system,
+    app,
   },
 })
 
