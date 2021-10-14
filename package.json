@@ -8,13 +8,16 @@
   "license": "MIT",
   "devDependencies": {
     "@types/three": "latest",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "parcel-bundler": "latest",
     "prettier": "latest",
     "typescript": "^4.4.4"
   },
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "rm -rf docs && parcel build src/index.html --public-url /cielab-curved-palette/ --out-dir docs --no-source-maps"
+    "build": "rm -rf docs && parcel build src/index.html --public-url /cielab-curved-palette/ --out-dir docs --no-source-maps",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@fluentui/react-northstar": "latest",

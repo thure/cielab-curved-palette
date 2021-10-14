@@ -12,7 +12,7 @@ const systemSlice = createSlice({
   reducers: {
     toggleUi: (state) => {
       state.ui = state.ui === 'light' ? 'dark' : 'light'
-    }
+    },
   },
 })
 

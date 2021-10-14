@@ -1,7 +1,5 @@
 import React from 'react'
 
-export const System = ()=>{
-  return <main>
-    System
-  </main>
+export const System = () => {
+  return <main>System</main>
 }
