@@ -8,8 +8,9 @@ import {
   teamsTheme,
 } from '@fluentui/react-northstar'
 import { Provider as StoreProvider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
-import { store } from './state/store'
+import { store, persistor } from './state/store'
 import { Palette, System, Theme } from './pages'
 import { useAppSelector } from './state/hooks'
 
@@ -65,7 +66,9 @@ const App = () => {
 function mount() {
   return ReactDOM.render(
     <StoreProvider store={store}>
-      <App />
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </StoreProvider>,
     document.getElementById('root')
   )

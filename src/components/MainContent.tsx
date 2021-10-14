@@ -1,11 +1,13 @@
 import React from 'react'
 import {
   Box,
+  Button,
   Flex,
   RadioGroup,
   ChevronStartIcon,
 } from '@fluentui/react-northstar'
 import { PropsWithChildren } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../state/hooks'
 import { toggleUi } from '../state/app'
 
@@ -19,6 +21,7 @@ export const MainContent = ({
 }: PropsWithChildren<MainContentProps>) => {
   const ui = useAppSelector((state) => state.app.ui)
   const dispatch = useAppDispatch()
+  const history = useHistory()
   return (
     <Box
       as="main"
@@ -30,19 +33,24 @@ export const MainContent = ({
     >
       <Flex as="nav">
         {back && (
-          <span>
-            <ChevronStartIcon />
-            Back
-          </span>
+          <Button
+            icon={<ChevronStartIcon />}
+            iconPosition="before"
+            text
+            content="Back to color system"
+            onClick={() => history.push('/')}
+          />
         )}
         <Box styles={{ flexGrow: 1 }} role="none" />
         <RadioGroup
           items={[
             {
+              key: 'l',
               value: 'light',
               label: '☀️',
             },
             {
+              key: 'd',
               value: 'dark',
               label: '🌙',
             },
