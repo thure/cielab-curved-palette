@@ -1,17 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Palette, Vec3 } from '../lib/interfaces'
+import { NamedPalette, Vec3 } from '../lib/interfaces'
 
-interface PallettesState {
-  [paletteId: string]: Palette
+interface PalettesState {
+  [paletteId: string]: NamedPalette
 }
 
-const initialState = {} as PallettesState
+const initialState = {} as PalettesState
 
 export const palettesSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    create: (state, { payload }: PayloadAction<Palette & { id: string }>) => {
+    create: (
+      state,
+      { payload }: PayloadAction<NamedPalette & { id: string }>
+    ) => {
       const { id, ...palette } = payload
       state[id] = palette
     },

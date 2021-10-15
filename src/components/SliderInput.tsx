@@ -1,11 +1,11 @@
 import { Box, Flex, Input, Slider, Text } from '@fluentui/react-northstar'
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 interface SliderInputProps {
   value: number
   min: number
   max: number
-  label: string
+  label: ReactNode
   id: string
   onChange: (value: number) => void
   reverseInputs?: boolean

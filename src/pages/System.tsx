@@ -21,7 +21,7 @@ export const System = () => {
         disabled={palettesIds.length < 1}
       />
       <Header as="h2">Palettes</Header>
-      {palettesIds.map((paletteId, p) => (
+      {palettesIds.map((paletteId, _p) => (
         <PaletteListItem
           key={paletteId}
           id={paletteId}

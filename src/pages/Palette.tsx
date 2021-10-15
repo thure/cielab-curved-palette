@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   Input,
   MenuButton,
   MoreIcon,
+  Text,
 } from '@fluentui/react-northstar'
 import { HexColorPicker } from 'react-colorful'
 
@@ -17,7 +18,8 @@ import { palettesSlice } from '../state/palettes'
 import { MainContent, Info, SliderInput } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import {
-  cssGradientFromPalette,
+  cssGradientFromCurve,
+  curvePathFromPalette,
   hex_to_sRGB,
   Lab_to_hex,
 } from '../lib/paletteShades'
@@ -56,6 +58,10 @@ export const Palette = () => {
   const hueTorsion = useAppSelector(
     (state) => state.palettes[paletteId].hueTorsion
   )
+
+  const paletteCurve = useMemo(() => {
+    return curvePathFromPalette({ keyColor, darkCp, lightCp, hueTorsion })
+  }, [darkCp, lightCp, hueTorsion, keyColor])
 
   return (
     <MainContent back>
@@ -100,12 +106,7 @@ export const Palette = () => {
       <Box as="section">
         <Box
           styles={{
-            backgroundImage: cssGradientFromPalette({
-              keyColor,
-              darkCp,
-              lightCp,
-              hueTorsion,
-            }),
+            backgroundImage: cssGradientFromCurve(paletteCurve),
             height: '2rem',
             borderRadius: '.5rem',
           }}
@@ -161,7 +162,11 @@ export const Palette = () => {
           <Flex styles={{ marginInlineEnd: '-1rem' }}>
             <SliderInput
               id="darkCpLabel"
-              label="Curvature toward black"
+              label={
+                <Text>
+                  <abbr title="Chroma control point">CCP</abbr> to black
+                </Text>
+              }
               value={darkCp}
               onChange={(darkCp) =>
                 dispatch(
@@ -174,7 +179,11 @@ export const Palette = () => {
             />
             <SliderInput
               id="lightCpLabel"
-              label="Curvature toward white"
+              label={
+                <Text>
+                  <abbr title="Chroma control point">CCP</abbr> to white
+                </Text>
+              }
               value={lightCp}
               onChange={(lightCp) =>
                 dispatch(

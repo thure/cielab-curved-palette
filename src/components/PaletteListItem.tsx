@@ -2,7 +2,10 @@ import React from 'react'
 import { Box } from '@fluentui/react-northstar'
 import { useHistory } from 'react-router-dom'
 import { Palette } from '../lib/interfaces'
-import { cssGradientFromPalette } from '../lib/paletteShades'
+import {
+  cssGradientFromCurve,
+  curvePathFromPalette,
+} from '../lib/paletteShades'
 
 export const PaletteListItem = ({
   id,
@@ -16,7 +19,7 @@ export const PaletteListItem = ({
         padding: '1rem',
         margin: '1rem 0',
         cursor: 'pointer',
-        backgroundImage: cssGradientFromPalette(palette),
+        backgroundImage: cssGradientFromCurve(curvePathFromPalette(palette)),
         minHeight: '2rem',
       }}
       onClick={() => history.push(`/palette/${id}`)}

@@ -87,12 +87,12 @@ function get_point_within_gamut(this: CurvePath<Vector3>, t): Vector3 {
   return point
 }
 
-function curvePathFromPalette({
+export function curvePathFromPalette({
   keyColor,
   darkCp,
   lightCp,
   hueTorsion,
-}: Omit<Palette, 'name'>): CurvePath<Vector3> {
+}: Palette): CurvePath<Vector3> {
   const blackPos = new Vector3(0, 0, 0)
   const whitePos = new Vector3(0, 0, 100)
   const [l, a, b] = LCH_to_Lab(keyColor)
@@ -135,10 +135,7 @@ function curvePathFromPalette({
   return curve
 }
 
-export function cssGradientFromPalette(palette: Omit<Palette, 'name'>, d = 16) {
-  const curve = curvePathFromPalette(palette)
-
+export function cssGradientFromCurve(curve: CurvePath<Vector3>, d = 16) {
   const hexes = paletteShadesToHex(getPaletteShades(curve.getPoints(d), d))
-
-  return `linear-gradient(to left, ${hexes.reverse().join(', ')})`
+  return `linear-gradient(to right, ${hexes.join(', ')})`
 }
