@@ -26,6 +26,28 @@ export const palettesSlice = createSlice({
     ) => {
       state[id].keyColor = keyColor
     },
+    setDarkCp: (
+      state,
+      { payload: { id, darkCp } }: PayloadAction<{ id: string; darkCp: number }>
+    ) => {
+      state[id].darkCp = darkCp
+    },
+    setLightCp: (
+      state,
+      {
+        payload: { id, lightCp },
+      }: PayloadAction<{ id: string; lightCp: number }>
+    ) => {
+      state[id].lightCp = lightCp
+    },
+    setHueTorsion: (
+      state,
+      {
+        payload: { id, hueTorsion },
+      }: PayloadAction<{ id: string; hueTorsion: number }>
+    ) => {
+      state[id].hueTorsion = hueTorsion
+    },
   },
 })
 
