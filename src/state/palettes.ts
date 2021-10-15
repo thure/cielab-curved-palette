@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Palette } from '../lib/interfaces'
+import { Palette, Vec3 } from '../lib/interfaces'
 
 interface PallettesState {
   [paletteId: string]: Palette
@@ -15,11 +15,18 @@ export const palettesSlice = createSlice({
       const { id, ...palette } = payload
       state[id] = palette
     },
-    delete: (state, { payload }: PayloadAction<{ id: string }>) => {
-      delete state[payload.id]
+    delete: (state, { payload: { id } }: PayloadAction<{ id: string }>) => {
+      delete state[id]
+    },
+    setKeyColor: (
+      state,
+      {
+        payload: { id, keyColor },
+      }: PayloadAction<{ id: string; keyColor: Vec3 }>
+    ) => {
+      state[id].keyColor = keyColor
     },
   },
 })
 
-export const { create } = palettesSlice.actions
 export default palettesSlice.reducer

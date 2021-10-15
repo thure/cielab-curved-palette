@@ -55,18 +55,29 @@ function getPaletteShades(
   return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }
 
+export function Lab_to_hex(lab: Vec3): string {
+  return (
+    '#' +
+    LAB_to_sRGB(lab)
+      .map((x) => {
+        const channel = x < 0 ? 0 : Math.floor(x >= 1.0 ? 255 : x * 256)
+        return channel.toString(16).padStart(2, '0')
+      })
+      .join('')
+  )
+}
+
+export function hex_to_sRGB(hex: string): Vec3 {
+  var aRgbHex = hex.match(/#?(..)(..)(..)/)
+  return [
+    parseInt(aRgbHex[1], 16) / 255,
+    parseInt(aRgbHex[2], 16) / 255,
+    parseInt(aRgbHex[3], 16) / 255,
+  ]
+}
+
 function paletteShadesToHex(paletteShades: Vec3[]): string[] {
-  return paletteShades.map((lab) => {
-    return (
-      '#' +
-      LAB_to_sRGB(lab)
-        .map((x) => {
-          const channel = x < 0 ? 0 : Math.floor(x >= 1.0 ? 255 : x * 256)
-          return channel.toString(16).padStart(2, '0')
-        })
-        .join('')
-    )
-  })
+  return paletteShades.map(Lab_to_hex)
 }
 
 function get_point_within_gamut(this: CurvePath<Vector3>, t): Vector3 {
@@ -81,7 +92,7 @@ function curvePathFromPalette({
   darkCp,
   lightCp,
   hueTorsion,
-}: Palette): CurvePath<Vector3> {
+}: Omit<Palette, 'name'>): CurvePath<Vector3> {
   const blackPos = new Vector3(0, 0, 0)
   const whitePos = new Vector3(0, 0, 100)
   const [l, a, b] = LCH_to_Lab(keyColor)
@@ -124,7 +135,7 @@ function curvePathFromPalette({
   return curve
 }
 
-export function cssGradientFromPalette(palette: Palette, d = 16) {
+export function cssGradientFromPalette(palette: Omit<Palette, 'name'>, d = 16) {
   const curve = curvePathFromPalette(palette)
 
   const hexes = paletteShadesToHex(getPaletteShades(curve.getPoints(d), d))

@@ -329,7 +329,7 @@ export function D50_to_D65(XYZ) {
 
 // Lab and LCH
 
-export function XYZ_to_Lab(XYZ) {
+export function XYZ_to_Lab(XYZ: Vec3): Vec3 {
   // Assuming XYZ is relative to D50, convert to CIE Lab
   // from CIE standard, which now defines these as a rational fraction
   var ε = 216 / 24389 // 6^3/29^3
@@ -351,7 +351,7 @@ export function XYZ_to_Lab(XYZ) {
   ]
 }
 
-export function Lab_to_XYZ(Lab) {
+export function Lab_to_XYZ(Lab: Vec3): Vec3 {
   // Convert Lab to D50-adapted XYZ
   // http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
   var κ = 24389 / 27 // 29^3/3^3
@@ -372,7 +372,7 @@ export function Lab_to_XYZ(Lab) {
   ]
 
   // Compute XYZ by scaling xyz by reference white
-  return xyz.map((value, i) => value * white[i])
+  return xyz.map((value, i) => value * white[i]) as Vec3
 }
 
 export function Lab_to_LCH(Lab: Vec3): Vec3 {

@@ -24,6 +24,7 @@ import {
   XYZ_to_lin_P3,
   XYZ_to_lin_sRGB,
 } from './conversions'
+import { Vec3 } from '../interfaces'
 
 export function sRGB_to_luminance(RGB) {
   // convert an array of gamma-corrected sRGB values
@@ -51,7 +52,7 @@ export function contrast(RGB1, RGB2) {
   return (L2 + 0.05) / (L1 + 0.05)
 }
 
-export function sRGB_to_LCH(RGB) {
+export function sRGB_to_LCH(RGB: Vec3) {
   // convert an array of gamma-corrected sRGB values
   // in the 0.0 to 1.0 range
   // to linear-light sRGB, then to CIE XYZ,
@@ -62,7 +63,7 @@ export function sRGB_to_LCH(RGB) {
   return Lab_to_LCH(XYZ_to_Lab(D65_to_D50(lin_sRGB_to_XYZ(lin_sRGB(RGB)))))
 }
 
-export function sRGB_to_LAB(RGB) {
+export function sRGB_to_LAB(RGB: Vec3) {
   // convert an array of gamma-corrected sRGB values
   // in the 0.0 to 1.0 range
   // to linear-light sRGB, then to CIE XYZ,

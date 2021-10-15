@@ -25,6 +25,7 @@
     "lodash": "latest",
     "nanoid": "^3.1.30",
     "react": "^16.8.6",
+    "react-colorful": "^5.5.0",
     "react-dom": "^16.8.6",
     "react-redux": "latest",
     "react-router-dom": "latest",
