@@ -13,18 +13,12 @@ export const PaletteListItem = ({
     <Box
       styles={{
         borderRadius: '.5rem',
-        borderWidth: '1px',
-        borderStyle: 'solid',
         padding: '1rem',
         margin: '1rem 0',
         cursor: 'pointer',
         backgroundImage: cssGradientFromPalette(palette),
         minHeight: '2rem',
       }}
-      variables={({ colorScheme }) => ({
-        borderColor: colorScheme.default.foreground2,
-        elevation: '0px 0.2rem 0.4rem -0.075rem rgba(0, 0, 0, 0.25)',
-      })}
       onClick={() => history.push(`/palette/${id}`)}
     />
   )

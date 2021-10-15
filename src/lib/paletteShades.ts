@@ -46,7 +46,11 @@ function getPaletteShades(
     ]
   }
 
-  // paletteShades[nShades - 1] = curvePoints[curvePoints.length - 1]
+  paletteShades[nShades - 1] = [
+    curvePoints[curvePoints.length - 1].z,
+    curvePoints[curvePoints.length - 1].x,
+    curvePoints[curvePoints.length - 1].y,
+  ]
 
   return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }
