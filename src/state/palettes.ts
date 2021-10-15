@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Palette } from '../types'
+import { Palette } from '../lib/interfaces'
 
 interface PallettesState {
   [paletteId: string]: Palette

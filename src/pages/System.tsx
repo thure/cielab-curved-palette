@@ -37,7 +37,7 @@ export const System = () => {
             palettesSlice.actions.create({
               id,
               name: '',
-              keyColor: [50, 0, 0],
+              keyColor: [44.51, 39.05, 288.84],
               darkCp: 2 / 3,
               lightCp: 1 / 3,
               hueTorsion: 0,

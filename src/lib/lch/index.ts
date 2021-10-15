@@ -4,8 +4,9 @@
 
 import { LCH_to_sRGB } from '../csswg/utilities'
 import { Lab_to_LCH, LCH_to_Lab } from '../csswg/conversions'
+import { Vec3 } from '../interfaces'
 
-export function force_into_gamut(_l, a, b) {
+export function force_into_gamut(_l: number, a: number, b: number): Vec3 {
   // Moves an lch color into the sRGB gamut
   // by holding the l and h steady,
   // and adjusting the c via binary-search
@@ -35,7 +36,7 @@ export function force_into_gamut(_l, a, b) {
   return LCH_to_Lab([l, c, h])
 }
 
-export function isLCH_within_sRGB(l, c, h) {
+export function isLCH_within_sRGB(l: number, c: number, h: number): boolean {
   var rgb = LCH_to_sRGB([+l, +c, +h])
   const ε = 0.000005
   return rgb.reduce((a, b) => a && b >= 0 - ε && b <= 1 + ε, true)

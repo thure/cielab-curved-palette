@@ -1,4 +1,5 @@
 import multiplyMatrices from './multiply-matrices'
+import { Vec3 } from '../interfaces'
 
 // Sample code for color conversions
 // Conversion can also be done using ICC profiles and a Color Management System
@@ -374,7 +375,7 @@ export function Lab_to_XYZ(Lab) {
   return xyz.map((value, i) => value * white[i])
 }
 
-export function Lab_to_LCH(Lab) {
+export function Lab_to_LCH(Lab: Vec3): Vec3 {
   // Convert to polar form
   var hue = (Math.atan2(Lab[2], Lab[1]) * 180) / Math.PI
   return [
@@ -384,7 +385,7 @@ export function Lab_to_LCH(Lab) {
   ]
 }
 
-export function LCH_to_Lab(LCH) {
+export function LCH_to_Lab(LCH: Vec3): Vec3 {
   // Convert from polar form
   return [
     LCH[0], // L is still L

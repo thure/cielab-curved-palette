@@ -1,7 +1,8 @@
 import React from 'react'
 import { Box } from '@fluentui/react-northstar'
 import { useHistory } from 'react-router-dom'
-import { Palette } from '../types'
+import { Palette } from '../lib/interfaces'
+import { cssGradientFromPalette } from '../lib/paletteShades'
 
 export const PaletteListItem = ({
   id,
@@ -17,14 +18,14 @@ export const PaletteListItem = ({
         padding: '1rem',
         margin: '1rem 0',
         cursor: 'pointer',
+        backgroundImage: cssGradientFromPalette(palette),
+        minHeight: '2rem',
       }}
       variables={({ colorScheme }) => ({
         borderColor: colorScheme.default.foreground2,
         elevation: '0px 0.2rem 0.4rem -0.075rem rgba(0, 0, 0, 0.25)',
       })}
       onClick={() => history.push(`/palette/${id}`)}
-    >
-      …
-    </Box>
+    />
   )
 }
