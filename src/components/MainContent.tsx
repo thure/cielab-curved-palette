@@ -27,7 +27,7 @@ export const MainContent = ({
       as="main"
       styles={{
         maxWidth: '60rem',
-        padding: '0 1rem',
+        padding: '1rem',
         margin: '0 auto',
       }}
     >

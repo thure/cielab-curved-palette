@@ -135,7 +135,7 @@ export function curvePathFromPalette({
   return curve
 }
 
-export function cssGradientFromCurve(curve: CurvePath<Vector3>, d = 16) {
+export function cssGradientFromCurve(curve: CurvePath<Vector3>, d = 32) {
   const hexes = paletteShadesToHex(getPaletteShades(curve.getPoints(d), d))
   return `linear-gradient(to right, ${hexes.join(', ')})`
 }

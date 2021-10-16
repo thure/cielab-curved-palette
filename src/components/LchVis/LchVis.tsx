@@ -6,14 +6,11 @@ import React, {
   useEffect,
 } from 'react'
 import { CurvePath, Vector3 } from 'three'
-import { Box } from '@fluentui/react-northstar'
 
 import { useAppSelector } from '../../state/hooks'
-import {
-  cssGradientFromCurve,
-  curvePathFromPalette,
-} from '../../lib/paletteShades'
+import { curvePathFromPalette } from '../../lib/paletteShades'
 import { init, mount, unmount, setCurve, SceneRef } from './scene'
+import { PalettePreview } from '../PalettePreview'
 
 function useHookWithRefCallback(deps, initialCurve: CurvePath<Vector3>) {
   const ref = useRef<SceneRef | null>(null)
@@ -61,14 +58,7 @@ export const LchVis = ({ paletteId }: { paletteId: string }) => {
         id={canvasId}
         ref={$canvas as (node: HTMLCanvasElement) => void}
       />
-      <Box
-        styles={{
-          margin: '1rem 0',
-          borderRadius: '.2rem',
-          height: '4rem',
-          backgroundImage: cssGradientFromCurve(paletteCurve),
-        }}
-      />
+      <PalettePreview curve={paletteCurve} />
     </>
   )
 }

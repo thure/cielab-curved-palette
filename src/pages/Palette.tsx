@@ -7,6 +7,7 @@ import {
   Button,
   TrashCanIcon,
   EditIcon,
+  Dialog,
   Input,
   MenuButton,
   MoreIcon,
@@ -63,11 +64,34 @@ export const Palette = () => {
           styles={{ flexGrow: 1, ...(!paletteName && { fontStyle: 'italic' }) }}
         >
           {paletteName || 'Untitled palette'}
-          <Button
-            text
-            content="Edit name"
-            icon={<EditIcon outline />}
-            styles={{ margin: '0 .5em' }}
+          <Dialog
+            header="Palette name"
+            content={
+              <>
+                <Input
+                  fluid
+                  placeholder="Enter a name here"
+                  value={paletteName}
+                  onChange={(_e, { value }) =>
+                    dispatch(
+                      palettesSlice.actions.setName({
+                        id: paletteId,
+                        name: value,
+                      })
+                    )
+                  }
+                />
+              </>
+            }
+            confirmButton="Okay"
+            trigger={
+              <Button
+                text
+                content="Edit name"
+                icon={<EditIcon outline />}
+                styles={{ margin: '0 .5em' }}
+              />
+            }
           />
         </Header>
         <MenuButton
@@ -93,7 +117,6 @@ export const Palette = () => {
         />
       </Flex>
 
-      {/* TODO: Palette preview */}
       <LchVis paletteId={paletteId} />
 
       <Box
@@ -147,7 +170,7 @@ export const Palette = () => {
               id="darkCpLabel"
               label={
                 <Text>
-                  <abbr title="Chroma control point">CCP</abbr> to black
+                  <abbr title="Chroma control point">C*CP</abbr> to black
                 </Text>
               }
               value={darkCp}
@@ -164,7 +187,7 @@ export const Palette = () => {
               id="lightCpLabel"
               label={
                 <Text>
-                  <abbr title="Chroma control point">CCP</abbr> to white
+                  <abbr title="Chroma control point">C*CP</abbr> to white
                 </Text>
               }
               value={lightCp}

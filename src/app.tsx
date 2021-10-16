@@ -21,6 +21,8 @@ const ugh = {
     borderColor: variables.borderColor,
     borderWidth: variables.borderWidth,
     boxShadow: variables.elevation,
+    '--surface-color': variables.surfaceColor,
+    '--foreground-color': variables.foregroundColor,
   }),
 }
 

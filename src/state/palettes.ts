@@ -51,6 +51,12 @@ export const palettesSlice = createSlice({
     ) => {
       state[id].hueTorsion = hueTorsion
     },
+    setName: (
+      state,
+      { payload: { id, name } }: PayloadAction<{ id: string; name: string }>
+    ) => {
+      state[id].name = name
+    },
   },
 })
 
