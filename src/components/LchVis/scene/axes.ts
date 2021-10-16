@@ -7,9 +7,9 @@ import {
   TextureLoader,
   Vector3,
 } from 'three'
-import hAxisAsset from '../assets/h-axis.png'
-import lcAxesAsset from '../assets/lc-axes.png'
-import { rotateAboutPoint } from '../lib/3d'
+import hAxisAsset from '../../../assets/h-axis.png'
+import lcAxesAsset from '../../../assets/lc-axes.png'
+import { rotateAboutPoint } from '../../../lib/3d'
 
 const alphaTest = 0.1
 

@@ -7,11 +7,12 @@ import {
   TubeGeometry,
   Vector3,
 } from 'three'
-import { ck, lk, rotatePoint } from '../lib/3d'
-import { LAB_to_sRGB } from '../lib/csswg/utilities'
-import { force_into_gamut } from '../lib/lch'
-import { LCH_to_Lab } from '../lib/csswg/conversions'
+import { rotatePoint } from '../../../lib/3d'
+import { LAB_to_sRGB } from '../../../lib/csswg/utilities'
+import { force_into_gamut } from '../../../lib/lch'
+import { LCH_to_Lab } from '../../../lib/csswg/conversions'
 import throttle from 'lodash/throttle'
+import { ck, lk } from './constants'
 
 const depth = 0.8
 const rs = 3

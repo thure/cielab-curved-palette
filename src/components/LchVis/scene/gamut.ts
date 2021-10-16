@@ -1,4 +1,4 @@
-import { sRGB_to_LAB } from '../lib/csswg/utilities'
+import { sRGB_to_LAB } from '../../../lib/csswg/utilities'
 import {
   BufferGeometry,
   Float32BufferAttribute,
@@ -7,9 +7,10 @@ import {
   MeshBasicMaterial,
   Vector3,
 } from 'three'
-import { ck, lk } from '../lib/3d'
+import { ck, lk } from './constants'
+import { Vec3 } from '../../../lib/interfaces'
 
-const center = new Vector3(0, 50, 0)
+const center = new Vector3(0, 0, 50)
 const depth = 32
 
 enum axisPhase {
@@ -67,11 +68,11 @@ export default function populate({ scene }) {
 
     for (let i = 0; i < depth; i++) {
       for (let o = 0; o < depth; o++) {
-        const color = getColor(phase, i, o)
+        const color = getColor(phase, i, o) as Vec3
         Array.prototype.push.apply(colors, color)
 
         const [L, A, B] = sRGB_to_LAB(color)
-        const position = new Vector3(A * ck, L * lk, B * ck)
+        const position = new Vector3(A * ck, B * ck, L * lk)
         vertices.push(position.x, position.y, position.z)
 
         const normal = position.sub(center).normalize()
@@ -86,7 +87,7 @@ export default function populate({ scene }) {
         const v3 = (i + 1) * depth + o
         const v4 = (i + 1) * depth + (o + 1)
 
-        if (p % 2 == 0) {
+        if (p % 2 != 0) {
           // counter-clockwise winding
           indices.push(v1, v2, v4)
           indices.push(v2, v3, v4)

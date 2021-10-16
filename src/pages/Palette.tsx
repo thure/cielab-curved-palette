@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   Box,
@@ -15,14 +15,9 @@ import {
 import { HexColorPicker } from 'react-colorful'
 
 import { palettesSlice } from '../state/palettes'
-import { MainContent, Info, SliderInput } from '../components'
+import { MainContent, Info, SliderInput, LchVis } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
-import {
-  cssGradientFromCurve,
-  curvePathFromPalette,
-  hex_to_sRGB,
-  Lab_to_hex,
-} from '../lib/paletteShades'
+import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
 
@@ -58,10 +53,6 @@ export const Palette = () => {
   const hueTorsion = useAppSelector(
     (state) => state.palettes[paletteId].hueTorsion
   )
-
-  const paletteCurve = useMemo(() => {
-    return curvePathFromPalette({ keyColor, darkCp, lightCp, hueTorsion })
-  }, [darkCp, lightCp, hueTorsion, keyColor])
 
   return (
     <MainContent back>
@@ -102,16 +93,8 @@ export const Palette = () => {
         />
       </Flex>
 
-      {/* Palette preview */}
-      <Box as="section">
-        <Box
-          styles={{
-            backgroundImage: cssGradientFromCurve(paletteCurve),
-            height: '2rem',
-            borderRadius: '.5rem',
-          }}
-        />
-      </Box>
+      {/* TODO: Palette preview */}
+      <LchVis paletteId={paletteId} />
 
       <Box
         styles={{
