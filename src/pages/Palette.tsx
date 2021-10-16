@@ -191,8 +191,8 @@ export const Palette = () => {
                   })
                 )
               }
-              min={-Math.PI}
-              max={Math.PI}
+              min={Math.PI / -2}
+              max={Math.PI / 2}
             />
             <Box role="none" styles={{ flex: '0 0 3.84rem' }} />
           </Flex>

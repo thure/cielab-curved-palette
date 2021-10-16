@@ -80,7 +80,7 @@ function paletteShadesToHex(paletteShades: Vec3[]): string[] {
   return paletteShades.map(Lab_to_hex)
 }
 
-function get_point_within_gamut(this: CurvePath<Vector3>, t): Vector3 {
+function get_point_within_gamut(this: CurvePath<Vector3>, t: number): Vector3 {
   const point = CurvePath.prototype.getPoint.call(this, t)
   const [l, a, b] = force_into_gamut(point.z, point.x, point.y)
   point.set(a, b, l)

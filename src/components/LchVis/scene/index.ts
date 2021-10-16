@@ -1,5 +1,7 @@
 import {
+  CurvePath,
   CustomBlending,
+  Mesh,
   PerspectiveCamera,
   Scene,
   Vector2,
@@ -13,24 +15,29 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 
 import { LchColor } from '../../../lib/color'
 import populateGamut from './gamut'
+import { setCurveMesh } from './curve'
 import { ck, lk } from './constants'
 
 export type SceneRef = {
-  pause: () => void
-  resume: () => void
+  pause?: () => void
+  resume?: () => void
   renderer: WebGLRenderer
+  scene: Scene
+  tubeMesh?: Mesh
 }
 
-export function init(canvas: HTMLCanvasElement): SceneRef {
+export function init(
+  canvas: HTMLCanvasElement,
+  initialCurve: CurvePath<Vector3>
+): SceneRef {
   window.addEventListener('resize', onWindowResize, false)
 
   const camera = new PerspectiveCamera(12, 1, 0.01, 8e3)
-  camera.position.x = 1160 * -ck
+  camera.position.x = 1010 * -ck
   camera.position.y = 0
   camera.position.z = 50 * lk
 
   const scene = new Scene()
-  // scene.background = LchColor(50, 0, 0)
   scene.background = null
 
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true })
@@ -39,7 +46,8 @@ export function init(canvas: HTMLCanvasElement): SceneRef {
   controls.target = new Vector3(0, 0, 50 * lk)
   controls.update()
 
-  //const axes = populateAxes({ scene })
+  const { tubeMesh } = setCurveMesh({ scene, renderer }, initialCurve)
+
   const { gamut, updateGamut } = populateGamut({ scene })
 
   const composer = new EffectComposer(renderer)
@@ -93,15 +101,24 @@ export function init(canvas: HTMLCanvasElement): SceneRef {
     pause,
     resume,
     renderer,
+    scene,
+    tubeMesh,
   }
 }
 
-export function unmount({ renderer, pause }) {
+export function unmount({ renderer, pause }: SceneRef) {
   pause()
   renderer.domElement = null
 }
 
-export function mount({ renderer, resume }, canvas: HTMLCanvasElement) {
+export function mount(
+  { renderer, resume }: SceneRef,
+  canvas: HTMLCanvasElement
+) {
   renderer.domElement = canvas
   resume()
+}
+
+export function setCurve(sceneRef: SceneRef, curve: CurvePath<Vector3>) {
+  return setCurveMesh(sceneRef, curve)
 }
