@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Box } from '@fluentui/react-northstar'
+import { Box, ChevronEndIcon } from '@fluentui/react-northstar'
 
 import { Palette } from '../lib/interfaces'
 import { curvePathFromPalette } from '../lib/paletteShades'
@@ -41,6 +41,7 @@ export const PaletteListItem = ({
         })}
       >
         {palette.name ? palette.name : 'Untitled palette'}
+        <ChevronEndIcon styles={{ margin: '0 .5em' }} outline />
       </Box>
     </PalettePreview>
   )

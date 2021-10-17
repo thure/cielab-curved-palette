@@ -1,5 +1,11 @@
 import React from 'react'
-import { Button, Header, AddIcon, Text } from '@fluentui/react-northstar'
+import {
+  Button,
+  Header,
+  AddIcon,
+  Text,
+  ChevronEndIcon,
+} from '@fluentui/react-northstar'
 import { useHistory } from 'react-router-dom'
 
 import { MainContent, PaletteListItem, ThemeListItem } from '../components'
@@ -32,11 +38,12 @@ export const System = () => {
             <Text styles={!theme.name && { fontStyle: 'italic' }}>
               {theme.name ? theme.name : 'Untitled theme'}
             </Text>
+            <ChevronEndIcon styles={{ margin: '0 .5em' }} outline />
           </ThemeListItem>
         )
       })}
       <Button
-        icon={<AddIcon />}
+        icon={<AddIcon outline />}
         content="Create a new theme"
         disabled={palettesIds.length < 1}
         onClick={() => {
@@ -54,7 +61,7 @@ export const System = () => {
         />
       ))}
       <Button
-        icon={<AddIcon />}
+        icon={<AddIcon outline />}
         content="Create a new palette"
         onClick={() => {
           const nextPalette = paletteTemplate()
