@@ -7,19 +7,29 @@ import { cssGradientFromCurve } from '../lib/paletteShades'
 interface PalettePreviewProps {
   curve: CurvePath<Vector3>
   onClick?: () => void
+  variant?: 'broad' | 'narrow'
 }
 
 export const PalettePreview = ({
   curve,
   onClick,
   children,
+  variant,
 }: PropsWithChildren<PalettePreviewProps>) => {
   return (
     <Box
       styles={{
         margin: '1rem 0',
         borderRadius: children ? '.4rem' : '.2rem',
-        minHeight: '3rem',
+        minHeight: (() => {
+          switch (variant) {
+            case 'narrow':
+              return '1.2rem'
+            case 'broad':
+            default:
+              return '3rem'
+          }
+        })(),
         backgroundImage: cssGradientFromCurve(curve),
         display: 'flex',
         flexFlow: 'row wrap',

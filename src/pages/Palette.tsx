@@ -16,7 +16,13 @@ import {
 import { HexColorPicker } from 'react-colorful'
 
 import { palettesSlice } from '../state/palettes'
-import { MainContent, Info, SliderInput, LchVis } from '../components'
+import {
+  MainContent,
+  Info,
+  SliderInput,
+  LchVis,
+  EntityName,
+} from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
@@ -59,41 +65,18 @@ export const Palette = () => {
     <MainContent back>
       {/* Title and overflow menu */}
       <Flex vAlign="center" as="section">
-        <Header
-          as="h1"
-          styles={{ flexGrow: 1, ...(!paletteName && { fontStyle: 'italic' }) }}
-        >
-          {paletteName || 'Untitled palette'}
-          <Dialog
-            header="Palette name"
-            content={
-              <>
-                <Input
-                  fluid
-                  placeholder="Enter a name here"
-                  value={paletteName}
-                  onChange={(_e, { value }) =>
-                    dispatch(
-                      palettesSlice.actions.setName({
-                        id: paletteId,
-                        name: value,
-                      })
-                    )
-                  }
-                />
-              </>
-            }
-            confirmButton="Okay"
-            trigger={
-              <Button
-                text
-                content="Edit name"
-                icon={<EditIcon outline />}
-                styles={{ margin: '0 .5em' }}
-              />
-            }
-          />
-        </Header>
+        <EntityName
+          name={paletteName}
+          onChange={(value) =>
+            dispatch(
+              palettesSlice.actions.setName({
+                id: paletteId,
+                name: value,
+              })
+            )
+          }
+          emptyNameValue={'Untitled palette'}
+        />
         <MenuButton
           menu={[
             {

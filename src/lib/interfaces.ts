@@ -8,3 +8,18 @@ export type Palette = {
 }
 
 export type NamedPalette = Palette & { name: string }
+
+export type PaletteRange = {
+  range: [number, number]
+}
+
+export type Theme = {
+  backgrounds: {
+    [paletteId: string]: PaletteRange
+  }
+  foregrounds: {
+    [paletteId: string]: PaletteRange
+  }
+}
+
+export type NamedTheme = Theme & { name: string }
