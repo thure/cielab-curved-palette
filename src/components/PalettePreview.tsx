@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import { Box } from '@fluentui/react-northstar'
+import { Box, EnterKey, SpacebarKey } from '@fluentui/react-northstar'
 import { CurvePath, Vector3 } from 'three'
 
 import { cssGradientFromCurve } from '../lib/paletteShades'
@@ -28,6 +28,16 @@ export const PalettePreview = ({
         ...(onClick && { cursor: 'pointer' }),
       }}
       onClick={onClick}
+      onKeyDown={({ keyCode }) => {
+        switch (keyCode) {
+          case EnterKey:
+          case SpacebarKey:
+            return onClick()
+          default:
+            return
+        }
+      }}
+      {...(onClick && { tabIndex: 0 })}
     >
       {children}
     </Box>
