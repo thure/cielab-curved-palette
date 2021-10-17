@@ -63,42 +63,22 @@ export const Palette = () => {
 
   return (
     <MainContent back>
-      {/* Title and overflow menu */}
-      <Flex vAlign="center" as="section">
-        <EntityName
-          name={paletteName}
-          onChange={(value) =>
-            dispatch(
-              palettesSlice.actions.setName({
-                id: paletteId,
-                name: value,
-              })
-            )
-          }
-          emptyNameValue={'Untitled palette'}
-        />
-        <MenuButton
-          menu={[
-            {
-              key: 'd',
-              content: 'Delete',
-              icon: <TrashCanIcon outline />,
-              onClick: () => {
-                dispatch(palettesSlice.actions.delete({ id: paletteId }))
-                history.push('/')
-              },
-            },
-          ]}
-          trigger={
-            <Button
-              text
-              iconOnly
-              icon={<MoreIcon outline />}
-              aria-label="Menu"
-            />
-          }
-        />
-      </Flex>
+      <EntityName
+        name={paletteName}
+        emptyNameValue={'Untitled palette'}
+        onChange={(value) =>
+          dispatch(
+            palettesSlice.actions.setName({
+              id: paletteId,
+              name: value,
+            })
+          )
+        }
+        onDelete={() => {
+          dispatch(palettesSlice.actions.delete({ id: paletteId }))
+          history.push('/')
+        }}
+      />
 
       <LchVis paletteId={paletteId} />
 

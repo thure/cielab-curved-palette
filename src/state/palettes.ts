@@ -8,7 +8,7 @@ interface PalettesState {
 const initialState = {} as PalettesState
 
 export const palettesSlice = createSlice({
-  name: 'app',
+  name: 'palettes',
   initialState,
   reducers: {
     create: (

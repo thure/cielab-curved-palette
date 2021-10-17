@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid'
+
 export type Vec3 = [number, number, number]
 
 export type Palette = {
@@ -8,6 +10,15 @@ export type Palette = {
 }
 
 export type NamedPalette = Palette & { name: string }
+
+export const paletteTemplate = (): NamedPalette & { id: string } => ({
+  id: nanoid(),
+  name: '',
+  keyColor: [44.51, 39.05, 288.84],
+  darkCp: 2 / 3,
+  lightCp: 1 / 3,
+  hueTorsion: 0,
+})
 
 export type PaletteRange = {
   range: [number, number]
@@ -23,3 +34,10 @@ export type Theme = {
 }
 
 export type NamedTheme = Theme & { name: string }
+
+export const themeTemplate = (): NamedTheme & { id: string } => ({
+  id: nanoid(),
+  name: '',
+  backgrounds: {},
+  foregrounds: {},
+})

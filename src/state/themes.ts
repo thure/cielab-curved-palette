@@ -1,27 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { NamedPalette, Vec3 } from '../lib/interfaces'
+import { NamedTheme } from '../lib/interfaces'
 
-interface PalettesState {
-  [themeId: string]: NamedPalette
+interface ThemesState {
+  [themeId: string]: NamedTheme
 }
 
-const initialState = {} as PalettesState
+const initialState = {} as ThemesState
 
-export const palettesSlice = createSlice({
-  name: 'app',
+export const themesSlice = createSlice({
+  name: 'themes',
   initialState,
   reducers: {
     create: (
       state,
-      { payload }: PayloadAction<NamedPalette & { id: string }>
+      { payload }: PayloadAction<NamedTheme & { id: string }>
     ) => {
-      const { id, ...palette } = payload
-      state[id] = palette
+      const { id, ...theme } = payload
+      state[id] = theme
     },
     delete: (state, { payload: { id } }: PayloadAction<{ id: string }>) => {
       delete state[id]
     },
+    setName: (
+      state,
+      { payload: { id, name } }: PayloadAction<{ id: string; name: string }>
+    ) => {
+      state[id].name = name
+    },
   },
 })
 
-export default palettesSlice.reducer
+export default themesSlice.reducer

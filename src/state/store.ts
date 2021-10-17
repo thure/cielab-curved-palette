@@ -7,6 +7,7 @@ import thunk from 'redux-thunk'
 
 import app from './app'
 import palettes from './palettes'
+import themes from './themes'
 
 export const store = configureStore({
   reducer: persistReducer(
@@ -17,6 +18,7 @@ export const store = configureStore({
     combineReducers({
       app,
       palettes,
+      themes,
     })
   ),
   devTools: process.env.NODE_ENV !== 'production',
