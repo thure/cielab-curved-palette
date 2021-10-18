@@ -1,18 +1,6 @@
 import React, { useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import {
-  Box,
-  Flex,
-  Header,
-  Button,
-  TrashCanIcon,
-  EditIcon,
-  Dialog,
-  Input,
-  MenuButton,
-  MoreIcon,
-  Text,
-} from '@fluentui/react-northstar'
+import { Box, Flex, Header, Input, Text } from '@fluentui/react-northstar'
 import { HexColorPicker } from 'react-colorful'
 
 import { palettesSlice } from '../state/palettes'
