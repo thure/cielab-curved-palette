@@ -28,6 +28,9 @@ import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
 
+const toDeg = (rad: number) => (rad * 180) / Math.PI
+const toRad = (deg: number) => (deg * Math.PI) / 180
+
 export const Palette = () => {
   const { paletteId } = useParams()
   const dispatch = useAppDispatch()
@@ -136,14 +139,17 @@ export const Palette = () => {
                   <abbr title="Chroma control point">C*CP</abbr> to black
                 </Text>
               }
-              value={darkCp}
-              onChange={(darkCp) =>
+              value={darkCp * 100}
+              onChange={(value) =>
                 dispatch(
-                  palettesSlice.actions.setDarkCp({ id: paletteId, darkCp })
+                  palettesSlice.actions.setDarkCp({
+                    id: paletteId,
+                    darkCp: value / 100,
+                  })
                 )
               }
               min={0}
-              max={1}
+              max={100}
               reverseSlider
             />
             <SliderInput
@@ -153,14 +159,17 @@ export const Palette = () => {
                   <abbr title="Chroma control point">C*CP</abbr> to white
                 </Text>
               }
-              value={lightCp}
-              onChange={(lightCp) =>
+              value={lightCp * 100}
+              onChange={(value) =>
                 dispatch(
-                  palettesSlice.actions.setLightCp({ id: paletteId, lightCp })
+                  palettesSlice.actions.setLightCp({
+                    id: paletteId,
+                    lightCp: value / 100,
+                  })
                 )
               }
               min={0}
-              max={1}
+              max={100}
               reverseInputs
             />
           </Flex>
@@ -168,19 +177,19 @@ export const Palette = () => {
             <SliderInput
               id="hueTorsionLabel"
               label="Hue torsion"
-              value={hueTorsion}
-              onChange={(hueTorsion) =>
+              value={toDeg(hueTorsion)}
+              onChange={(value) =>
                 dispatch(
                   palettesSlice.actions.setHueTorsion({
                     id: paletteId,
-                    hueTorsion,
+                    hueTorsion: toRad(value),
                   })
                 )
               }
-              min={Math.PI / -2}
-              max={Math.PI / 2}
+              min={-90}
+              max={90}
             />
-            <Box role="none" styles={{ flex: '0 0 3.84rem' }} />
+            <Box role="none" styles={{ flex: '0 0 4.84rem' }} />
           </Flex>
         </Box>
       </Box>

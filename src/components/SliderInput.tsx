@@ -23,27 +23,32 @@ export const SliderInput = ({
   onChange,
 }: SliderInputProps) => {
   const sk = reverseSlider ? -1 : 1
+  const numericProps = {
+    min: reverseSlider ? max * -1 : min,
+    max: reverseSlider ? min * -1 : max,
+    step: 0.5,
+  }
   const inputs = [
     <Input
       fluid
+      type="number"
+      {...numericProps}
       aria-labelledby={id}
-      value={value.toFixed(2)}
+      value={value.toFixed(1)}
       onChange={(_e, { value }) => onChange(parseFloat(value))}
-      styles={{ width: '3.4rem', flex: '0 0 auto' }}
+      styles={{ width: '4.4rem', flex: '0 0 auto' }}
       key="i1"
     />,
     <Slider
       fluid
+      {...numericProps}
       aria-labelledby={id}
       value={value * sk}
       onChange={(_e, { value }) => onChange(sk * parseFloat(value))}
-      min={reverseSlider ? max * -1 : min}
-      max={reverseSlider ? min * -1 : max}
       styles={{
         flex: '1 0 0',
         [reverseInputs ? 'marginInlineEnd' : 'marginInlineStart']: '.5rem',
       }}
-      step={0.01}
       key="i2"
     />,
   ]
