@@ -34,6 +34,16 @@ const appTheme = {
       track: () => ({
         display: 'none',
       }),
+      rail: ({ variables }) => ({
+        opacity: variables.railOpacity,
+        backgroundColor: variables.railBackgroundColor,
+      }),
+      thumb: ({ variables }) => ({
+        borderWidth: variables.thumbBorderWidth,
+        borderStyle: variables.thumbBorderStyle,
+        borderColor: variables.thumbBorderColor,
+        backgroundColor: variables.thumbBackgroundColor,
+      }),
     },
   },
 }

@@ -11,15 +11,10 @@ import {
   EditIcon,
 } from '@fluentui/react-northstar'
 
-import {
-  EntityName,
-  MainContent,
-  PaletteListItem,
-  PalettePreview,
-} from '../components'
+import { EntityName, MainContent, PaletteListItem } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
-import { curvePathFromPalette } from '../lib/paletteShades'
+import { PaletteRange } from '../components/PaletteRange'
 
 export const Theme = () => {
   const { themeId } = useParams()
@@ -47,6 +42,7 @@ export const Theme = () => {
       key: 'bg',
       title: 'Backgrounds',
       name: 'background',
+      themeKey: 'backgrounds',
       actionSuffix: 'Background',
       activePalettes: backgrounds,
       options: addBackgroundOptions,
@@ -55,6 +51,7 @@ export const Theme = () => {
       key: 'fg',
       title: 'Foregrounds',
       name: 'foreground',
+      themeKey: 'foregrounds',
       actionSuffix: 'Foreground',
       activePalettes: foregrounds,
       options: addForegroundOptions,
@@ -80,7 +77,15 @@ export const Theme = () => {
         }}
       />
       {sectionsContent.map(
-        ({ key, title, name, actionSuffix, activePalettes, options }) => {
+        ({
+          key,
+          title,
+          name,
+          themeKey,
+          actionSuffix,
+          activePalettes,
+          options,
+        }) => {
           return (
             <React.Fragment key={key}>
               <Header as="h2">{title}</Header>
@@ -91,13 +96,10 @@ export const Theme = () => {
                     vAlign="center"
                     styles={{
                       marginInlineEnd: '-0.5rem',
-                      marginBlockEnd: '.5rem',
+                      marginBlockEnd: '1rem',
                     }}
                   >
-                    <PalettePreview
-                      curve={curvePathFromPalette(palettes[paletteId])}
-                      variant="narrow"
-                    />
+                    <PaletteRange {...{ paletteId, themeId, themeKey }} />
                     <MenuButton
                       trigger={
                         <Button
