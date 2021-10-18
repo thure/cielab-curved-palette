@@ -8,13 +8,17 @@ import { PalettePreview } from './PalettePreview'
 
 export const PaletteListItem = ({
   id,
+  variant,
   ...palette
-}: Palette & { id: string; name?: string }) => {
+}: Palette & { id: string; variant?: 'link' | 'menuItem'; name?: string }) => {
   const history = useHistory()
   return (
     <PalettePreview
       curve={curvePathFromPalette(palette)}
-      onClick={() => history.push(`/palette/${id}`)}
+      {...(variant === 'link' && {
+        onClick: () => history.push(`/palette/${id}`),
+      })}
+      {...(variant === 'menuItem' && { variant: 'narrow' })}
     >
       <Box
         styles={{
@@ -41,7 +45,9 @@ export const PaletteListItem = ({
         })}
       >
         {palette.name ? palette.name : 'Untitled palette'}
-        <ChevronEndIcon styles={{ margin: '0 .5em' }} outline />
+        {variant === 'link' && (
+          <ChevronEndIcon styles={{ margin: '0 .5em' }} outline />
+        )}
       </Box>
     </PalettePreview>
   )

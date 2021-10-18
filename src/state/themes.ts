@@ -27,6 +27,38 @@ export const themesSlice = createSlice({
     ) => {
       state[id].name = name
     },
+    addBackground: (
+      state,
+      {
+        payload: { id, paletteId },
+      }: PayloadAction<{ id: string; paletteId: string }>
+    ) => {
+      state[id].backgrounds[paletteId] = { range: [0, 20] }
+    },
+    addForeground: (
+      state,
+      {
+        payload: { id, paletteId },
+      }: PayloadAction<{ id: string; paletteId: string }>
+    ) => {
+      state[id].foregrounds[paletteId] = { range: [60, 100] }
+    },
+    removeBackground: (
+      state,
+      {
+        payload: { id, paletteId },
+      }: PayloadAction<{ id: string; paletteId: string }>
+    ) => {
+      delete state[id].backgrounds[paletteId]
+    },
+    removeForeground: (
+      state,
+      {
+        payload: { id, paletteId },
+      }: PayloadAction<{ id: string; paletteId: string }>
+    ) => {
+      delete state[id].foregrounds[paletteId]
+    },
   },
 })
 

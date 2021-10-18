@@ -57,6 +57,7 @@ export const System = () => {
         <PaletteListItem
           key={paletteId}
           id={paletteId}
+          variant="link"
           {...palettes[paletteId]}
         />
       ))}

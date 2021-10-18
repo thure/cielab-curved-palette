@@ -19,7 +19,7 @@ export const PalettePreview = ({
   return (
     <Box
       styles={{
-        margin: '1rem 0',
+        margin: variant === 'narrow' ? '0' : '1rem 0',
         borderRadius: children ? '.4rem' : '.2rem',
         minHeight: (() => {
           switch (variant) {
@@ -30,6 +30,7 @@ export const PalettePreview = ({
               return '3rem'
           }
         })(),
+        flex: '1 0 auto',
         backgroundImage: cssGradientFromCurve(curve),
         display: 'flex',
         flexFlow: 'row wrap',
