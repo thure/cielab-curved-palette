@@ -219,6 +219,7 @@ export const Theme = () => {
         }}
       >
         {contrastValue ? `1 : ${Math.floor(contrastValue * 2) / 2}` : 'None'}
+        {contrastValue >= 4.5 ? (contrastValue >= 7 ? ' AAA' : ' AA') : ''}
       </Text>
     </MainContent>
   )
