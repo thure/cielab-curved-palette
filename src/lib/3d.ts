@@ -23,6 +23,3 @@ export function rotatePoint(vector, point, axis, theta) {
   vector.applyAxisAngle(axis, theta) // rotate the POSITION
   vector.add(point) // re-add the offset
 }
-
-export const ck = 3 / 8
-export const lk = 1

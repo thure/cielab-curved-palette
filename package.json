@@ -1,26 +1,35 @@
 {
   "name": "cielab-curved-palette",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A tool which generates accessible sRGB color palettes by drawing bézier curves through CIELAB color space.",
   "main": "dist/index.html",
   "repository": "git@github.com:thure/cielab-curved-palette.git",
-  "author": "Will Shown <v-wishow@microsoft.com>",
+  "author": "Will Shown <willshown@microsoft.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/three": "^0.128.0",
-    "parcel-bundler": "^1.12.5",
-    "prettier": "^2.3.0",
-    "typescript": "^4.2.4"
+    "@types/three": "latest",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "parcel-bundler": "latest",
+    "prettier": "latest",
+    "typescript": "^4.4.4"
   },
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "rm -rf docs && parcel build src/index.html --public-url /cielab-curved-palette/ --out-dir docs --no-source-maps"
+    "build": "rm -rf docs && parcel build src/index.html --public-url /cielab-curved-palette/ --out-dir docs --no-source-maps",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "@fluentui/react-northstar": "^0.56.0",
-    "lodash": "^4.17.21",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "three": "^0.128.0"
+    "@fluentui/react-northstar": "latest",
+    "@reduxjs/toolkit": "latest",
+    "lodash": "latest",
+    "nanoid": "^3.1.30",
+    "react": "^16.8.6",
+    "react-colorful": "^5.5.0",
+    "react-dom": "^16.8.6",
+    "react-redux": "latest",
+    "react-router-dom": "latest",
+    "redux-persist": "^6.0.0",
+    "three": "latest"
   }
 }
