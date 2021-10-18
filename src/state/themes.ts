@@ -59,6 +59,32 @@ export const themesSlice = createSlice({
     ) => {
       delete state[id].foregrounds[paletteId]
     },
+    setDarkPoint: (
+      state,
+      {
+        payload: { themeId, themeKey, paletteId, value },
+      }: PayloadAction<{
+        themeId: string
+        paletteId: string
+        themeKey: string
+        value: number
+      }>
+    ) => {
+      state[themeId][themeKey][paletteId].range[0] = value
+    },
+    setLightPoint: (
+      state,
+      {
+        payload: { themeId, themeKey, paletteId, value },
+      }: PayloadAction<{
+        themeId: string
+        paletteId: string
+        themeKey: string
+        value: number
+      }>
+    ) => {
+      state[themeId][themeKey][paletteId].range[1] = value
+    },
   },
 })
 
