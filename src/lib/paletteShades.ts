@@ -55,6 +55,15 @@ function getPaletteShades(
   return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }
 
+export function paletteShadesFromCurve(
+  curve: CurvePath<Vector3>,
+  nShades = 8,
+  curveDepth = 12
+): Vec3[] {
+  const curvePoints = curve.getPoints(Math.ceil(curveDepth / 2)) // getPoints gets a depth of 2 * n + 1
+  return getPaletteShades(curvePoints, nShades)
+}
+
 export function Lab_to_hex(lab: Vec3): string {
   return (
     '#' +
@@ -135,7 +144,13 @@ export function curvePathFromPalette({
   return curve
 }
 
-export function cssGradientFromCurve(curve: CurvePath<Vector3>, d = 32) {
-  const hexes = paletteShadesToHex(getPaletteShades(curve.getPoints(d), d))
+export function cssGradientFromCurve(
+  curve: CurvePath<Vector3>,
+  nShades = 8,
+  curveDepth = 12
+) {
+  const hexes = paletteShadesToHex(
+    paletteShadesFromCurve(curve, curveDepth, nShades)
+  )
   return `linear-gradient(to right, ${hexes.join(', ')})`
 }
