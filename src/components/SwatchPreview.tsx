@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Flex, Input, Checkbox, Text } from '@fluentui/react-northstar'
-import range from 'lodash/range'
+import { Box, Flex, Input, Text } from '@fluentui/react-northstar'
 
 import { usePaletteCurve } from '../lib/usePaletteCurve'
 import { CurvePath, Vector3 } from 'three'
@@ -18,36 +17,15 @@ export const SwatchPreview = (props: {
   palette?: Palette
 }) => {
   const [nShades, setNShades] = useState(8)
-  const [includeWhite, setIncludeWhite] = useState(false)
-  const [includeBlack, setIncludeBlack] = useState(false)
 
   const { paletteId } = props
-  const [paletteCurve, palette] =
+  const [paletteCurve, _palette] =
     [props.paletteCurve, props.palette] ?? usePaletteCurve(paletteId)
 
-  const divisions = nShades * 2 + 1
-  const allShades = paletteShadesFromCurve(
-    paletteCurve,
-    divisions + (!(includeWhite && includeBlack) ? 1 : 0)
-  )
-  const shades = (() => {
-    const result = []
-    if (includeBlack) result.push(allShades[0])
-    for (
-      var i = includeBlack ? 1 : 2;
-      i < allShades.length - (includeWhite ? 2 : 1);
-      i += 2
-    ) {
-      result.push(allShades[i])
-    }
-    if (includeWhite) result.push(allShades[allShades.length - 1])
-    return result
-  })()
+  const shades = paletteShadesFromCurve(paletteCurve, nShades + 2)
 
   const id = `${paletteId}__swatch-preview`
   const nShadesId = `${id}__n-shades`
-  const includeWhiteId = `${id}__include-white`
-  const includeBlackId = `${id}__include-black`
 
   const shadeStyles = {
     height: '3rem',
@@ -56,8 +34,13 @@ export const SwatchPreview = (props: {
     marginInlineStart: `${10 / shades.length}%`,
   }
 
+  const bwStyles = {
+    flexBasis: '1rem',
+    maxWidth: '1rem',
+  }
+
   return (
-    <Box>
+    <Box styles={{ marginBlockEnd: '2rem' }}>
       <Flex styles={{ marginInlineEnd: '-1rem' }}>
         <Box styles={styles.controlSet}>
           <Text as="label" id={nShadesId} styles={styles.label}>
@@ -66,33 +49,11 @@ export const SwatchPreview = (props: {
           <Input
             fluid
             type="number"
-            min={0}
+            min={1}
             max={360}
             aria-labelledby={nShadesId}
             value={`${nShades}`}
             onChange={(_e, { value }) => setNShades(parseInt(value))}
-          />
-        </Box>
-        <Box styles={styles.controlSet}>
-          <Text as="label" id={includeBlackId} styles={styles.label}>
-            Include black
-          </Text>
-          <Checkbox
-            aria-labelledby={id}
-            toggle
-            checked={includeBlack}
-            onChange={() => setIncludeBlack(!includeBlack)}
-          />
-        </Box>
-        <Box styles={styles.controlSet}>
-          <Text as="label" id={includeWhiteId} styles={styles.label}>
-            Include white
-          </Text>
-          <Checkbox
-            aria-labelledby={id}
-            toggle
-            checked={includeWhite}
-            onChange={() => setIncludeWhite(!includeWhite)}
           />
         </Box>
       </Flex>
@@ -103,7 +64,13 @@ export const SwatchPreview = (props: {
         }}
       >
         {shades.map((lab) => (
-          <Box styles={{ ...shadeStyles, backgroundColor: Lab_to_hex(lab) }} />
+          <Box
+            styles={{
+              ...shadeStyles,
+              ...((lab[0] === 0 || lab[0] === 100) && bwStyles),
+              backgroundColor: Lab_to_hex(lab),
+            }}
+          />
         ))}
       </Flex>
     </Box>
