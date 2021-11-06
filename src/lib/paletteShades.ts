@@ -64,16 +64,20 @@ export function paletteShadesFromCurve(
   return getPaletteShades(curvePoints, nShades)
 }
 
-export function Lab_to_hex(lab: Vec3): string {
+export function sRGB_to_hex(rgb: Vec3): string {
   return (
     '#' +
-    LAB_to_sRGB(lab)
+    rgb
       .map((x) => {
         const channel = x < 0 ? 0 : Math.floor(x >= 1.0 ? 255 : x * 256)
         return channel.toString(16).padStart(2, '0')
       })
       .join('')
   )
+}
+
+export function Lab_to_hex(lab: Vec3): string {
+  return sRGB_to_hex(LAB_to_sRGB(lab))
 }
 
 export function hex_to_sRGB(hex: string): Vec3 {

@@ -5,6 +5,7 @@ import { usePaletteCurve } from '../lib/usePaletteCurve'
 import { CurvePath, Vector3 } from 'three'
 import { Palette } from '../lib/interfaces'
 import { Lab_to_hex, paletteShadesFromCurve } from '../lib/paletteShades'
+import { ShadeInspection } from './ShadeInspection'
 
 const styles = {
   controlSet: { flex: '0 0 auto', marginInlineEnd: '1rem' },
@@ -64,13 +65,16 @@ export const SwatchPreview = (props: {
         }}
       >
         {shades.map((lab) => (
-          <Box
-            styles={{
-              ...shadeStyles,
-              ...((lab[0] === 0 || lab[0] === 100) && bwStyles),
-              backgroundColor: Lab_to_hex(lab),
-            }}
-          />
+          <ShadeInspection lab={lab}>
+            <Box
+              tabIndex={0}
+              styles={{
+                ...shadeStyles,
+                ...((lab[0] === 0 || lab[0] === 100) && bwStyles),
+                backgroundColor: Lab_to_hex(lab),
+              }}
+            />
+          </ShadeInspection>
         ))}
       </Flex>
     </Box>

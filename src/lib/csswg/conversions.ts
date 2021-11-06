@@ -393,3 +393,44 @@ export function LCH_to_Lab(LCH: Vec3): Vec3 {
     LCH[1] * Math.sin((LCH[2] * Math.PI) / 180), // b
   ]
 }
+
+/**
+ * Converts an RGB color value to HSV. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
+ * Assumes r, g, and b are contained in the set [0, 1] and
+ * returns h, s, and v in the set [0, 1].
+ *
+ * @param   rgb      The red, green, and blue color values
+ * @return  Array    The HSV representation
+ */
+export function rgbToHsv(rgb: Vec3) {
+  var [r, g, b] = rgb
+  var max = Math.max(r, g, b),
+    min = Math.min(r, g, b)
+  var h,
+    s,
+    v = max
+
+  var d = max - min
+  s = max == 0 ? 0 : d / max
+
+  if (max == min) {
+    h = 0 // achromatic
+  } else {
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0)
+        break
+      case g:
+        h = (b - r) / d + 2
+        break
+      case b:
+        h = (r - g) / d + 4
+        break
+    }
+
+    h /= 6
+  }
+
+  return [h, s, v]
+}
