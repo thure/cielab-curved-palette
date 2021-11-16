@@ -56,8 +56,6 @@ export const ShadeInspection = ({
   const hsv = rgbToHsv(srgb)
   const hex = sRGB_to_hex(srgb)
 
-  console.log(srgb, hsv)
-
   return (
     <Tooltip
       pointing

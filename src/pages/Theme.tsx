@@ -18,8 +18,6 @@ import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
 import { PaletteRange } from '../components/PaletteRange'
 
-const contrast = (L1: number, L2: number): number => (L1 + 0.05) / (L2 + 0.05)
-
 export const Theme = () => {
   const { themeId } = useParams()
   const history = useHistory()
@@ -41,8 +39,8 @@ export const Theme = () => {
     (paletteId) => !(paletteId in foregrounds)
   )
 
-  const contrastValue: number | null = useMemo(() => {
-    const bgSpan = Object.keys(backgrounds).reduce(
+  const middlemostBgL: number | null = useMemo(() => {
+    const [darkestL, lightestL] = Object.keys(backgrounds).reduce(
       ([darkestPoint, lightestPoint], paletteId) => {
         const [darkPoint, lightPoint] = backgrounds[paletteId].range
         return [
@@ -52,25 +50,10 @@ export const Theme = () => {
       },
       [Infinity, -Infinity]
     )
-
-    const fgSpan = Object.keys(foregrounds).reduce(
-      ([darkestPoint, lightestPoint], paletteId) => {
-        const [darkPoint, lightPoint] = foregrounds[paletteId].range
-        return [
-          Math.min(darkPoint, darkestPoint),
-          Math.max(lightPoint, lightestPoint),
-        ]
-      },
-      [Infinity, -Infinity]
-    )
-
-    return inRange(bgSpan[0], fgSpan[0], fgSpan[1]) ||
-      inRange(bgSpan[1], fgSpan[0], fgSpan[1])
-      ? null // there is overlap
-      : bgSpan[0] > fgSpan[1]
-      ? contrast(bgSpan[0], fgSpan[1]) // dark on light (light mode theme)
-      : contrast(fgSpan[0], bgSpan[1]) // light on dark (dark mode theme)
-  }, [backgrounds, foregrounds])
+    const darketstLDelta = darkestL
+    const lighestLDelta = 100 - lightestL
+    return darketstLDelta > lighestLDelta ? darkestL : lightestL
+  }, [backgrounds])
 
   const sectionsContent = [
     {
@@ -134,7 +117,10 @@ export const Theme = () => {
                       marginBlockEnd: '1rem',
                     }}
                   >
-                    <PaletteRange {...{ paletteId, themeId, themeKey }} />
+                    <PaletteRange
+                      {...{ paletteId, themeId, themeKey }}
+                      {...(key === 'fg' && { bgL: middlemostBgL })}
+                    />
                     <MenuButton
                       trigger={
                         <Button
@@ -198,29 +184,6 @@ export const Theme = () => {
           )
         }
       )}
-      <Header as="h2">
-        Contrast accessibility{' '}
-        <Info>
-          Within a given theme, this evaluates the contrast ratio between the
-          middlemost point of the ranges of foreground palettes with the
-          middlemost point of the ranges of background palettes. If the ranges
-          overlap between backgrounds and foregrounds, you’ll see 'None',
-          otherwise this will provide the contrast ratio and the best WCAG
-          success criterion (1.4.x) that the ratio meets.
-        </Info>
-      </Header>
-      <Text
-        as="p"
-        styles={{
-          fontSize: '4rem',
-          lineHeight: 1,
-          fontWeight: 200,
-          marginBlockStart: 0,
-        }}
-      >
-        {contrastValue ? `1 : ${Math.floor(contrastValue * 2) / 2}` : 'None'}
-        {contrastValue >= 4.5 ? (contrastValue >= 7 ? ' AAA' : ' AA') : ''}
-      </Text>
     </MainContent>
   )
 }
