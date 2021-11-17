@@ -20,11 +20,10 @@ const styles = {
   },
 }
 
-const getContrast = (L1: number, L2: number): number =>
+const contrastRatio = (L1: number, L2: number): number =>
   (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05)
 
-const contrastText = (L1: number, L2: number): string => {
-  const contrast = getContrast(L1, L2)
+const contrastText = (contrast: number): string => {
   switch (true) {
     case contrast >= 7:
       return '7'
@@ -37,8 +36,8 @@ const contrastText = (L1: number, L2: number): string => {
   }
 }
 
-const WCAGRatio = ({ bgL, fgL }: { bgL: number; fgL: number }) => {
-  return <Text size="small">{contrastText(bgL, fgL)}</Text>
+const WCAGRatio = ({ contrast }: { contrast: number }) => {
+  return <Text size="small">{contrastText(contrast)}</Text>
 }
 
 export const SwatchPreview = (props: {
@@ -89,25 +88,32 @@ export const SwatchPreview = (props: {
           marginInlineStart: `${-10 / shades.length}%`,
         }}
       >
-        {shades.map((lab) => (
-          <ShadeInspection lab={lab} key={JSON.stringify(lab)}>
-            <Box
-              tabIndex={0}
-              styles={{
-                ...shadeStyles,
-                ...((lab[0] === 0 || lab[0] === 100) && styles.bw),
-              }}
+        {shades.map((lab) => {
+          const contrast = bgL ? contrastRatio(bgL, lab[0]) : null
+          return (
+            <ShadeInspection
+              lab={lab}
+              key={JSON.stringify(lab)}
+              contrast={contrast}
             >
               <Box
+                tabIndex={0}
                 styles={{
-                  ...styles.shadePreview,
-                  backgroundColor: Lab_to_hex(lab),
+                  ...shadeStyles,
+                  ...((lab[0] === 0 || lab[0] === 100) && styles.bw),
                 }}
-              />
-              {bgL && <WCAGRatio bgL={bgL} fgL={lab[0]} />}
-            </Box>
-          </ShadeInspection>
-        ))}
+              >
+                <Box
+                  styles={{
+                    ...styles.shadePreview,
+                    backgroundColor: Lab_to_hex(lab),
+                  }}
+                />
+                {bgL && <WCAGRatio contrast={contrast} />}
+              </Box>
+            </ShadeInspection>
+          )
+        })}
       </Flex>
     </Box>
   )

@@ -46,9 +46,11 @@ const KeyValue = ({
 
 export const ShadeInspection = ({
   lab,
+  contrast,
   children,
 }: {
   lab: Vec3
+  contrast?: number | null
   children: JSX.Element
 }) => {
   const lch = Lab_to_LCH(lab)
@@ -77,6 +79,16 @@ export const ShadeInspection = ({
               <KeyValue k="V" v={`${(hsv[2] * 100).toFixed(0)}`} unit="%" />
             </Box>
           </Flex>
+          {contrast && (
+            <Box>
+              <Header as="h2" styles={{ margin: 0 }}>
+                1:{contrast.toFixed(2)}
+              </Header>
+              <Text as="p" styles={{ margin: 0 }}>
+                max contrast ratio against all backgrounds in this theme.
+              </Text>
+            </Box>
+          )}
         </Box>
       }
     />
