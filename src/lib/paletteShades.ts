@@ -31,7 +31,7 @@ function getPaletteShades(
 
   let c = 0
 
-  for (let i = 0; i < nShades - 1; i++) {
+  for (let i = 0; i < nShades; i++) {
     const l = getTargetLightness(/*linearity, */ i / (nShades - 1), range)
 
     while (l > curvePoints[c + 1].z) {
@@ -54,12 +54,6 @@ function getPaletteShades(
       b1 + (b2 - b1) * u,
     ]
   }
-
-  paletteShades[nShades - 1] = [
-    curvePoints[curvePoints.length - 1].z,
-    curvePoints[curvePoints.length - 1].x,
-    curvePoints[curvePoints.length - 1].y,
-  ]
 
   return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }

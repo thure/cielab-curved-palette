@@ -54,7 +54,7 @@ export const SwatchPreview = (props: {
   const [paletteCurve, _palette] =
     [props.paletteCurve, props.palette] ?? usePaletteCurve(paletteId)
 
-  const shades = paletteShadesFromCurve(paletteCurve, nShades + 1, 16, range)
+  const shades = paletteShadesFromCurve(paletteCurve, nShades, 16, range)
 
   const id = `${paletteId}__swatch-preview`
   const nShadesId = `${id}__n-shades`
