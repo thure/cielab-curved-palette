@@ -10,11 +10,13 @@ import {
   SliderInput,
   LchVis,
   EntityName,
+  SwatchPreview,
 } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
+import { usePaletteCurve } from '../lib/usePaletteCurve'
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI
 const toRad = (deg: number) => (deg * Math.PI) / 180
@@ -30,8 +32,11 @@ export const Palette = () => {
     return null
   }
 
-  const keyColor = useAppSelector((state) => state.palettes[paletteId].keyColor)
+  const [paletteCurve, palette] = usePaletteCurve(paletteId)
+  const { keyColor, darkCp, lightCp, hueTorsion } = palette
+
   const keyColorAsHex = Lab_to_hex(LCH_to_Lab(keyColor))
+
   const setKeyColorFromHex = useCallback(
     (hex) => {
       dispatch(
@@ -45,12 +50,6 @@ export const Palette = () => {
   )
 
   const paletteName = useAppSelector((state) => state.palettes[paletteId].name)
-
-  const darkCp = useAppSelector((state) => state.palettes[paletteId].darkCp)
-  const lightCp = useAppSelector((state) => state.palettes[paletteId].lightCp)
-  const hueTorsion = useAppSelector(
-    (state) => state.palettes[paletteId].hueTorsion
-  )
 
   return (
     <MainContent back>
@@ -71,7 +70,7 @@ export const Palette = () => {
         }}
       />
 
-      <LchVis paletteId={paletteId} />
+      <LchVis {...{ paletteId, paletteCurve, palette }} />
 
       <Box
         styles={{
@@ -179,6 +178,15 @@ export const Palette = () => {
             />
             <Box role="none" styles={{ flex: '0 0 4.84rem' }} />
           </Flex>
+        </Box>
+
+        {/* Palette preview */}
+        <Box
+          as="section"
+          styles={{ flex: '1 0 50vh', marginInlineEnd: '2rem' }}
+        >
+          <Header as="h2">Swatch preview</Header>
+          <SwatchPreview {...{ paletteId, paletteCurve, palette }} />
         </Box>
       </Box>
     </MainContent>

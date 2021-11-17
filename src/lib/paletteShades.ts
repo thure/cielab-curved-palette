@@ -6,15 +6,24 @@ import { Palette, Vec3 } from './interfaces'
 import { LCH_to_Lab } from './csswg/conversions'
 import { rotatePoint } from './3d'
 
-function getTargetLightness(/*linearity, */ t: number): number {
+function getTargetLightness(
+  /*linearity, */ t: number,
+  range = [0, 100]
+): number {
   // const cbrt = 6.3 * Math.cbrt(t * 1000 - 500) + 50
-  const line = t * 100
-  return Math.max(0, Math.min(100, /*cbrt + (*/ line /* - cbrt) * linearity*/))
+  const delta = range[1] - range[0]
+  const offset = range[0]
+  const line = t * delta + offset
+  return Math.max(
+    range[0],
+    Math.min(range[1], /*cbrt + (*/ line /* - cbrt) * linearity*/)
+  )
 }
 
 function getPaletteShades(
   curvePoints: Vector3[],
-  /*linearity, */ nShades: number
+  /*linearity, */ nShades: number,
+  range = [0, 100]
 ): Vec3[] {
   if (curvePoints.length <= 2) return []
 
@@ -22,8 +31,8 @@ function getPaletteShades(
 
   let c = 0
 
-  for (let i = 0; i < nShades - 1; i++) {
-    const l = getTargetLightness(/*linearity, */ i / (nShades - 1))
+  for (let i = 0; i < nShades; i++) {
+    const l = getTargetLightness(/*linearity, */ i / (nShades - 1), range)
 
     while (l > curvePoints[c + 1].z) {
       c++
@@ -46,25 +55,33 @@ function getPaletteShades(
     ]
   }
 
-  paletteShades[nShades - 1] = [
-    curvePoints[curvePoints.length - 1].z,
-    curvePoints[curvePoints.length - 1].x,
-    curvePoints[curvePoints.length - 1].y,
-  ]
-
   return paletteShades.map(([l, a, b]) => force_into_gamut(l, a, b))
 }
 
-export function Lab_to_hex(lab: Vec3): string {
+export function paletteShadesFromCurve(
+  curve: CurvePath<Vector3>,
+  nShades = 8,
+  curveDepth = 12,
+  range = [0, 100]
+): Vec3[] {
+  const curvePoints = curve.getPoints(Math.ceil(curveDepth / 2)) // getPoints gets a depth of 2 * n + 1
+  return getPaletteShades(curvePoints, nShades, range)
+}
+
+export function sRGB_to_hex(rgb: Vec3): string {
   return (
     '#' +
-    LAB_to_sRGB(lab)
+    rgb
       .map((x) => {
         const channel = x < 0 ? 0 : Math.floor(x >= 1.0 ? 255 : x * 256)
         return channel.toString(16).padStart(2, '0')
       })
       .join('')
   )
+}
+
+export function Lab_to_hex(lab: Vec3): string {
+  return sRGB_to_hex(LAB_to_sRGB(lab))
 }
 
 export function hex_to_sRGB(hex: string): Vec3 {
@@ -135,7 +152,13 @@ export function curvePathFromPalette({
   return curve
 }
 
-export function cssGradientFromCurve(curve: CurvePath<Vector3>, d = 32) {
-  const hexes = paletteShadesToHex(getPaletteShades(curve.getPoints(d), d))
+export function cssGradientFromCurve(
+  curve: CurvePath<Vector3>,
+  nShades = 8,
+  curveDepth = 12
+) {
+  const hexes = paletteShadesToHex(
+    paletteShadesFromCurve(curve, curveDepth, nShades)
+  )
   return `linear-gradient(to right, ${hexes.join(', ')})`
 }

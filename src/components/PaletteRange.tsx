@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
 import { PalettePreview } from './PalettePreview'
 import { curvePathFromPalette } from '../lib/paletteShades'
+import { SwatchPreview } from './SwatchPreview'
 
 const numericProps = { min: 0, max: 100, step: 0.01 }
 
@@ -17,7 +18,7 @@ const sliderVariables = ({ colorScheme }) => ({
   thumbBorderStyle: 'solid',
 })
 
-export const PaletteRange = ({ themeId, themeKey, paletteId }) => {
+export const PaletteRange = ({ themeId, themeKey, paletteId, bgL }) => {
   const dispatch = useAppDispatch()
 
   const darkPoint = useAppSelector(
@@ -98,13 +99,18 @@ export const PaletteRange = ({ themeId, themeKey, paletteId }) => {
 
   const htmlId = `${themeId}__${themeKey}__${paletteId}`
 
+  const curve = curvePathFromPalette(palette)
+
   return (
     <Box styles={{ flex: '1 0 0' }}>
+      <SwatchPreview
+        paletteId={paletteId}
+        paletteCurve={curve}
+        range={[darkPoint, lightPoint]}
+        bgL={bgL}
+      />
       <Box styles={{ position: 'relative', marginBlockEnd: '.5rem' }}>
-        <PalettePreview
-          curve={curvePathFromPalette(palette)}
-          variant="narrow"
-        />
+        <PalettePreview curve={curve} variant="narrow" />
         <Box
           styles={{
             position: 'absolute',

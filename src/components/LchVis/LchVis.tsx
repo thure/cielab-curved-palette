@@ -1,16 +1,11 @@
-import React, {
-  useRef,
-  useCallback,
-  useMemo,
-  MutableRefObject,
-  useEffect,
-} from 'react'
+import React, { useRef, useCallback, MutableRefObject, useEffect } from 'react'
 import { CurvePath, Vector3 } from 'three'
+import values from 'lodash/values'
 
-import { useAppSelector } from '../../state/hooks'
-import { curvePathFromPalette } from '../../lib/paletteShades'
 import { init, mount, unmount, setCurve, SceneRef } from './scene'
 import { PalettePreview } from '../PalettePreview'
+import { usePaletteCurve } from '../../lib/usePaletteCurve'
+import { Palette } from '../../lib/interfaces'
 
 function useHookWithRefCallback(deps, initialCurve: CurvePath<Vector3>) {
   const ref = useRef<SceneRef | null>(null)
@@ -28,19 +23,14 @@ function useHookWithRefCallback(deps, initialCurve: CurvePath<Vector3>) {
   return [setRef, ref]
 }
 
-export const LchVis = ({ paletteId }: { paletteId: string }) => {
-  const darkCp = useAppSelector((state) => state.palettes[paletteId].darkCp)
-  const lightCp = useAppSelector((state) => state.palettes[paletteId].lightCp)
-  const keyColor = useAppSelector((state) => state.palettes[paletteId].keyColor)
-  const hueTorsion = useAppSelector(
-    (state) => state.palettes[paletteId].hueTorsion
-  )
-
-  const deps = [darkCp, lightCp, hueTorsion, keyColor]
-
-  const paletteCurve = useMemo(() => {
-    return curvePathFromPalette({ keyColor, darkCp, lightCp, hueTorsion })
-  }, deps)
+export const LchVis = (props: {
+  paletteId: string
+  paletteCurve?: CurvePath<Vector3>
+  palette?: Palette
+}) => {
+  const { paletteId } = props
+  const [paletteCurve, palette] =
+    [props.paletteCurve, props.palette] ?? usePaletteCurve(paletteId)
 
   const [$canvas, sceneRef] = useHookWithRefCallback([paletteId], paletteCurve)
   const canvasId = `${paletteId}__canvas`
@@ -49,7 +39,7 @@ export const LchVis = ({ paletteId }: { paletteId: string }) => {
     const mutableSceneRef = sceneRef as MutableRefObject<SceneRef>
     if (mutableSceneRef.current)
       mutableSceneRef.current = setCurve(mutableSceneRef.current, paletteCurve)
-  }, deps)
+  }, values(palette))
 
   return (
     <>

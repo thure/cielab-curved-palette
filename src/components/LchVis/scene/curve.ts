@@ -10,7 +10,7 @@ import { LAB_to_sRGB } from '../../../lib/csswg/utilities'
 import { ck, lk } from './constants'
 import { SceneRef } from './index'
 
-const depth = 3
+const depth = 0.7
 const rs = 5
 const thickness = 0.8
 
