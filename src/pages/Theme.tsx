@@ -17,6 +17,7 @@ import { EntityName, Info, MainContent, PaletteListItem } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
 import { PaletteRange } from '../components/PaletteRange'
+import { PreviewMatrix } from '../components/PreviewMatrix'
 
 export const Theme = () => {
   const { themeId } = useParams()
@@ -184,6 +185,8 @@ export const Theme = () => {
           )
         }
       )}
+      <Header as="h2">Preview matrix</Header>
+      <PreviewMatrix themeId={themeId} />
     </MainContent>
   )
 }
