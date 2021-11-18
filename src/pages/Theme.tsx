@@ -43,8 +43,8 @@ export const Theme = () => {
     (paletteId) => !(paletteId in foregrounds)
   )
 
-  const middlemostBgL: number | null = useMemo(() => {
-    const [darkestL, lightestL] = Object.keys(backgrounds).reduce(
+  const BgLExtrema: [number, number] | null = useMemo(() => {
+    return Object.keys(backgrounds).reduce(
       ([darkestPoint, lightestPoint], paletteId) => {
         const [darkShade, lightShade] = paletteShadesFromCurve(
           curvePathFromPalette(palettes[paletteId]),
@@ -59,9 +59,6 @@ export const Theme = () => {
       },
       [Infinity, -Infinity]
     )
-    const darketstLDelta = darkestL
-    const lighestLDelta = 100 - lightestL
-    return darketstLDelta > lighestLDelta ? darkestL : lightestL
   }, [backgrounds, palettes])
 
   const sectionsContent = [
@@ -128,7 +125,7 @@ export const Theme = () => {
                   >
                     <PaletteRange
                       {...{ paletteId, themeId, themeKey }}
-                      {...(key === 'fg' && { bgL: middlemostBgL })}
+                      {...(key === 'fg' && { bgLs: BgLExtrema })}
                     />
                     <MenuButton
                       trigger={
