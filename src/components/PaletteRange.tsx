@@ -18,7 +18,7 @@ const sliderVariables = ({ colorScheme }) => ({
   thumbBorderStyle: 'solid',
 })
 
-export const PaletteRange = ({ themeId, themeKey, paletteId, bgL }) => {
+export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
   const dispatch = useAppDispatch()
 
   const darkPoint = useAppSelector(
@@ -107,7 +107,7 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgL }) => {
         paletteId={paletteId}
         paletteCurve={curve}
         range={[darkPoint, lightPoint]}
-        bgL={bgL}
+        bgLs={bgLs}
         themeKey={themeKey}
         themeId={themeId}
       />

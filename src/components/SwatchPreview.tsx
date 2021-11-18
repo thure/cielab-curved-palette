@@ -23,8 +23,11 @@ const styles = {
   },
 }
 
-const contrastRatio = (L1: number, L2: number): number =>
-  (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05)
+const contrastRatio = ([L1a, L1b]: [number, number], L2: number): number =>
+  Math.min(
+    (Math.max(L1a, L2) + 0.05) / (Math.min(L1a, L2) + 0.05),
+    (Math.max(L1b, L2) + 0.05) / (Math.min(L1b, L2) + 0.05)
+  )
 
 const contrastText = (contrast: number): string => {
   switch (true) {
@@ -48,11 +51,11 @@ export const SwatchPreview = (props: {
   paletteCurve?: CurvePath<Vector3>
   palette?: Palette
   range?: number[]
-  bgL?: number
+  bgLs?: [number, number]
   themeId?: string
   themeKey?: string
 }) => {
-  const { paletteId, range = [0, 100], bgL, themeId, themeKey } = props
+  const { paletteId, range = [0, 100], bgLs, themeId, themeKey } = props
   const dispatch = useAppDispatch()
 
   const initialNShades =
@@ -120,7 +123,7 @@ export const SwatchPreview = (props: {
         }}
       >
         {shades.map((lab) => {
-          const contrast = bgL ? contrastRatio(bgL, Lab_to_XYZ(lab)[1]) : null
+          const contrast = bgLs ? contrastRatio(bgLs, Lab_to_XYZ(lab)[1]) : null
           return (
             <ShadeInspection
               lab={lab}
@@ -140,7 +143,7 @@ export const SwatchPreview = (props: {
                     backgroundColor: Lab_to_hex(lab),
                   }}
                 />
-                {bgL && <WCAGRatio contrast={contrast} />}
+                {bgLs && <WCAGRatio contrast={contrast} />}
               </Box>
             </ShadeInspection>
           )

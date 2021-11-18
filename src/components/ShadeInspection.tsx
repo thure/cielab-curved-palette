@@ -85,7 +85,8 @@ export const ShadeInspection = ({
                 1:{contrast.toFixed(2)}
               </Header>
               <Text as="p" styles={{ margin: 0 }}>
-                max contrast ratio against all backgrounds in this theme.
+                minimum assured contrast ratio against lightest & darkest
+                background shades in this theme.
               </Text>
             </Box>
           )}
