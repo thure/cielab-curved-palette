@@ -16,11 +16,11 @@ import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
 import { PaletteRange } from '../components/PaletteRange'
 import { PreviewMatrix } from '../components/PreviewMatrix'
-import { LAB_to_sRGB, sRGB_to_luminance } from '../lib/csswg/utilities'
 import {
   curvePathFromPalette,
   paletteShadesFromCurve,
 } from '../lib/paletteShades'
+import { Lab_to_XYZ } from '../lib/csswg/conversions'
 
 export const Theme = () => {
   const { themeId } = useParams()
@@ -53,8 +53,8 @@ export const Theme = () => {
           backgrounds[paletteId].range
         )
         return [
-          Math.min(sRGB_to_luminance(LAB_to_sRGB(darkShade)), darkestPoint),
-          Math.max(sRGB_to_luminance(LAB_to_sRGB(lightShade)), lightestPoint),
+          Math.min(Lab_to_XYZ(darkShade)[1], darkestPoint),
+          Math.max(Lab_to_XYZ(lightShade)[1], lightestPoint),
         ]
       },
       [Infinity, -Infinity]

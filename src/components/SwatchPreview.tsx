@@ -8,7 +8,7 @@ import { Lab_to_hex, paletteShadesFromCurve } from '../lib/paletteShades'
 import { ShadeInspection } from './ShadeInspection'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
-import { LAB_to_sRGB, sRGB_to_luminance } from '../lib/csswg/utilities'
+import { Lab_to_XYZ } from '../lib/csswg/conversions'
 
 const styles = {
   controlSet: { flex: '0 0 auto', marginInlineEnd: '1rem' },
@@ -120,9 +120,7 @@ export const SwatchPreview = (props: {
         }}
       >
         {shades.map((lab) => {
-          const contrast = bgL
-            ? contrastRatio(bgL, sRGB_to_luminance(LAB_to_sRGB(lab)))
-            : null
+          const contrast = bgL ? contrastRatio(bgL, Lab_to_XYZ(lab)[1]) : null
           return (
             <ShadeInspection
               lab={lab}
