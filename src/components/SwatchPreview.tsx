@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box, Flex, Input, Text } from '@fluentui/react-northstar'
 
 import { usePaletteCurve } from '../lib/usePaletteCurve'
@@ -6,6 +6,9 @@ import { CurvePath, Vector3 } from 'three'
 import { Palette } from '../lib/interfaces'
 import { Lab_to_hex, paletteShadesFromCurve } from '../lib/paletteShades'
 import { ShadeInspection } from './ShadeInspection'
+import { useAppDispatch, useAppSelector } from '../state/hooks'
+import { themesSlice } from '../state/themes'
+import { Lab_to_XYZ } from '../lib/csswg/conversions'
 
 const styles = {
   controlSet: { flex: '0 0 auto', marginInlineEnd: '1rem' },
@@ -46,10 +49,38 @@ export const SwatchPreview = (props: {
   palette?: Palette
   range?: number[]
   bgL?: number
+  themeId?: string
+  themeKey?: string
 }) => {
-  const [nShades, setNShades] = useState(8)
+  const { paletteId, range = [0, 100], bgL, themeId, themeKey } = props
+  const dispatch = useAppDispatch()
 
-  const { paletteId, range = [0, 100], bgL } = props
+  const initialNShades =
+    themeId && themeKey
+      ? useAppSelector(
+          (state) => state.themes[themeId][themeKey][paletteId].nShades
+        )
+      : 6
+
+  const [nShades, setNShades] = useState(initialNShades)
+
+  const onChangeNShades = useCallback(
+    (_e, { value: valueStr }) => {
+      const value = parseInt(valueStr)
+      if (themeId && themeKey)
+        dispatch(
+          themesSlice.actions.setNShades({
+            themeId,
+            paletteId,
+            themeKey,
+            value,
+          })
+        )
+      setNShades(value)
+    },
+    [themeId, themeKey, paletteId]
+  )
+
   const [paletteCurve, _palette] =
     [props.paletteCurve, props.palette] ?? usePaletteCurve(paletteId)
 
@@ -78,7 +109,7 @@ export const SwatchPreview = (props: {
             max={360}
             aria-labelledby={nShadesId}
             value={`${nShades}`}
-            onChange={(_e, { value }) => setNShades(parseInt(value))}
+            onChange={onChangeNShades}
           />
         </Box>
       </Flex>
@@ -89,7 +120,7 @@ export const SwatchPreview = (props: {
         }}
       >
         {shades.map((lab) => {
-          const contrast = bgL ? contrastRatio(bgL, lab[0]) : null
+          const contrast = bgL ? contrastRatio(bgL, Lab_to_XYZ(lab)[1]) : null
           return (
             <ShadeInspection
               lab={lab}

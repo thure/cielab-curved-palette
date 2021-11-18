@@ -20,16 +20,17 @@ export const paletteTemplate = (): NamedPalette & { id: string } => ({
   hueTorsion: 0,
 })
 
-export type PaletteRange = {
+export type PaletteConfig = {
   range: [number, number]
+  nShades: number
 }
 
 export type Theme = {
   backgrounds: {
-    [paletteId: string]: PaletteRange
+    [paletteId: string]: PaletteConfig
   }
   foregrounds: {
-    [paletteId: string]: PaletteRange
+    [paletteId: string]: PaletteConfig
   }
 }
 

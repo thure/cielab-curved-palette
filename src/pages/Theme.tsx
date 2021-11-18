@@ -1,22 +1,26 @@
 import React, { useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import inRange from 'lodash/inRange'
 import {
   Header,
   Button,
   Flex,
   MenuButton,
-  Text,
   AddIcon,
   TrashCanIcon,
   MoreIcon,
   EditIcon,
 } from '@fluentui/react-northstar'
 
-import { EntityName, Info, MainContent, PaletteListItem } from '../components'
+import { EntityName, MainContent, PaletteListItem } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
 import { PaletteRange } from '../components/PaletteRange'
+import { PreviewMatrix } from '../components/PreviewMatrix'
+import {
+  curvePathFromPalette,
+  paletteShadesFromCurve,
+} from '../lib/paletteShades'
+import { Lab_to_XYZ } from '../lib/csswg/conversions'
 
 export const Theme = () => {
   const { themeId } = useParams()
@@ -42,10 +46,15 @@ export const Theme = () => {
   const middlemostBgL: number | null = useMemo(() => {
     const [darkestL, lightestL] = Object.keys(backgrounds).reduce(
       ([darkestPoint, lightestPoint], paletteId) => {
-        const [darkPoint, lightPoint] = backgrounds[paletteId].range
+        const [darkShade, lightShade] = paletteShadesFromCurve(
+          curvePathFromPalette(palettes[paletteId]),
+          2,
+          8,
+          backgrounds[paletteId].range
+        )
         return [
-          Math.min(darkPoint, darkestPoint),
-          Math.max(lightPoint, lightestPoint),
+          Math.min(Lab_to_XYZ(darkShade)[1], darkestPoint),
+          Math.max(Lab_to_XYZ(lightShade)[1], lightestPoint),
         ]
       },
       [Infinity, -Infinity]
@@ -53,7 +62,7 @@ export const Theme = () => {
     const darketstLDelta = darkestL
     const lighestLDelta = 100 - lightestL
     return darketstLDelta > lighestLDelta ? darkestL : lightestL
-  }, [backgrounds])
+  }, [backgrounds, palettes])
 
   const sectionsContent = [
     {
@@ -184,6 +193,8 @@ export const Theme = () => {
           )
         }
       )}
+      <Header as="h2">Preview matrix</Header>
+      <PreviewMatrix themeId={themeId} />
     </MainContent>
   )
 }

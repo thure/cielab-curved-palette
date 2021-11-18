@@ -108,6 +108,8 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgL }) => {
         paletteCurve={curve}
         range={[darkPoint, lightPoint]}
         bgL={bgL}
+        themeKey={themeKey}
+        themeId={themeId}
       />
       <Box styles={{ position: 'relative', marginBlockEnd: '.5rem' }}>
         <PalettePreview curve={curve} variant="narrow" />
