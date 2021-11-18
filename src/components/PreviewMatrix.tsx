@@ -1,13 +1,10 @@
 import React, { useMemo, useState } from 'react'
-import find from 'lodash/find'
-import { Box, Flex, Dropdown, Text, Label } from '@fluentui/react-northstar'
+import { Box, Dropdown, Text } from '@fluentui/react-northstar'
 import { useAppSelector } from '../state/hooks'
-import { usePaletteCurve } from '../lib/usePaletteCurve'
 import {
   curvePathFromPalette,
   Lab_to_hex,
   paletteShadesFromCurve,
-  sRGB_to_hex,
 } from '../lib/paletteShades'
 
 export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
@@ -118,10 +115,9 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
             fluid
             placeholder="Please select a foreground palette"
             defaultValue={fgItems[0]}
-            onChange={(_e, { value }) => {
-              debugger
-              return setFgPaletteId(value['data-value'] || null)
-            }}
+            onChange={(_e, { value }) =>
+              setFgPaletteId(value['data-value'] || null)
+            }
             items={fgItems}
           />
         </Box>
