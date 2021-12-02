@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react'
 import { batch } from 'react-redux'
-import { Box, Flex, Input, Text, Slider } from '@fluentui/react-northstar'
+import isNumber from 'lodash/isNumber'
+import { Box, Flex, Text, Slider } from '@fluentui/react-northstar'
 
+import { Input } from './Input'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
 import { PalettePreview } from './PalettePreview'
@@ -31,8 +33,10 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
 
   const deps = [themeId, themeKey, paletteId, darkPoint, lightPoint]
 
-  const onDarkChange = useCallback((_e, { value }) => {
-    const numericValue = Math.min(100, Math.max(0, parseFloat(value)))
+  const getter = (value) => value.toFixed(2)
+  const setter = (valueStr) => Math.min(100, Math.max(0, parseFloat(valueStr)))
+
+  const onDarkChange = useCallback((numericValue) => {
     if (numericValue > lightPoint) {
       batch(() => {
         dispatch(
@@ -64,7 +68,7 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
     }
   }, deps)
 
-  const onLightChange = useCallback((_e, { value }) => {
+  const onLightChange = useCallback((value) => {
     const numericValue = Math.min(100, Math.max(0, parseFloat(value)))
     if (numericValue < darkPoint) {
       batch(() => {
@@ -128,14 +132,14 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
             {...numericProps}
             value={darkPoint}
             variables={sliderVariables}
-            onChange={onDarkChange}
+            onChange={(_e, { value }) => onDarkChange(setter(value))}
           />
           <Slider
             fluid
             {...numericProps}
             value={lightPoint}
             variables={sliderVariables}
-            onChange={onLightChange}
+            onChange={(_e, { value }) => onLightChange(setter(value))}
           />
         </Box>
       </Box>
@@ -151,9 +155,12 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
           id={`${htmlId}--dark`}
           type="number"
           {...numericProps}
-          value={darkPoint.toFixed(2)}
+          value={darkPoint}
+          getter={getter}
+          setter={setter}
           onChange={onDarkChange}
           styles={{ marginInlineEnd: '1rem' }}
+          key={`${paletteId}__range--dark__${darkPoint}`}
         />
         <Text
           as="label"
@@ -166,9 +173,12 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
           id={`${htmlId}--light`}
           type="number"
           {...numericProps}
-          value={lightPoint.toFixed(2)}
+          value={lightPoint}
+          getter={getter}
+          setter={setter}
           onChange={onLightChange}
           styles={{ marginInlineEnd: '1rem' }}
+          key={`${paletteId}__range--light__${lightPoint}`}
         />
       </Flex>
     </Box>
