@@ -1,4 +1,5 @@
-import { Box, Flex, Input, Slider, Text } from '@fluentui/react-northstar'
+import { Box, Flex, Slider, Text } from '@fluentui/react-northstar'
+import { Input } from './Input'
 import React, { ReactNode } from 'react'
 
 interface SliderInputProps {
@@ -34,10 +35,12 @@ export const SliderInput = ({
       type="number"
       {...numericProps}
       aria-labelledby={id}
-      value={value.toFixed(1)}
-      onChange={(_e, { value }) => onChange(parseFloat(value))}
+      value={value}
+      onChange={onChange}
+      setter={parseFloat}
+      getter={(value) => value.toFixed(1)}
       styles={{ width: '4.4rem', flex: '0 0 auto' }}
-      key="i1"
+      key={`${id}__${value}`}
     />,
     <Slider
       fluid
