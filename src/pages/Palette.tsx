@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Box, Flex, Header, Input, Text } from '@fluentui/react-northstar'
+import { Box, Flex, Header, Text } from '@fluentui/react-northstar'
 import { HexColorPicker } from 'react-colorful'
 
+import { Input } from '../components/Input'
 import { palettesSlice } from '../state/palettes'
 import {
   MainContent,
@@ -107,7 +108,8 @@ export const Palette = () => {
               aria-label="Key color hex value"
               value={keyColorAsHex}
               styles={{ margin: '.5rem 0' }}
-              onChange={(e, { value }) => setKeyColorFromHex(value)}
+              onChange={setKeyColorFromHex}
+              key={keyColorAsHex}
             />
           </Box>
         </Box>
