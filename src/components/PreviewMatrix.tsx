@@ -23,6 +23,11 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
     Object.keys(foregrounds || {})[0] ?? null
   )
 
+  if (!(bgPaletteId && fgPaletteId))
+    return (
+      <Text>Add a foreground and background to the theme to get started.</Text>
+    )
+
   const bgItems = Object.keys(backgrounds || {}).map((bgId) => ({
     header: palettes[bgId].name,
     'data-value': bgId,
