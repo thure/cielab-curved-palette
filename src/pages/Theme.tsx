@@ -190,8 +190,12 @@ export const Theme = () => {
           )
         }
       )}
-      <Header as="h2">Preview matrix</Header>
-      <PreviewMatrix themeId={themeId} />
+      {!!Object.keys(foregrounds).length && !!Object.keys(backgrounds).length && (
+        <>
+          <Header as="h2">Preview matrix</Header>
+          <PreviewMatrix themeId={themeId} />
+        </>
+      )}
     </MainContent>
   )
 }

@@ -29,13 +29,13 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
     )
 
   const bgItems = Object.keys(backgrounds || {}).map((bgId) => ({
-    header: palettes[bgId].name,
+    header: palettes[bgId].name || `Untitled palette (${bgId})`,
     'data-value': bgId,
     active: bgId === bgPaletteId,
   }))
 
   const fgItems = Object.keys(foregrounds || {}).map((fgId) => ({
-    header: palettes[fgId].name,
+    header: palettes[fgId].name || `Untitled palette (${fgId})`,
     'data-value': fgId,
     active: fgId === fgPaletteId,
   }))
