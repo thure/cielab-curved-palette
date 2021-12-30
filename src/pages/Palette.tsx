@@ -72,6 +72,19 @@ export const Palette = () => {
         }}
       />
 
+      <Header as="h2">
+        Curve visualization
+        <Info>
+          This is a 3D approximation of this palette’s curve in LAB space and a
+          gradient of the curve’s colors. The sRGB gamut is shown as a 50L
+          (medium gray) border around the curve. You can drag on the view to see
+          the curve &amp; gamut from different angles. As the curve’s shades are
+          calculated, any points that would lay outside the gamut are snapped to
+          to the most saturated point with the same hue and lightness that is
+          within the sRGB gamut.
+        </Info>
+      </Header>
+
       <LchVis {...{ paletteId, paletteCurve, palette }} />
 
       <Box styles={{ overflowX: 'hidden' }}>

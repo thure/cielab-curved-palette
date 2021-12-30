@@ -28,6 +28,24 @@ export const System = () => {
   return (
     <MainContent>
       <Header as="h1">Color system</Header>
+      <Header as="h2">Palettes</Header>
+      {palettesIds.map((paletteId, _p) => (
+        <PaletteListItem
+          key={paletteId}
+          id={paletteId}
+          variant="link"
+          {...palettes[paletteId]}
+        />
+      ))}
+      <Button
+        icon={<AddIcon outline />}
+        content="Create a new palette"
+        onClick={() => {
+          const nextPalette = paletteTemplate()
+          dispatch(palettesSlice.actions.create(nextPalette))
+          history.push(scoped(`/palette/${nextPalette.id}`))
+        }}
+      />
       <Header as="h2">Themes</Header>
       {themeIds.map((themeId, _t) => {
         const theme = themes[themeId]
@@ -53,24 +71,14 @@ export const System = () => {
           history.push(scoped(`/theme/${nextTheme.id}`))
         }}
       />
-      <Header as="h2">Palettes</Header>
-      {palettesIds.map((paletteId, _p) => (
-        <PaletteListItem
-          key={paletteId}
-          id={paletteId}
-          variant="link"
-          {...palettes[paletteId]}
-        />
-      ))}
-      <Button
-        icon={<AddIcon outline />}
-        content="Create a new palette"
-        onClick={() => {
-          const nextPalette = paletteTemplate()
-          dispatch(palettesSlice.actions.create(nextPalette))
-          history.push(scoped(`/palette/${nextPalette.id}`))
-        }}
-      />
+      <Header as="h1" styles={{ marginTop: '2em' }}>
+        Using this tool
+      </Header>
+      <Text as="p">
+        The best way to get started creating a color system with this tool is to
+        first create one or more palettes, then assemble the palettes into
+        themes.
+      </Text>
     </MainContent>
   )
 }

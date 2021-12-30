@@ -44,6 +44,10 @@ export function init(
 
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.target = new Vector3(0, 0, 50 * lk)
+  controls.minAzimuthAngle = -Math.PI
+  controls.maxAzimuthAngle = 0
+  controls.enableZoom = false
+  controls.rotateSpeed = 0.3
   controls.update()
 
   const { tubeMesh } = setCurveMesh({ scene, renderer }, initialCurve)
