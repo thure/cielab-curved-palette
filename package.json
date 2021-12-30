@@ -7,6 +7,7 @@
   "author": "Will Shown <willshown@microsoft.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^17.0.5",
     "@types/three": "latest",
     "husky": ">=6",
     "lint-staged": ">=10",
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "rm -rf docs && parcel build src/index.html --public-url /cielab-curved-palette/ --out-dir docs --no-source-maps",
+    "build": "rm -rf docs && (export NODE_ENV=\"production\"; parcel build src/index.html --public-url /cielab-curved-palette/ --out-dir docs --no-source-maps)",
     "prepare": "husky install"
   },
   "dependencies": {

@@ -2,6 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Box, ChevronEndIcon } from '@fluentui/react-northstar'
 
+import { scoped } from '../lib/basePath'
 import { Palette } from '../lib/interfaces'
 import { curvePathFromPalette } from '../lib/paletteShades'
 import { PalettePreview } from './PalettePreview'
@@ -16,7 +17,7 @@ export const PaletteListItem = ({
     <PalettePreview
       curve={curvePathFromPalette(palette)}
       {...(variant === 'link' && {
-        onClick: () => history.push(`/palette/${id}`),
+        onClick: () => history.push(scoped(`/palette/${id}`)),
       })}
       {...(variant === 'menuItem' && { variant: 'narrow' })}
     >

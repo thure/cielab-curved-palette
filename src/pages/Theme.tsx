@@ -11,6 +11,7 @@ import {
   EditIcon,
 } from '@fluentui/react-northstar'
 
+import { scoped } from '../lib/basePath'
 import { EntityName, MainContent, PaletteListItem } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
@@ -97,7 +98,7 @@ export const Theme = () => {
         }
         onDelete={() => {
           dispatch(themesSlice.actions.delete({ id: themeId }))
-          history.push('/')
+          history.push(scoped('/'))
         }}
       />
       {sectionsContent.map(
@@ -141,7 +142,8 @@ export const Theme = () => {
                           key: 'e',
                           content: 'Edit',
                           icon: <EditIcon outline />,
-                          onClick: () => history.push(`/palette/${paletteId}`),
+                          onClick: () =>
+                            history.push(scoped(`/palette/${paletteId}`)),
                         },
                         {
                           key: 'r',

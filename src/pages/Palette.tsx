@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import { Box, Flex, Header, Text } from '@fluentui/react-northstar'
 import { HexColorPicker } from 'react-colorful'
 
+import { scoped } from '../lib/basePath'
 import { Input } from '../components/Input'
 import { palettesSlice } from '../state/palettes'
 import {
@@ -29,7 +30,7 @@ export const Palette = () => {
   const history = useHistory()
 
   if (!(paletteId in palettes)) {
-    history.push('/')
+    history.push(scoped('/'))
     return null
   }
 
@@ -67,7 +68,7 @@ export const Palette = () => {
         }
         onDelete={() => {
           dispatch(palettesSlice.actions.delete({ id: paletteId }))
-          history.push('/')
+          history.push(scoped('/'))
         }}
       />
 
