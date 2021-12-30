@@ -74,122 +74,128 @@ export const Palette = () => {
 
       <LchVis {...{ paletteId, paletteCurve, palette }} />
 
-      <Box
-        styles={{
-          display: 'flex',
-          flexFlow: 'row wrap',
-          alignItems: 'stretch',
-          marginInlineEnd: '-2rem',
-        }}
-      >
-        {/* Key color */}
+      <Box styles={{ overflowX: 'hidden' }}>
         <Box
-          as="section"
-          styles={{ flex: '0 0 200px', marginInlineEnd: '2rem' }}
+          styles={{
+            display: 'flex',
+            flexFlow: 'row wrap',
+            alignItems: 'stretch',
+            width: 'calc(100% + 2rem)',
+          }}
         >
-          <Header as="h2">
-            Key color
-            <Info>
-              The key color is the inflection point between the palette’s two
-              curves: from the key color to black, and from the key color to
-              white. Generally speaking, it should have the greatest
-              chroma/saturation value. The palette’s path will pass through the
-              key color, however the exact key color is not guaranteed to appear
-              in the final palette.
-            </Info>
-          </Header>
-          <Box styles={{ width: '200px' }}>
-            <HexColorPicker
-              aria-label="Key color picker"
-              color={keyColorAsHex}
-              onChange={setKeyColorFromHex}
-            />
-            <Input
-              fluid
-              aria-label="Key color hex value"
-              value={keyColorAsHex}
-              styles={{ margin: '.5rem 0' }}
-              onChange={setKeyColorFromHex}
-              key={keyColorAsHex}
-            />
+          {/* Key color */}
+          <Box
+            as="section"
+            styles={{ flex: '0 0 200px', marginInlineEnd: '2rem' }}
+          >
+            <Header as="h2">
+              Key color
+              <Info>
+                The key color is the inflection point between the palette’s two
+                curves: from the key color to black, and from the key color to
+                white. Generally speaking, it should have the greatest
+                chroma/saturation value. The palette’s path will pass through
+                the key color, however the exact key color is not guaranteed to
+                appear in the final palette.
+              </Info>
+            </Header>
+            <Box styles={{ width: '200px' }}>
+              <HexColorPicker
+                aria-label="Key color picker"
+                color={keyColorAsHex}
+                onChange={setKeyColorFromHex}
+              />
+              <Input
+                fluid
+                aria-label="Key color hex value"
+                value={keyColorAsHex}
+                styles={{ margin: '.5rem 0' }}
+                onChange={setKeyColorFromHex}
+                key={keyColorAsHex}
+              />
+            </Box>
           </Box>
-        </Box>
 
-        {/* Curve parameters */}
-        <Box
-          as="section"
-          styles={{ flex: '1 0 320px', marginInlineEnd: '2rem' }}
-        >
-          <Header as="h2">Curve parameters</Header>
-          <Flex styles={{ marginInlineEnd: '-1rem' }}>
-            <SliderInput
-              id="darkCpLabel"
-              label={
-                <Text>
-                  <abbr title="Chroma control point">C*CP</abbr> to black
-                </Text>
-              }
-              value={darkCp * 100}
-              onChange={(value) =>
-                dispatch(
-                  palettesSlice.actions.setDarkCp({
-                    id: paletteId,
-                    darkCp: value / 100,
-                  })
-                )
-              }
-              min={0}
-              max={100}
-              reverseSlider
-            />
-            <SliderInput
-              id="lightCpLabel"
-              label={
-                <Text>
-                  <abbr title="Chroma control point">C*CP</abbr> to white
-                </Text>
-              }
-              value={lightCp * 100}
-              onChange={(value) =>
-                dispatch(
-                  palettesSlice.actions.setLightCp({
-                    id: paletteId,
-                    lightCp: value / 100,
-                  })
-                )
-              }
-              min={0}
-              max={100}
-              reverseInputs
-            />
-          </Flex>
-          <Flex styles={{ marginInlineEnd: '-1rem' }}>
-            <SliderInput
-              id="hueTorsionLabel"
-              label="Hue torsion"
-              value={toDeg(hueTorsion)}
-              onChange={(value) =>
-                dispatch(
-                  palettesSlice.actions.setHueTorsion({
-                    id: paletteId,
-                    hueTorsion: toRad(value),
-                  })
-                )
-              }
-              min={-90}
-              max={90}
-            />
-            <Box role="none" styles={{ flex: '0 0 4.84rem' }} />
-          </Flex>
-        </Box>
+          {/* Curve parameters */}
+          <Box
+            as="section"
+            styles={{ flex: '1 0 320px', marginInlineEnd: '2rem' }}
+          >
+            <Header as="h2">Curve parameters</Header>
+            <Flex styles={{ marginInlineEnd: '-1rem' }}>
+              <SliderInput
+                id="darkCpLabel"
+                label={
+                  <Text>
+                    <abbr title="Chroma control point">C*CP</abbr> to black
+                  </Text>
+                }
+                value={darkCp * 100}
+                onChange={(value) =>
+                  dispatch(
+                    palettesSlice.actions.setDarkCp({
+                      id: paletteId,
+                      darkCp: value / 100,
+                    })
+                  )
+                }
+                min={0}
+                max={100}
+                reverseSlider
+              />
+              <SliderInput
+                id="lightCpLabel"
+                label={
+                  <Text>
+                    <abbr title="Chroma control point">C*CP</abbr> to white
+                  </Text>
+                }
+                value={lightCp * 100}
+                onChange={(value) =>
+                  dispatch(
+                    palettesSlice.actions.setLightCp({
+                      id: paletteId,
+                      lightCp: value / 100,
+                    })
+                  )
+                }
+                min={0}
+                max={100}
+                reverseInputs
+              />
+            </Flex>
+            <Flex styles={{ marginInlineEnd: '-1rem' }}>
+              <SliderInput
+                id="hueTorsionLabel"
+                label="Hue torsion"
+                value={toDeg(hueTorsion)}
+                onChange={(value) =>
+                  dispatch(
+                    palettesSlice.actions.setHueTorsion({
+                      id: paletteId,
+                      hueTorsion: toRad(value),
+                    })
+                  )
+                }
+                min={-90}
+                max={90}
+              />
+              <Box role="none" styles={{ flex: '0 0 4.84rem' }} />
+            </Flex>
+          </Box>
 
-        {/* Palette preview */}
-        <Box
-          as="section"
-          styles={{ flex: '1 0 50vh', marginInlineEnd: '2rem' }}
-        >
-          <Header as="h2">Swatch preview</Header>
-          <SwatchPreview {...{ paletteId, paletteCurve, palette }} />
+          {/* Palette preview */}
+          <Box
+            as="section"
+            styles={{
+              flex: '1 0 50vh',
+              marginInlineEnd: '2rem',
+              maxWidth: 'calc(100% - 2rem)',
+            }}
+          >
+            <Header as="h2">Swatch preview</Header>
+            <SwatchPreview {...{ paletteId, paletteCurve, palette }} />
+          </Box>
         </Box>
       </Box>
     </MainContent>
