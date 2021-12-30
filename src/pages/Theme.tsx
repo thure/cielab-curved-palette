@@ -9,6 +9,7 @@ import {
   TrashCanIcon,
   MoreIcon,
   EditIcon,
+  Text,
 } from '@fluentui/react-northstar'
 
 import { scoped } from '../lib/basePath'
@@ -22,6 +23,7 @@ import {
   paletteShadesFromCurve,
 } from '../lib/paletteShades'
 import { Lab_to_XYZ } from '../lib/csswg/conversions'
+import { InFlowDocs } from '../components/InFlowDocs'
 
 export const Theme = () => {
   const { themeId } = useParams()
@@ -113,7 +115,9 @@ export const Theme = () => {
         }) => {
           return (
             <React.Fragment key={key}>
-              <Header as="h2">{title}</Header>
+              <Header as="h2" styles={{ marginBlockStart: '1em' }}>
+                {title}
+              </Header>
               {Object.keys(activePalettes).map((paletteId) => {
                 return (
                   <Flex
@@ -121,7 +125,6 @@ export const Theme = () => {
                     vAlign="center"
                     styles={{
                       marginInlineEnd: '-0.5rem',
-                      marginBlockEnd: '1rem',
                     }}
                   >
                     <PaletteRange
@@ -198,6 +201,22 @@ export const Theme = () => {
           <PreviewMatrix themeId={themeId} />
         </>
       )}
+      <InFlowDocs>
+        <Header as="h1">Creating &amp; editing themes</Header>
+        <Text as="p">
+          In this tool, a theme is two collections of parts of curves, one
+          collection for backgrounds and one collection for foregrounds. To get
+          started, add a palette to both the theme’s backgrounds and
+          foregrounds. They can use the same palette or different ones.
+        </Text>
+        <Text as="p">
+          For each palette there are two controls: one for setting the range of
+          lightness values in the palette to use, and one for setting the number
+          of shades. For foreground shades, the minimum assured WCAG contrast
+          ratio standard that the shade has against all backgrounds in the theme
+          is shown below the shade.
+        </Text>
+      </InFlowDocs>
     </MainContent>
   )
 }

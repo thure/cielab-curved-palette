@@ -1,6 +1,8 @@
-# [Launch LAB curved color system tool ↗︎](https://thure.github.io/cielab-curved-palette/)
+# LAB curved color system tool
 
-A tool which generates accessible sRGB color palettes and themes by drawing bézier curves through CIELAB color space, using an interface based in the LCH cylindrical model.
+A tool which helps generate accessible sRGB color palettes and themes by drawing bézier curves through CIELAB color space, using an interface based in the LCH cylindrical model.
+
+## [Open LAB curved color system tool ↗︎](https://thure.github.io/cielab-curved-palette/)
 
 The tool organizes ‘palettes’ and ‘themes’ into a comprehensive and configurable color system of your design.
 

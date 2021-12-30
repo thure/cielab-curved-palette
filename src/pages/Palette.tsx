@@ -19,6 +19,7 @@ import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
 import { usePaletteCurve } from '../lib/usePaletteCurve'
+import { InFlowDocs } from '../components/InFlowDocs'
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI
 const toRad = (deg: number) => (deg * Math.PI) / 180
@@ -71,8 +72,6 @@ export const Palette = () => {
           history.push(scoped('/'))
         }}
       />
-
-      <LchVis {...{ paletteId, paletteCurve, palette }} />
 
       <Box styles={{ overflowX: 'hidden' }}>
         <Box
@@ -183,21 +182,43 @@ export const Palette = () => {
               <Box role="none" styles={{ flex: '0 0 4.84rem' }} />
             </Flex>
           </Box>
-
-          {/* Palette preview */}
-          <Box
-            as="section"
-            styles={{
-              flex: '1 0 50vh',
-              marginInlineEnd: '2rem',
-              maxWidth: 'calc(100% - 2rem)',
-            }}
-          >
-            <Header as="h2">Swatch preview</Header>
-            <SwatchPreview {...{ paletteId, paletteCurve, palette }} />
-          </Box>
         </Box>
       </Box>
+
+      <Header as="h2">
+        Curve in LAB space
+        <Info>
+          This is a 3D approximation of this palette’s curve in LAB space and a
+          gradient of the curve’s colors. The sRGB gamut is shown as a 50L
+          (medium gray) border around the curve. You can drag on the view to see
+          the curve &amp; gamut from different angles. As the curve’s shades are
+          calculated, any points that would lay outside the gamut are snapped to
+          to the most saturated point with the same hue and lightness that is
+          within the sRGB gamut.
+        </Info>
+      </Header>
+      <LchVis {...{ paletteId, paletteCurve, palette }} />
+
+      <Header as="h2">Swatch preview</Header>
+      <SwatchPreview {...{ paletteId, paletteCurve, palette }} />
+
+      <InFlowDocs>
+        <Header as="h1">Creating &amp; editing palettes</Header>
+        <Text as="p">
+          In this tool, one palette is represented as a continuous curve through
+          LAB space. The curve is made of two bézier curves that start at either
+          0 L (black) and 100 L (white) and meet at the LAB value of the key
+          color you provide.
+        </Text>
+        <Text as="p">
+          You can configure the position of each bézier curve’s control point in
+          LAB space with the C*CP sliders.
+        </Text>
+        <Text as="p">
+          The ‘hue torsion’ parameter lets you create a single palette moves
+          through different hues by rotating the control points in LAB space.
+        </Text>
+      </InFlowDocs>
     </MainContent>
   )
 }

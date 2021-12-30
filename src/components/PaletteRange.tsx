@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { batch } from 'react-redux'
-import isNumber from 'lodash/isNumber'
-import { Box, Flex, Text, Slider } from '@fluentui/react-northstar'
+import { Box, Flex, Text, Slider, Header } from '@fluentui/react-northstar'
 
 import { Input } from './Input'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
@@ -107,42 +106,12 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
 
   return (
     <Box styles={{ flex: '1 0 0' }}>
-      <SwatchPreview
-        paletteId={paletteId}
-        paletteCurve={curve}
-        range={[darkPoint, lightPoint]}
-        bgLs={bgLs}
-        themeKey={themeKey}
-        themeId={themeId}
-      />
-      <Box styles={{ position: 'relative', marginBlockEnd: '.5rem' }}>
-        <PalettePreview curve={curve} variant="narrow" />
-        <Box
-          styles={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1,
-          }}
-        >
-          <Slider
-            fluid
-            {...numericProps}
-            value={darkPoint}
-            variables={sliderVariables}
-            onChange={(_e, { value }) => onDarkChange(setter(value))}
-          />
-          <Slider
-            fluid
-            {...numericProps}
-            value={lightPoint}
-            variables={sliderVariables}
-            onChange={(_e, { value }) => onLightChange(setter(value))}
-          />
-        </Box>
-      </Box>
+      <Header
+        as="h3"
+        styles={{ fontStyle: palette.name ? 'normal' : 'italic', margin: 0 }}
+      >
+        {palette.name || 'Untitled palette'}
+      </Header>
       <Flex vAlign="center">
         <Text
           as="label"
@@ -181,6 +150,48 @@ export const PaletteRange = ({ themeId, themeKey, paletteId, bgLs }) => {
           key={`${paletteId}__range--light__${lightPoint}`}
         />
       </Flex>
+      <Box
+        styles={{
+          position: 'relative',
+          marginBlockStart: '.5rem',
+          marginBlockEnd: '.5rem',
+        }}
+      >
+        <PalettePreview curve={curve} variant="narrow" />
+        <Box
+          styles={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+          }}
+        >
+          <Slider
+            fluid
+            {...numericProps}
+            value={darkPoint}
+            variables={sliderVariables}
+            onChange={(_e, { value }) => onDarkChange(setter(value))}
+          />
+          <Slider
+            fluid
+            {...numericProps}
+            value={lightPoint}
+            variables={sliderVariables}
+            onChange={(_e, { value }) => onLightChange(setter(value))}
+          />
+        </Box>
+      </Box>
+      <SwatchPreview
+        paletteId={paletteId}
+        paletteCurve={curve}
+        range={[darkPoint, lightPoint]}
+        bgLs={bgLs}
+        themeKey={themeKey}
+        themeId={themeId}
+      />
     </Box>
   )
 }

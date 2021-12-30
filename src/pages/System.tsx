@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { palettesSlice } from '../state/palettes'
 import { themesSlice } from '../state/themes'
 import { paletteTemplate, themeTemplate } from '../lib/interfaces'
+import { InFlowDocs } from '../components/InFlowDocs'
 
 export const System = () => {
   const dispatch = useAppDispatch()
@@ -28,6 +29,24 @@ export const System = () => {
   return (
     <MainContent>
       <Header as="h1">Color system</Header>
+      <Header as="h2">Palettes</Header>
+      {palettesIds.map((paletteId, _p) => (
+        <PaletteListItem
+          key={paletteId}
+          id={paletteId}
+          variant="link"
+          {...palettes[paletteId]}
+        />
+      ))}
+      <Button
+        icon={<AddIcon outline />}
+        content="Create a new palette"
+        onClick={() => {
+          const nextPalette = paletteTemplate()
+          dispatch(palettesSlice.actions.create(nextPalette))
+          history.push(scoped(`/palette/${nextPalette.id}`))
+        }}
+      />
       <Header as="h2">Themes</Header>
       {themeIds.map((themeId, _t) => {
         const theme = themes[themeId]
@@ -53,24 +72,39 @@ export const System = () => {
           history.push(scoped(`/theme/${nextTheme.id}`))
         }}
       />
-      <Header as="h2">Palettes</Header>
-      {palettesIds.map((paletteId, _p) => (
-        <PaletteListItem
-          key={paletteId}
-          id={paletteId}
-          variant="link"
-          {...palettes[paletteId]}
-        />
-      ))}
-      <Button
-        icon={<AddIcon outline />}
-        content="Create a new palette"
-        onClick={() => {
-          const nextPalette = paletteTemplate()
-          dispatch(palettesSlice.actions.create(nextPalette))
-          history.push(scoped(`/palette/${nextPalette.id}`))
-        }}
-      />
+      <InFlowDocs>
+        <Header as="h1">Using this tool</Header>
+        <Text as="p">
+          The best way to get started creating a color system with this tool is
+          to first create one or more palettes, then assemble the palettes into
+          themes. Each page in this tool has additional guidance specific to its
+          function.
+        </Text>
+        <Text as="p">
+          Your work is saved locally in your browser, not on any server, so
+          anything you create here is unique to this browser on this device.
+          This tool doesn’t yet support importing/exporting data or migrating
+          data when upgrades are released, so bear in mind any of your work may
+          be lost.
+        </Text>
+        <Text as="p">
+          If you’re experiencing bugs, first record any details you want to keep
+          then clear local storage for this page, which will clear your palettes
+          and themes, then start again. If after doing so you still experience a
+          bug, you’re welcome to file an issue{' '}
+          <Text
+            as="a"
+            href="https://github.com/thure/cielab-curved-palette/issues"
+            color="grey"
+            variables={({ colorScheme }) => ({
+              color: colorScheme.brand.foreground,
+            })}
+          >
+            on Github
+          </Text>
+          .
+        </Text>
+      </InFlowDocs>
     </MainContent>
   )
 }
