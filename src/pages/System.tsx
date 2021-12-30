@@ -8,6 +8,7 @@ import {
 } from '@fluentui/react-northstar'
 import { useHistory } from 'react-router-dom'
 
+import { scoped } from '../lib/basePath'
 import { MainContent, PaletteListItem, ThemeListItem } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { palettesSlice } from '../state/palettes'
@@ -33,9 +34,9 @@ export const System = () => {
         return (
           <ThemeListItem
             key={themeId}
-            onClick={() => history.push(`/theme/${themeId}`)}
+            onClick={() => history.push(scoped(`/theme/${themeId}`))}
           >
-            <Text styles={!theme.name && { fontStyle: 'italic' }}>
+            <Text styles={{ fontStyle: !theme.name ? 'italic' : 'normal' }}>
               {theme.name ? theme.name : 'Untitled theme'}
             </Text>
             <ChevronEndIcon styles={{ margin: '0 .5em' }} outline />
@@ -49,7 +50,7 @@ export const System = () => {
         onClick={() => {
           const nextTheme = themeTemplate()
           dispatch(themesSlice.actions.create(nextTheme))
-          history.push(`/theme/${nextTheme.id}`)
+          history.push(scoped(`/theme/${nextTheme.id}`))
         }}
       />
       <Header as="h2">Palettes</Header>
@@ -67,7 +68,7 @@ export const System = () => {
         onClick={() => {
           const nextPalette = paletteTemplate()
           dispatch(palettesSlice.actions.create(nextPalette))
-          history.push(`/palette/${nextPalette.id}`)
+          history.push(scoped(`/palette/${nextPalette.id}`))
         }}
       />
     </MainContent>

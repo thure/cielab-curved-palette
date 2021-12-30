@@ -13,6 +13,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './state/store'
 import { Palette, System, Theme } from './pages'
 import { useAppSelector } from './state/hooks'
+import { scoped } from './lib/basePath'
 
 const ugh = {
   root: ({ variables }) => ({
@@ -60,13 +61,13 @@ const App = () => {
     >
       <Router>
         <Switch>
-          <Route path="/theme/:themeId">
+          <Route path={scoped('/theme/:themeId')}>
             <Theme />
           </Route>
-          <Route path="/palette/:paletteId">
+          <Route path={scoped('/palette/:paletteId')}>
             <Palette />
           </Route>
-          <Route path="/">
+          <Route path={scoped('/')}>
             <System />
           </Route>
         </Switch>

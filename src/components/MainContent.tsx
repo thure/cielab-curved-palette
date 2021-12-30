@@ -10,6 +10,7 @@ import { PropsWithChildren } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../state/hooks'
 import { toggleUi } from '../state/app'
+import { scoped } from '../lib/basePath'
 
 type MainContentProps = {
   back?: boolean
@@ -38,7 +39,7 @@ export const MainContent = ({
             iconPosition="before"
             text
             content="Back to color system"
-            onClick={() => history.push('/')}
+            onClick={() => history.push(scoped('/'))}
           />
         )}
         <Box styles={{ flexGrow: 1 }} role="none" />
