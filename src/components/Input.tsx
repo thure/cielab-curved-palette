@@ -18,8 +18,6 @@ export const Input = ({
   setter = identity,
   ...props
 }: InputProps) => {
-  console.log('[value]', value)
-
   const [internalValue, setInternalValue] = useState(getter(value))
 
   const onUpdate = useCallback(() => {

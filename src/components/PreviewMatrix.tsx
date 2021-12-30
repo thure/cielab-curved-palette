@@ -66,9 +66,12 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
         const result = []
         for (let i = 0; i < backgrounds[bgPaletteId].nShades; i++) {
           for (let j = 0; j < foregrounds[fgPaletteId].nShades; j++) {
+            const bgShade = Lab_to_hex(bgShades[i])
+            const fgShade = Lab_to_hex(fgShades[j])
             result.push(
               <rect
-                fill={Lab_to_hex(bgShades[i])}
+                key={`bg${i}${j}`}
+                fill={bgShade}
                 height="10"
                 width="10"
                 x={10 * j}
@@ -77,10 +80,11 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
             )
             result.push(
               <text
+                key={`fg${i}${j}`}
                 className="text"
                 x={10 * j + 0.4}
                 y={10 * i + 9.4}
-                fill={Lab_to_hex(fgShades[j])}
+                fill={fgShade}
               >
                 Text
               </text>

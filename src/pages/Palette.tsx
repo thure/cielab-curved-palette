@@ -19,6 +19,7 @@ import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
 import { usePaletteCurve } from '../lib/usePaletteCurve'
+import { InFlowDocs } from '../components/InFlowDocs'
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI
 const toRad = (deg: number) => (deg * Math.PI) / 180
@@ -211,6 +212,23 @@ export const Palette = () => {
           </Box>
         </Box>
       </Box>
+      <InFlowDocs>
+        <Header as="h1">Creating &amp; editing palettes</Header>
+        <Text as="p">
+          In this tool, one palette is represented as a continuous curve through
+          LAB space. The curve is made of two bézier curves that start at either
+          0 L (black) and 100 L (white) and meet at the LAB value of the key
+          color you provide.
+        </Text>
+        <Text as="p">
+          You can configure the position of each bézier curve’s control point in
+          LAB space with the C*CP sliders.
+        </Text>
+        <Text as="p">
+          The ‘hue torsion’ parameter lets you create a single palette moves
+          through different hues by rotating the control points in LAB space.
+        </Text>
+      </InFlowDocs>
     </MainContent>
   )
 }
