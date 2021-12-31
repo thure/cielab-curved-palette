@@ -80,13 +80,31 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
             )
             result.push(
               <text
-                key={`fg${i}${j}`}
+                key={`fg1${i}${j}`}
                 className="text"
                 x={10 * j + 0.4}
                 y={10 * i + 9.4}
                 fill={fgShade}
               >
                 Text
+              </text>,
+              <text
+                key={`fg2${i}${j}`}
+                className="text"
+                x={10 * j + 6.6}
+                y={10 * i + 9.4}
+                fill={fgShade}
+              >
+                متن
+              </text>,
+              <text
+                key={`fg3${i}${j}`}
+                className="text"
+                x={10 * j + 0.4}
+                y={10 * i + 6.4}
+                fill={fgShade}
+              >
+                文字亮度
               </text>
             )
           }
@@ -138,7 +156,7 @@ export const PreviewMatrix = ({ themeId }: { themeId: string }) => {
         }`}
         style={{ width: '100%', height: 'auto' }}
       >
-        <style>{`.text { font: normal 4px sans-serif; }`}</style>
+        <style>{`.text { font: normal 2.3px sans-serif; }`}</style>
         {rects}
       </svg>
     </Box>

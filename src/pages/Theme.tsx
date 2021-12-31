@@ -20,6 +20,7 @@ import {
   PaletteRange,
   PreviewMatrix,
   InFlowDocs,
+  Link,
 } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
@@ -213,12 +214,40 @@ export const Theme = () => {
           both the theme’s backgrounds and foregrounds. Between the two
           collections you can use the same palette or different ones.
         </Text>
+        <Header as="h2">Controls</Header>
         <Text as="p">
           For each palette in a collection there are two controls: one for
           setting the range of lightness values in the palette to use, and one
           for setting the number of shades. For foreground shades, the minimum
           assured WCAG contrast ratio standard that the shade has against all
           backgrounds in the theme is displayed below the shade.
+        </Text>
+        <Header as="h2">Bear in mind</Header>
+        <Text as="p">
+          Contrast values are computed here using the Y value in the{' '}
+          <Link href="https://en.wikipedia.org/wiki/CIE_1931_color_space">
+            CIE XYZ space
+          </Link>{' '}
+          to support sRGB as well as spaces in W3’s upcoming{' '}
+          <Link href="https://www.w3.org/TR/css-color-4/">
+            level 4 color module
+          </Link>{' '}
+          like display-p3 (yet to be added to this tool).
+        </Text>
+        <Text as="p">
+          Since the conversion from floating point LAB to 8-bit sRBG hex colors
+          is lossy, you may see very slight differences in contrast values here
+          from what a tool like the{' '}
+          <Link href="https://webaim.org/resources/contrastchecker/">
+            WebAIM contrast checker
+          </Link>{' '}
+          will provide given the same 8-bit sRGB values provided in the tooltips
+          here.
+        </Text>
+        <Text as="p">
+          It’s generally a good idea to exceed contrast standards by at least a
+          little bit and double-check using different tools to be sure your
+          design conforms properly.
         </Text>
       </InFlowDocs>
     </MainContent>
