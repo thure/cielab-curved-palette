@@ -192,10 +192,7 @@ export const Palette = () => {
           This is a 3D approximation of this palette’s curve in LAB space and a
           gradient of the curve’s colors. The sRGB gamut is shown as a 50L
           (medium gray) border around the curve. You can drag on the view to see
-          the curve &amp; gamut from different angles. As the curve’s shades are
-          calculated, any points that would lay outside the gamut are snapped to
-          to the most saturated point with the same hue and lightness that is
-          within the sRGB gamut.
+          the curve &amp; gamut from different angles.
         </Info>
       </Header>
       <LchVis {...{ paletteId, paletteCurve, palette }} />
@@ -206,14 +203,18 @@ export const Palette = () => {
       <InFlowDocs>
         <Header as="h1">Creating &amp; editing palettes</Header>
         <Text as="p">
-          In this tool, a palette is represented as a continuous curve through
-          LAB space. The curve is made of two quadratic{' '}
+          In this tool, a palette is represented as a continuous curve through{' '}
+          <Link href="https://en.wikipedia.org/wiki/CIELAB_color_space">
+            LAB space
+          </Link>
+          . The curve is made of two quadratic{' '}
           <Link href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B%C3%A9zier_curves">
             bézier curves
           </Link>{' '}
           that start at 0L (black) and 100L (white) and meet at the LAB value of
           the key color you provide.
         </Text>
+        <Header as="h2">Controls</Header>
         <Text as="p">
           You can configure the position of each bézier curve’s control point in
           LAB space with the C*CP sliders. Higher values move the control point
@@ -226,10 +227,18 @@ export const Palette = () => {
           The ‘hue torsion’ parameter enables the palette to move through
           different hues by rotating the control points in LAB space.
         </Text>
+        <Header as="h2">Take note</Header>
         <Text as="p">
-          This Palettes page is oriented around adjusting the entire curve of
-          the palette; in the Themes page you’ll choose how parts of a palette
-          are used to create background and foreground shades.
+          As the curve’s displayable shades are calculated, any points that
+          would lay outside the sRGB gamut (shown as an outline around the curve
+          in the 3D visualization) snap to to the most saturated point with the
+          same hue and lightness that is within the sRGB gamut.
+        </Text>
+        <Text as="p">
+          This page is oriented around adjusting the <em>entire</em> curve of
+          the palette between black and white; in the Themes page you’ll choose
+          how segments from a palette are used to create specific background and
+          foreground shades.
         </Text>
       </InFlowDocs>
     </MainContent>

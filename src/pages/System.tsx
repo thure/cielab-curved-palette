@@ -81,12 +81,18 @@ export const System = () => {
           themes. Each page in this tool has additional guidance specific to its
           function.
         </Text>
+        <Header as="h2">About the data you create here</Header>
         <Text as="p">
           Your work is saved locally in your browser, not on any server, so
           anything you create here is unique to this browser on this device.
           This tool doesn’t yet support importing/exporting data or migrating
           data when upgrades are released, so bear in mind any of your work can
-          get lost.
+          get lost. We’re working on making the situation better, so keep an eye
+          on{' '}
+          <Link href="https://github.com/thure/cielab-curved-palette">
+            the repository on Github
+          </Link>
+          .
         </Text>
         <Text as="p">
           If you’re experiencing bugs, first record any details you want to
