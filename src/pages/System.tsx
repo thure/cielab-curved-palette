@@ -15,6 +15,7 @@ import { palettesSlice } from '../state/palettes'
 import { themesSlice } from '../state/themes'
 import { paletteTemplate, themeTemplate } from '../lib/interfaces'
 import { InFlowDocs } from '../components/InFlowDocs'
+import { Link } from '../components/Link'
 
 export const System = () => {
   const dispatch = useAppDispatch()
@@ -80,28 +81,27 @@ export const System = () => {
           themes. Each page in this tool has additional guidance specific to its
           function.
         </Text>
+        <Header as="h2">About the data you create here</Header>
         <Text as="p">
           Your work is saved locally in your browser, not on any server, so
           anything you create here is unique to this browser on this device.
           This tool doesn’t yet support importing/exporting data or migrating
-          data when upgrades are released, so bear in mind any of your work may
-          be lost.
+          data when upgrades are released, so bear in mind any of your work can
+          get lost. We’re working on making the situation better, so keep an eye
+          on{' '}
+          <Link href="https://github.com/thure/cielab-curved-palette">
+            the repository on Github
+          </Link>
+          .
         </Text>
         <Text as="p">
-          If you’re experiencing bugs, first record any details you want to keep
-          then clear local storage for this page, which will clear your palettes
-          and themes, then start again. If after doing so you still experience a
-          bug, you’re welcome to file an issue{' '}
-          <Text
-            as="a"
-            href="https://github.com/thure/cielab-curved-palette/issues"
-            color="grey"
-            variables={({ colorScheme }) => ({
-              color: colorScheme.brand.foreground,
-            })}
-          >
+          If you’re experiencing bugs, first record any details you want to
+          keep, then clear local storage for this app (this also clears your
+          palettes and themes), then start again. If after doing so you still
+          experience a bug, you’re welcome to file an issue{' '}
+          <Link href="https://github.com/thure/cielab-curved-palette/issues">
             on Github
-          </Text>
+          </Link>
           .
         </Text>
       </InFlowDocs>

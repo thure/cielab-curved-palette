@@ -43,7 +43,14 @@ export const MainContent = ({
             onClick={() => history.push(scoped('/'))}
           />
         ) : (
-          <Label styles={{ fontWeight: 200, padding: '1em' }}>
+          <Label
+            styles={{
+              fontWeight: 200,
+              padding: '.2rem .4rem',
+              height: 'auto',
+              marginInlineEnd: '.5em',
+            }}
+          >
             LAB curved color system tool
           </Label>
         )}
@@ -76,6 +83,7 @@ export const MainContent = ({
             pointerEvents: 'none',
             paddingInlineEnd: 0,
             paddingInlineStart: '.25rem',
+            flex: '0 0 auto',
           }}
         >
           <RadioGroup

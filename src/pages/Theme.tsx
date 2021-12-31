@@ -204,17 +204,17 @@ export const Theme = () => {
       <InFlowDocs>
         <Header as="h1">Creating &amp; editing themes</Header>
         <Text as="p">
-          In this tool, a theme is two collections of parts of curves, one
-          collection for backgrounds and one collection for foregrounds. To get
-          started, add a palette to both the theme’s backgrounds and
-          foregrounds. They can use the same palette or different ones.
+          In this tool, a theme is two collections of curve segments, one for
+          backgrounds and one for foregrounds. To get started, add a palette to
+          both the theme’s backgrounds and foregrounds. Between the two
+          collections you can use the same palette or different ones.
         </Text>
         <Text as="p">
-          For each palette there are two controls: one for setting the range of
-          lightness values in the palette to use, and one for setting the number
-          of shades. For foreground shades, the minimum assured WCAG contrast
-          ratio standard that the shade has against all backgrounds in the theme
-          is shown below the shade.
+          For each palette in a collection there are two controls: one for
+          setting the range of lightness values in the palette to use, and one
+          for setting the number of shades. For foreground shades, the minimum
+          assured WCAG contrast ratio standard that the shade has against all
+          backgrounds in the theme is displayed below the shade.
         </Text>
       </InFlowDocs>
     </MainContent>
