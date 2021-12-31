@@ -1,10 +1,13 @@
 import React from 'react'
+import pick from 'lodash/pick'
 import {
+  Box,
   Button,
   Header,
   AddIcon,
   Text,
   ChevronEndIcon,
+  SaveIcon,
 } from '@fluentui/react-northstar'
 import { useHistory } from 'react-router-dom'
 
@@ -23,6 +26,7 @@ import { themesSlice } from '../state/themes'
 import { systemSlice } from '../state/system'
 import { paletteTemplate, themeTemplate } from '../lib/interfaces'
 import { batch } from 'react-redux'
+import { store } from '../state/store'
 
 export const System = () => {
   const dispatch = useAppDispatch()
@@ -57,6 +61,28 @@ export const System = () => {
         }}
         deleteLabel="Clear all data"
       />
+      <Box>
+        <Button
+          icon={<SaveIcon outline />}
+          content="Download"
+          onClick={() => {
+            const el = document.createElement('a')
+            el.setAttribute(
+              'href',
+              `data:application/json;charset=utf-8,${encodeURIComponent(
+                JSON.stringify(
+                  pick(store.getState(), ['system', 'themes', 'palettes'])
+                )
+              )}`
+            )
+            el.setAttribute(
+              'download',
+              `${systemName || 'Untitled color system'}.lccst.json`
+            )
+            el.click()
+          }}
+        />
+      </Box>
       <Header as="h2">Palettes</Header>
       {palettesIds.map((paletteId, _p) => (
         <PaletteListItem
