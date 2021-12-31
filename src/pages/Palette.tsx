@@ -20,6 +20,7 @@ import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
 import { usePaletteCurve } from '../lib/usePaletteCurve'
 import { InFlowDocs } from '../components/InFlowDocs'
+import { Link } from '../components/Link'
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI
 const toRad = (deg: number) => (deg * Math.PI) / 180
@@ -205,18 +206,30 @@ export const Palette = () => {
       <InFlowDocs>
         <Header as="h1">Creating &amp; editing palettes</Header>
         <Text as="p">
-          In this tool, one palette is represented as a continuous curve through
-          LAB space. The curve is made of two bézier curves that start at either
-          0 L (black) and 100 L (white) and meet at the LAB value of the key
-          color you provide.
+          In this tool, a palette is represented as a continuous curve through
+          LAB space. The curve is made of two quadratic{' '}
+          <Link href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B%C3%A9zier_curves">
+            bézier curves
+          </Link>{' '}
+          that start at 0L (black) and 100L (white) and meet at the LAB value of
+          the key color you provide.
         </Text>
         <Text as="p">
           You can configure the position of each bézier curve’s control point in
-          LAB space with the C*CP sliders.
+          LAB space with the C*CP sliders. Higher values move the control point
+          toward the ends of the gamut causing chroma/saturation to diminish
+          more slowly near the key color, and lower values move the control
+          point toward the key color causing chroma/saturation to diminish more
+          linearly.
         </Text>
         <Text as="p">
-          The ‘hue torsion’ parameter lets you create a single palette moves
-          through different hues by rotating the control points in LAB space.
+          The ‘hue torsion’ parameter enables the palette to move through
+          different hues by rotating the control points in LAB space.
+        </Text>
+        <Text as="p">
+          This Palettes page is oriented around adjusting the entire curve of
+          the palette; in the Themes page you’ll choose how parts of a palette
+          are used to create background and foreground shades.
         </Text>
       </InFlowDocs>
     </MainContent>
