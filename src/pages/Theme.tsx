@@ -13,17 +13,21 @@ import {
 } from '@fluentui/react-northstar'
 
 import { scoped } from '../lib/basePath'
-import { EntityName, MainContent, PaletteListItem } from '../components'
+import {
+  EntityName,
+  MainContent,
+  PaletteListItem,
+  PaletteRange,
+  PreviewMatrix,
+  InFlowDocs,
+} from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
-import { PaletteRange } from '../components/PaletteRange'
-import { PreviewMatrix } from '../components/PreviewMatrix'
 import {
   curvePathFromPalette,
   paletteShadesFromCurve,
 } from '../lib/paletteShades'
 import { Lab_to_XYZ } from '../lib/csswg/conversions'
-import { InFlowDocs } from '../components/InFlowDocs'
 
 export const Theme = () => {
   const { themeId } = useParams()

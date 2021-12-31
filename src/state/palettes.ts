@@ -57,6 +57,7 @@ export const palettesSlice = createSlice({
     ) => {
       state[id].name = name
     },
+    reset: (state) => (state = initialState),
   },
 })
 

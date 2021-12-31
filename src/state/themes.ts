@@ -98,6 +98,7 @@ export const themesSlice = createSlice({
     ) => {
       state[themeId][themeKey][paletteId].nShades = value
     },
+    reset: (state) => (state = initialState),
   },
 })
 

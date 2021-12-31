@@ -9,17 +9,26 @@ import {
 import { useHistory } from 'react-router-dom'
 
 import { scoped } from '../lib/basePath'
-import { MainContent, PaletteListItem, ThemeListItem } from '../components'
+import {
+  EntityName,
+  MainContent,
+  PaletteListItem,
+  ThemeListItem,
+  InFlowDocs,
+  Link,
+} from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { palettesSlice } from '../state/palettes'
 import { themesSlice } from '../state/themes'
+import { systemSlice } from '../state/system'
 import { paletteTemplate, themeTemplate } from '../lib/interfaces'
-import { InFlowDocs } from '../components/InFlowDocs'
-import { Link } from '../components/Link'
+import { batch } from 'react-redux'
 
 export const System = () => {
   const dispatch = useAppDispatch()
   const history = useHistory()
+
+  const systemName = useAppSelector((state) => state.system.name)
 
   const palettes = useAppSelector((state) => state.palettes)
   const palettesIds = Object.keys(palettes)
@@ -29,7 +38,25 @@ export const System = () => {
 
   return (
     <MainContent>
-      <Header as="h1">Color system</Header>
+      <EntityName
+        name={systemName}
+        emptyNameValue={'Untitled color system'}
+        onChange={(value) =>
+          dispatch(
+            systemSlice.actions.setName({
+              name: value,
+            })
+          )
+        }
+        onDelete={() => {
+          batch(() => {
+            dispatch(themesSlice.actions.reset())
+            dispatch(palettesSlice.actions.reset())
+            dispatch(systemSlice.actions.reset())
+          })
+        }}
+        deleteLabel="Clear all data"
+      />
       <Header as="h2">Palettes</Header>
       {palettesIds.map((paletteId, _p) => (
         <PaletteListItem
@@ -89,18 +116,18 @@ export const System = () => {
           data when upgrades are released, so bear in mind any of your work can
           get lost. We’re working on making the situation better, so keep an eye
           on{' '}
-          <Link href="https://github.com/thure/cielab-curved-palette">
+          <Link href="https://github.com/thure/cielab-curved-palette#readme">
             the repository on Github
           </Link>
           .
         </Text>
         <Text as="p">
           If you’re experiencing bugs, first record any details you want to
-          keep, then clear local storage for this app (this also clears your
-          palettes and themes), then start again. If after doing so you still
-          experience a bug, you’re welcome to file an issue{' '}
+          keep, then click ‘Clear all data’ from the ‘…’ menu on this page, then
+          start again. If after doing so you still experience a bug, we’d love
+          it if you filed an{' '}
           <Link href="https://github.com/thure/cielab-curved-palette/issues">
-            on Github
+            issue on Github
           </Link>
           .
         </Text>
