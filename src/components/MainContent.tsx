@@ -5,7 +5,7 @@ import {
   Flex,
   RadioGroup,
   ChevronStartIcon,
-  Label,
+  Text,
 } from '@fluentui/react-northstar'
 import { PropsWithChildren } from 'react'
 import { useHistory } from 'react-router-dom'
@@ -43,16 +43,14 @@ export const MainContent = ({
             onClick={() => history.push(scoped('/'))}
           />
         ) : (
-          <Label
+          <Text
             styles={{
               fontWeight: 900,
-              padding: '.3rem .6rem',
-              height: 'auto',
               marginInlineEnd: '.5em',
             }}
           >
             🌈 <abbr title="LAB curved color system tool">LCCST</abbr>
-          </Label>
+          </Text>
         )}
         <Box styles={{ flexGrow: 1 }} role="none" />
         <Button

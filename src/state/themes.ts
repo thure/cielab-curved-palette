@@ -33,7 +33,11 @@ export const themesSlice = createSlice({
         payload: { id, paletteId },
       }: PayloadAction<{ id: string; paletteId: string }>
     ) => {
-      state[id].backgrounds[paletteId] = { range: [0, 20], nShades: 4 }
+      state[id].backgrounds[paletteId] = {
+        range: [0, 20],
+        nShades: 3,
+        shadeNames: [],
+      }
     },
     addForeground: (
       state,
@@ -41,7 +45,11 @@ export const themesSlice = createSlice({
         payload: { id, paletteId },
       }: PayloadAction<{ id: string; paletteId: string }>
     ) => {
-      state[id].foregrounds[paletteId] = { range: [60, 100], nShades: 6 }
+      state[id].foregrounds[paletteId] = {
+        range: [60, 100],
+        nShades: 3,
+        shadeNames: [],
+      }
     },
     removeBackground: (
       state,
@@ -97,6 +105,21 @@ export const themesSlice = createSlice({
       }>
     ) => {
       state[themeId][themeKey][paletteId].nShades = value
+    },
+    setShadeName: (
+      state,
+      {
+        payload: { themeId, themeKey, paletteId, shade, value },
+      }: PayloadAction<{
+        themeId: string
+        paletteId: string
+        themeKey: string
+        shade: number
+        value: string
+      }>
+    ) => {
+      // todo: immer is bugging, probably because this is an array, it's casting this to an Object
+      state[themeId][themeKey][paletteId].shadeNames[shade] = value
     },
     reset: (state) => (state = initialState),
     setFromImport: (state, { payload }: PayloadAction<ThemesState>) => {

@@ -29,6 +29,7 @@ import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { palettesSlice } from '../state/palettes'
 import { themesSlice } from '../state/themes'
 import { systemSlice } from '../state/system'
+import { exportSettingsSlice } from '../state/exportSettings'
 import { paletteTemplate, themeTemplate } from '../lib/interfaces'
 import { batch } from 'react-redux'
 import { store } from '../state/store'
@@ -67,6 +68,7 @@ export const System = () => {
             dispatch(themesSlice.actions.reset())
             dispatch(palettesSlice.actions.reset())
             dispatch(systemSlice.actions.reset())
+            dispatch(exportSettingsSlice.actions.reset())
           })
         }}
         deleteLabel="Clear all data"
@@ -94,7 +96,12 @@ export const System = () => {
               'href',
               `data:application/json;charset=utf-8,${encodeURIComponent(
                 JSON.stringify(
-                  pick(store.getState(), ['system', 'themes', 'palettes'])
+                  pick(store.getState(), [
+                    'system',
+                    'themes',
+                    'palettes',
+                    'export',
+                  ])
                 )
               )}`
             )
@@ -154,6 +161,12 @@ export const System = () => {
                     dispatch(themesSlice.actions.reset())
                     dispatch(palettesSlice.actions.reset())
                     dispatch(systemSlice.actions.reset())
+                    dispatch(exportSettingsSlice.actions.reset())
+                    dispatch(
+                      exportSettingsSlice.actions.setFromImport(
+                        importedState.export
+                      )
+                    )
                     dispatch(
                       systemSlice.actions.setFromImport(importedState.system)
                     )
