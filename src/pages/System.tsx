@@ -12,8 +12,9 @@ import {
   Dialog,
   Input,
   Alert,
+  ShareGenericIcon,
 } from '@fluentui/react-northstar'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link as RRLink } from 'react-router-dom'
 
 import { scoped } from '../lib/basePath'
 import {
@@ -77,6 +78,13 @@ export const System = () => {
           marginInlineEnd: '-.5rem',
         }}
       >
+        <Button
+          as={RRLink}
+          to={scoped('/export')}
+          icon={<ShareGenericIcon outline />}
+          content="Export"
+          styles={{ textDecoration: 'none', marginInlineEnd: '.5rem' }}
+        />
         <Button
           icon={<DownloadIcon outline />}
           content="Download"

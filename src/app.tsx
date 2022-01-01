@@ -11,7 +11,7 @@ import { Provider as StoreProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
 import { store, persistor } from './state/store'
-import { Palette, System, Theme } from './pages'
+import { Palette, System, Theme, Export } from './pages'
 import { useAppSelector } from './state/hooks'
 import { scoped } from './lib/basePath'
 
@@ -66,6 +66,9 @@ const App = () => {
           </Route>
           <Route path={scoped('/palette/:paletteId')}>
             <Palette />
+          </Route>
+          <Route path={scoped('/export')}>
+            <Export />
           </Route>
           <Route path={scoped('/')}>
             <System />

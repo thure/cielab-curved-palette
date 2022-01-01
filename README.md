@@ -50,3 +50,7 @@ The theme page also inclues a preview of how foreground shades look against back
 1. Run `yarn install`
 1. Run `yarn dev`
 1. Open your browser to [`localhost:1234`](http://localhost:1234/)
+
+## Attributions
+
+Beyond the explicit dependencies listed in `package.json`, some parts of this project use [Feather icons](https://github.com/feathericons/feather).
