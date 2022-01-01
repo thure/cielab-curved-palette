@@ -58,6 +58,13 @@ export const palettesSlice = createSlice({
       state[id].name = name
     },
     reset: (state) => (state = initialState),
+    setFromImport: (state, { payload }: PayloadAction<PalettesState>) => {
+      Object.keys(payload).forEach((key) => {
+        if (payload.hasOwnProperty(key)) {
+          state[key] = payload[key]
+        }
+      })
+    },
   },
 })
 

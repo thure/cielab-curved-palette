@@ -99,6 +99,13 @@ export const themesSlice = createSlice({
       state[themeId][themeKey][paletteId].nShades = value
     },
     reset: (state) => (state = initialState),
+    setFromImport: (state, { payload }: PayloadAction<ThemesState>) => {
+      Object.keys(payload).forEach((key) => {
+        if (payload.hasOwnProperty(key)) {
+          state[key] = payload[key]
+        }
+      })
+    },
   },
 })
 
