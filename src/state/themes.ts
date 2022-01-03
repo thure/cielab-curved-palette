@@ -36,7 +36,7 @@ export const themesSlice = createSlice({
       state[id].backgrounds[paletteId] = {
         range: [0, 20],
         nShades: 3,
-        shadeNames: [],
+        shadeNames: {},
       }
     },
     addForeground: (
@@ -48,7 +48,7 @@ export const themesSlice = createSlice({
       state[id].foregrounds[paletteId] = {
         range: [60, 100],
         nShades: 3,
-        shadeNames: [],
+        shadeNames: {},
       }
     },
     removeBackground: (

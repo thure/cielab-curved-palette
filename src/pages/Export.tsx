@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import {
   Header,
   Text,
@@ -7,16 +7,30 @@ import {
   Checkbox,
   Box,
 } from '@fluentui/react-northstar'
+
 import { MainContent, Input } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { exportSettingsSlice } from '../state/exportSettings'
-import { Lab_to_hex, paletteShadesFromCurve } from '../lib/paletteShades'
-import { usePaletteCurve } from '../lib/usePaletteCurve'
+import {
+  curvePathFromPalette,
+  Lab_to_hex,
+  paletteShadesFromCurve,
+} from '../lib/paletteShades'
 import { themesSlice } from '../state/themes'
+import { defaultShadeName } from '../lib/shadeName'
 
-function defaultShadeNameValue({}) {
-  return 'doop'
-}
+const sectionsContent = [
+  {
+    key: 'bg',
+    title: 'Backgrounds',
+    themeKey: 'backgrounds' as 'backgrounds',
+  },
+  {
+    key: 'fg',
+    title: 'Foregrounds',
+    themeKey: 'foregrounds' as 'foregrounds',
+  },
+]
 
 export const Export = ({}) => {
   const dispatch = useAppDispatch()
@@ -32,10 +46,18 @@ export const Export = ({}) => {
 
   const selector = useAppSelector((state) => state.exportSettings.selector)
 
+  const exportInclude = useAppSelector((state) => state.exportSettings.include)
+
+  const systemName = useAppSelector((state) => state.system.name)
   const themes = useAppSelector((state) => state.themes)
-  const [exportThemes, setExportThemes] = useState<Set<string>>(
-    new Set(Object.keys(themes))
-  )
+  const palettes = useAppSelector((state) => state.palettes)
+
+  const paletteCurves = useMemo(() => {
+    return Object.keys(palettes).reduce((acc, paletteId) => {
+      acc[paletteId] = curvePathFromPalette(palettes[paletteId])
+      return acc
+    }, {})
+  }, [palettes])
 
   return (
     <MainContent back>
@@ -77,13 +99,16 @@ export const Export = ({}) => {
       {Object.keys(themes).map((themeId) => {
         const theme = themes[themeId]
         return (
-          <Box key={`h3--${themeId}`}>
+          <Box key={themeId}>
             <Checkbox
-              checked={exportThemes.has(themeId)}
-              onChange={(e, { checked }) => {
-                exportThemes[checked ? 'add' : 'delete'](themeId)
-                setExportThemes(new Set(Array.from(exportThemes)))
-              }}
+              checked={exportInclude.hasOwnProperty(themeId)}
+              onChange={(e, { checked }) =>
+                dispatch(
+                  exportSettingsSlice.actions[
+                    checked ? 'includeTheme' : 'excludeTheme'
+                  ]({ themeId, theme })
+                )
+              }
               label={
                 <Header
                   as="h3"
@@ -96,54 +121,109 @@ export const Export = ({}) => {
                 </Header>
               }
             />
-            {exportThemes.has(themeId) && (
+            {exportInclude.hasOwnProperty(themeId) && (
               <>
                 <Header as="h4">Shade names</Header>
-                <Header as="h5">Backgrounds</Header>
-                {Object.keys(theme.backgrounds).map((paletteId) => {
-                  const { nShades, shadeNames, range } =
-                    theme.backgrounds[paletteId]
-                  const [paletteCurve, _palette] = usePaletteCurve(paletteId)
-                  const shades = paletteShadesFromCurve(
-                    paletteCurve,
-                    nShades,
-                    16,
-                    range
-                  )
+                {sectionsContent.map(({ title, themeKey, key }) => {
                   return (
-                    <>
-                      {shades.map((lab, s) => {
+                    <Fragment key={themeKey}>
+                      <Header as="h5">{title}</Header>
+                      {Object.keys(theme[themeKey]).map((paletteId) => {
+                        const { nShades, shadeNames, range } =
+                          theme[themeKey][paletteId]
+                        const palette = palettes[paletteId]
+                        const shades = paletteShadesFromCurve(
+                          paletteCurves[paletteId],
+                          nShades,
+                          16,
+                          range
+                        )
                         return (
-                          <Flex>
-                            <Box
-                              styles={{
-                                width: '2rem',
-                                height: '2rem',
-                                borderRadius: '.5rem',
-                                backgroundColor: Lab_to_hex(lab),
-                              }}
-                            />
-                            <Input
-                              value={shadeNames[s] || defaultShadeNameValue({})}
-                              onChange={(value) =>
-                                dispatch(
-                                  themesSlice.actions.setShadeName({
-                                    themeId,
-                                    themeKey: 'backgrounds',
-                                    paletteId,
-                                    shade: s,
-                                    value,
-                                  })
-                                )
-                              }
-                            />
-                          </Flex>
+                          <Fragment key={paletteId}>
+                            <Header as="h6">{palette.name}</Header>
+                            {shades.map((lab, s) => {
+                              const shadeIncluded =
+                                exportInclude[themeId][themeKey][
+                                  paletteId
+                                ].includes(s)
+                              return (
+                                <Flex
+                                  key={lab.join('.')}
+                                  styles={{
+                                    alignItems: 'center',
+                                    marginBlockEnd: '.5rem',
+                                  }}
+                                >
+                                  <Checkbox
+                                    checked={shadeIncluded}
+                                    onChange={(e, { checked }) => {
+                                      dispatch(
+                                        exportSettingsSlice.actions[
+                                          checked
+                                            ? 'includeShade'
+                                            : 'excludeShade'
+                                        ]({
+                                          themeId,
+                                          themeKey,
+                                          paletteId,
+                                          shade: s,
+                                        })
+                                      )
+                                    }}
+                                  />
+                                  <Box
+                                    styles={{
+                                      width: '2rem',
+                                      height: '2rem',
+                                      borderRadius: '.2rem',
+                                      backgroundColor: Lab_to_hex(lab),
+                                      marginInlineEnd: '.5rem',
+                                    }}
+                                  />
+                                  {exportType === 'csscp' && (
+                                    <Text
+                                      styles={{
+                                        flex: '0 0 auto',
+                                        whiteSpace: 'nowrap',
+                                      }}
+                                    >
+                                      --
+                                    </Text>
+                                  )}
+                                  <Input
+                                    fluid
+                                    disabled={!shadeIncluded}
+                                    value={
+                                      shadeNames[s] ||
+                                      defaultShadeName({
+                                        themeName: theme.name,
+                                        themeKey: key,
+                                        paletteName: palette.name,
+                                        systemName,
+                                        shade: s,
+                                      })
+                                    }
+                                    onChange={(value) =>
+                                      dispatch(
+                                        themesSlice.actions.setShadeName({
+                                          themeId,
+                                          themeKey,
+                                          paletteId,
+                                          shade: s,
+                                          value,
+                                        })
+                                      )
+                                    }
+                                  />
+                                </Flex>
+                              )
+                            })}
+                          </Fragment>
                         )
                       })}
-                    </>
+                    </Fragment>
                   )
                 })}
-                <Header as="h5">Foregrounds</Header>
               </>
             )}
           </Box>

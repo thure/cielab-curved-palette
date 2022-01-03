@@ -23,7 +23,7 @@ export const paletteTemplate = (): NamedPalette & { id: string } => ({
 export type PaletteConfig = {
   range: [number, number]
   nShades: number
-  shadeNames: string[]
+  shadeNames: Record<number, string>
 }
 
 export type Theme = {
