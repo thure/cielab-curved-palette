@@ -11,7 +11,13 @@ import {
 } from '@fluentui/react-northstar'
 import React from 'react'
 
-export const EntityName = ({ name, emptyNameValue, onChange, onDelete }) => {
+export const EntityName = ({
+  name,
+  emptyNameValue,
+  onChange,
+  onDelete = null,
+  deleteLabel = 'Delete',
+}) => {
   return (
     <Flex vAlign="center" as="section">
       <Header
@@ -42,19 +48,26 @@ export const EntityName = ({ name, emptyNameValue, onChange, onDelete }) => {
           }
         />
       </Header>
-      <MenuButton
-        menu={[
-          {
-            key: 'd',
-            content: 'Delete',
-            icon: <TrashCanIcon outline />,
-            onClick: onDelete,
-          },
-        ]}
-        trigger={
-          <Button text iconOnly icon={<MoreIcon outline />} aria-label="Menu" />
-        }
-      />
+      {onDelete && (
+        <MenuButton
+          menu={[
+            {
+              key: 'd',
+              content: deleteLabel,
+              icon: <TrashCanIcon outline />,
+              onClick: onDelete,
+            },
+          ]}
+          trigger={
+            <Button
+              text
+              iconOnly
+              icon={<MoreIcon outline />}
+              aria-label="Menu"
+            />
+          }
+        />
+      )}
     </Flex>
   )
 }

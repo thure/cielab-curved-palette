@@ -23,6 +23,7 @@
   "dependencies": {
     "@fluentui/react-northstar": "latest",
     "@reduxjs/toolkit": "latest",
+    "camelcase": "^6.3.0",
     "lodash": "latest",
     "nanoid": "^3.1.30",
     "react": "^16.8.6",

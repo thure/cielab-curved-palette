@@ -13,14 +13,14 @@ import {
   LchVis,
   EntityName,
   SwatchPreview,
+  InFlowDocs,
+  Link,
 } from '../components'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { hex_to_sRGB, Lab_to_hex } from '../lib/paletteShades'
 import { LCH_to_Lab } from '../lib/csswg/conversions'
 import { sRGB_to_LCH } from '../lib/csswg/utilities'
 import { usePaletteCurve } from '../lib/usePaletteCurve'
-import { InFlowDocs } from '../components/InFlowDocs'
-import { Link } from '../components/Link'
 
 const toDeg = (rad: number) => (rad * 180) / Math.PI
 const toRad = (deg: number) => (deg * Math.PI) / 180

@@ -9,13 +9,19 @@ The tool organizes ‘palettes’ and ‘themes’ into a configurable color sys
 ## Palettes
 
 In this tool, a palette is represented as a continuous curve through
-LAB space.
+[LAB space](https://en.wikipedia.org/wiki/CIELAB_color_space).
 
-![Screenshot of palette editor](https://i.ibb.co/chhTNnS/ss1.png)
+Why LAB and not HSL/HSV? I’ll quote standardist Lea Verou from her excellent article [_LCH colors in CSS: what, why, and how?_](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/):
 
-The curve is made of two bézier curves that start at
+> 1. We actually get access to about 50% more colors.
+> 2. LCH (and \[LAB\]) is perceptually uniform.
+> 3. LCH lightness actually means something.
+
+The curve of a palette in this tool is made of two bézier curves that start at
 0L (black) and 100L (white) and meet at the LAB value of the key
 color you provide.
+
+![Screenshot of palette editor](https://i.ibb.co/chhTNnS/ss1.png)
 
 You can configure the position of each bézier curve’s control point in
 LAB space with the C*CP sliders.
@@ -44,3 +50,7 @@ The theme page also inclues a preview of how foreground shades look against back
 1. Run `yarn install`
 1. Run `yarn dev`
 1. Open your browser to [`localhost:1234`](http://localhost:1234/)
+
+## Attributions
+
+Beyond the explicit dependencies listed in `package.json`, some parts of this project use [Feather icons](https://github.com/feathericons/feather).
