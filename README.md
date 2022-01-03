@@ -45,6 +45,17 @@ The theme page also inclues a preview of how foreground shades look against back
 
 ![Screenshot of theme editor preview matrix](https://i.ibb.co/0VD8bbm/ss3.png)
 
+## Exporting
+
+Once you have palettes organized into themes, you can export your color system by clicking the 'Export' action on the main page.
+
+On the Export page, you can configure the type of export (currently only CSS custom properties is supported), which themes to export, and the names of each shade and which of them to export.
+
+## Coming soon
+
+- support for exporting as JSON
+- a CLI for converting a configuration file from this tool to any of the supported export formats
+
 ## Development
 
 1. Run `yarn install`
