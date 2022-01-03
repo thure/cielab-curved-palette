@@ -33,6 +33,7 @@ import { exportSettingsSlice } from '../state/exportSettings'
 import { paletteTemplate, themeTemplate } from '../lib/interfaces'
 import { batch } from 'react-redux'
 import { store } from '../state/store'
+import { download } from '../lib/download'
 
 export const System = () => {
   const dispatch = useAppDispatch()
@@ -90,27 +91,19 @@ export const System = () => {
         <Button
           icon={<DownloadIcon outline />}
           content="Download"
-          onClick={() => {
-            const el = document.createElement('a')
-            el.setAttribute(
-              'href',
-              `data:application/json;charset=utf-8,${encodeURIComponent(
-                JSON.stringify(
-                  pick(store.getState(), [
-                    'system',
-                    'themes',
-                    'palettes',
-                    'export',
-                  ])
-                )
-              )}`
+          onClick={() =>
+            download(
+              `${systemName || 'Untitled color system'}.lccst`,
+              JSON.stringify(
+                pick(store.getState(), [
+                  'system',
+                  'themes',
+                  'palettes',
+                  'export',
+                ])
+              )
             )
-            el.setAttribute(
-              'download',
-              `${systemName || 'Untitled color system'}.lccst`
-            )
-            el.click()
-          }}
+          }
           styles={{ marginInlineEnd: '.5rem' }}
         />
         <Button

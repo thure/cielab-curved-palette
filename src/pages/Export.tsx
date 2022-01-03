@@ -6,6 +6,8 @@ import {
   Flex,
   Checkbox,
   Box,
+  Button,
+  DownloadIcon,
 } from '@fluentui/react-northstar'
 
 import { MainContent, Input } from '../components'
@@ -18,6 +20,9 @@ import {
 } from '../lib/paletteShades'
 import { themesSlice } from '../state/themes'
 import { defaultShadeName } from '../lib/shadeName'
+import { download } from '../lib/download'
+import { renderExport } from '../lib/export/render'
+import { store } from '../state/store'
 
 const sectionsContent = [
   {
@@ -229,6 +234,23 @@ export const Export = ({}) => {
           </Box>
         )
       })}
+      <Button
+        icon={<DownloadIcon outline />}
+        content="Download exported color system"
+        onClick={() =>
+          download(
+            `${systemName}.${
+              exportType === 'csscp'
+                ? 'css'
+                : exportType === 'json'
+                ? 'json'
+                : 'txt'
+            }`,
+            renderExport(store.getState())
+          )
+        }
+        styles={{ margin: '2rem 0' }}
+      />
     </MainContent>
   )
 }
