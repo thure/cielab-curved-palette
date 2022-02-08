@@ -2,9 +2,12 @@ import React, { useCallback, useState } from 'react'
 import { Box, Flex, Input, Text } from '@fluentui/react-northstar'
 
 import { usePaletteCurve } from '../lib/usePaletteCurve'
-import { CurvePath, Vector3 } from 'three'
 import { Palette } from '../lib/interfaces'
-import { Lab_to_hex, paletteShadesFromCurve } from '../lib/paletteShades'
+import {
+  Lab_to_hex,
+  paletteShadesFromCurve,
+  CurvedHelixPath,
+} from '../lib/paletteShades'
 import { ShadeInspection } from './ShadeInspection'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import { themesSlice } from '../state/themes'
@@ -48,7 +51,7 @@ const WCAGRatio = ({ contrast }: { contrast: number }) => {
 
 export const SwatchPreview = (props: {
   paletteId: string
-  paletteCurve?: CurvePath<Vector3>
+  paletteCurve?: CurvedHelixPath
   palette?: Palette
   range?: number[]
   bgLs?: [number, number]

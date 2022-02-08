@@ -17,6 +17,7 @@ import { LchColor } from '../../../lib/color'
 import populateGamut from './gamut'
 import { setCurveMesh } from './curve'
 import { ck, lk } from './constants'
+import { CurvedHelixPath } from '../../../lib/paletteShades'
 
 export type SceneRef = {
   pause?: () => void
@@ -28,7 +29,7 @@ export type SceneRef = {
 
 export function init(
   canvas: HTMLCanvasElement,
-  initialCurve: CurvePath<Vector3>
+  initialCurve: CurvedHelixPath
 ): SceneRef {
   window.addEventListener('resize', onWindowResize, false)
 
@@ -123,6 +124,6 @@ export function mount(
   resume()
 }
 
-export function setCurve(sceneRef: SceneRef, curve: CurvePath<Vector3>) {
+export function setCurve(sceneRef: SceneRef, curve: CurvedHelixPath) {
   return setCurveMesh(sceneRef, curve)
 }

@@ -177,8 +177,8 @@ export const Palette = () => {
                     })
                   )
                 }
-                min={-90}
-                max={90}
+                min={-360}
+                max={360}
               />
               <Box role="none" styles={{ flex: '0 0 4.84rem' }} />
             </Flex>
@@ -225,7 +225,8 @@ export const Palette = () => {
         </Text>
         <Text as="p">
           The ‘hue torsion’ parameter enables the palette to move through
-          different hues by rotating the control points in LAB space.
+          different hues by rotating the curve’s points in LAB space, creating a
+          helical curve.
         </Text>
         <Header as="h2">Take note</Header>
         <Text as="p">
