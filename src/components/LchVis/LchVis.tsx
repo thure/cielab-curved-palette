@@ -1,13 +1,13 @@
 import React, { useRef, useCallback, MutableRefObject, useEffect } from 'react'
-import { CurvePath, Vector3 } from 'three'
 import values from 'lodash/values'
 
 import { init, mount, unmount, setCurve, SceneRef } from './scene'
 import { PalettePreview } from '../PalettePreview'
 import { usePaletteCurve } from '../../lib/usePaletteCurve'
 import { Palette } from '../../lib/interfaces'
+import { CurvedHelixPath } from '../../lib/paletteShades'
 
-function useHookWithRefCallback(deps, initialCurve: CurvePath<Vector3>) {
+function useHookWithRefCallback(deps, initialCurve: CurvedHelixPath) {
   const ref = useRef<SceneRef | null>(null)
   const setRef = useCallback((node: HTMLCanvasElement | null) => {
     if (ref.current) {
@@ -25,7 +25,7 @@ function useHookWithRefCallback(deps, initialCurve: CurvePath<Vector3>) {
 
 export const LchVis = (props: {
   paletteId: string
-  paletteCurve?: CurvePath<Vector3>
+  paletteCurve?: CurvedHelixPath
   palette?: Palette
 }) => {
   const { paletteId } = props

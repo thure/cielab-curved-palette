@@ -1,11 +1,10 @@
 import React, { PropsWithChildren } from 'react'
 import { Box, EnterKey, SpacebarKey } from '@fluentui/react-northstar'
-import { CurvePath, Vector3 } from 'three'
 
-import { cssGradientFromCurve } from '../lib/paletteShades'
+import { cssGradientFromCurve, CurvedHelixPath } from '../lib/paletteShades'
 
 interface PalettePreviewProps {
-  curve: CurvePath<Vector3>
+  curve: CurvedHelixPath
   onClick?: () => void
   variant?: 'broad' | 'narrow'
 }

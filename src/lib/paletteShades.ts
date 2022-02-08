@@ -3,8 +3,7 @@ import { CurvePath, QuadraticBezierCurve3, Vector3 } from 'three'
 import { force_into_gamut } from './lch'
 import { LAB_to_sRGB } from './csswg/utilities'
 import { Palette, Vec3 } from './interfaces'
-import { LCH_to_Lab } from './csswg/conversions'
-import { rotatePoint } from './3d'
+import { Lab_to_LCH, LCH_to_Lab } from './csswg/conversions'
 
 function getTargetLightness(
   /*linearity, */ t: number,
@@ -59,12 +58,20 @@ function getPaletteShades(
 }
 
 export function paletteShadesFromCurve(
-  curve: CurvePath<Vector3>,
+  curve: CurvedHelixPath,
   nShades = 8,
   curveDepth = 12,
   range = [0, 100]
 ): Vec3[] {
-  const curvePoints = curve.getPoints(Math.ceil(curveDepth / 2)) // getPoints gets a depth of 2 * n + 1
+  const curvePoints = curve
+    .getPoints(Math.ceil((curveDepth * (1 + Math.abs(curve.torsion || 1))) / 2))
+    .map((curvePoint) => {
+      return set_point_helical_position(
+        curvePoint,
+        curve.torsion,
+        curve.torsionL0
+      )
+    }) // getPoints gets a depth of 2 * n + 1
   return getPaletteShades(curvePoints, nShades, range)
 }
 
@@ -97,8 +104,37 @@ function paletteShadesToHex(paletteShades: Vec3[]): string[] {
   return paletteShades.map(Lab_to_hex)
 }
 
-function get_point_within_gamut(this: CurvePath<Vector3>, t: number): Vector3 {
-  const point = CurvePath.prototype.getPoint.call(this, t)
+export interface CurvedHelixPath extends CurvePath<Vector3> {
+  torsion?: number
+  torsionL0?: number
+}
+
+function set_point_helical_position(
+  point: Vector3,
+  torsion = 0,
+  torsionL0 = 50
+): Vector3 {
+  const t = point.z
+
+  const hueOffset = torsion * (t - torsionL0)
+
+  const [l1, c1, h1] = Lab_to_LCH([point.z, point.x, point.y])
+  const [l2, a2, b2] = LCH_to_Lab([l1, c1, h1 + hueOffset])
+
+  point.set(a2, b2, l2)
+
+  return point
+}
+
+function get_point_on_curved_helix_within_gamut(
+  this: CurvedHelixPath,
+  t: number
+): Vector3 {
+  const point = set_point_helical_position(
+    CurvePath.prototype.getPoint.call(this, t),
+    this.torsion,
+    this.torsionL0
+  )
   const [l, a, b] = force_into_gamut(point.z, point.x, point.y)
   point.set(a, b, l)
   return point
@@ -109,25 +145,18 @@ export function curvePathFromPalette({
   darkCp,
   lightCp,
   hueTorsion,
-}: Palette): CurvePath<Vector3> {
+}: Palette): CurvedHelixPath {
   const blackPos = new Vector3(0, 0, 0)
   const whitePos = new Vector3(0, 0, 100)
   const [l, a, b] = LCH_to_Lab(keyColor)
   const keyColorPos = new Vector3(a, b, l)
 
-  const curve = new CurvePath<Vector3>()
+  const curve = new CurvePath<Vector3>() as CurvedHelixPath
 
   const darkControlPos = new Vector3(
     keyColorPos.x,
     keyColorPos.y,
     keyColorPos.z * (1 - darkCp)
-  )
-
-  rotatePoint(
-    darkControlPos,
-    keyColorPos,
-    new Vector3(a, b, 0).normalize(),
-    hueTorsion
   )
 
   curve.add(new QuadraticBezierCurve3(blackPos, darkControlPos, keyColorPos))
@@ -138,22 +167,18 @@ export function curvePathFromPalette({
     keyColorPos.z + (100 - keyColorPos.z) * lightCp
   )
 
-  rotatePoint(
-    lightControlPos,
-    keyColorPos,
-    new Vector3(a, b, 0).normalize(),
-    hueTorsion
-  )
-
   curve.add(new QuadraticBezierCurve3(keyColorPos, lightControlPos, whitePos))
 
-  curve.getPoint = get_point_within_gamut
+  curve.torsion = hueTorsion
+  curve.torsionL0 = l
+
+  curve.getPoint = get_point_on_curved_helix_within_gamut
 
   return curve
 }
 
 export function cssGradientFromCurve(
-  curve: CurvePath<Vector3>,
+  curve: CurvedHelixPath,
   nShades = 8,
   curveDepth = 12
 ) {

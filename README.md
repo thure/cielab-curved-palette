@@ -26,8 +26,7 @@ color you provide.
 You can configure the position of each bézier curve’s control point in
 LAB space with the C*CP sliders.
 
-The ‘hue torsion’ parameter lets you create a single palette that moves gradually
-through different hues by rotating the control points in LAB space.
+The ‘hue torsion’ parameter lets you create a single palette that changes gradually in hue by mapping the curve to a helix possessing the torsion you specify.
 
 ## Themes
 

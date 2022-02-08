@@ -1,5 +1,4 @@
 import {
-  CurvePath,
   Float32BufferAttribute,
   Mesh,
   MeshBasicMaterial,
@@ -9,19 +8,20 @@ import {
 import { LAB_to_sRGB } from '../../../lib/csswg/utilities'
 import { ck, lk } from './constants'
 import { SceneRef } from './index'
+import { CurvedHelixPath } from '../../../lib/paletteShades'
 
 const depth = 0.7
 const rs = 5
 const thickness = 0.8
 
-export function setCurveMesh(sceneRef: SceneRef, curve: CurvePath<Vector3>) {
+export function setCurveMesh(sceneRef: SceneRef, curve: CurvedHelixPath) {
   const { scene, tubeMesh } = sceneRef
   if (tubeMesh) scene.remove(tubeMesh)
 
   const pointGetter = curve.getPoint
 
   curve.getPoint = function get_scaled_point(
-    this: CurvePath<Vector3>,
+    this: CurvedHelixPath,
     t: number
   ): Vector3 {
     const point = pointGetter.call(this, t)
